@@ -1,0 +1,44 @@
+'use client'
+
+import React from "react";
+import AnimatedSection from "@/components/custom/animated-section";
+import {cn} from "@/lib/utils";
+
+interface IProps {
+    title: string;
+    bgTitleColor: string;
+    titleHeight?: string;
+    children: React.ReactNode;
+    className?: string;
+    childrenBg?: string;
+    border?: boolean
+}
+
+export default function CardWithTitle(
+    {
+        title,
+        bgTitleColor,
+        titleHeight = '',
+        children,
+        className,
+        childrenBg = '',
+        border = false
+    }: IProps) {
+    return (
+        <AnimatedSection
+            asTag={'div'}
+            className={cn(`rounded rounded-b-[5px] shadow-lg ${bgTitleColor} flex flex-col ${border ? 'border border-solid h-full' : ''}`, className)}
+            whileHover={{scale: 1.03}}
+            transition={{type: "spring", stiffness: 300}}
+        >
+            <h3 className={cn('px-3 box-border text-center text-white text-lg w-full font-medium h-14 flex items-center justify-center', titleHeight)}>
+                {title}
+            </h3>
+            <div
+                className={cn('box-border px-4 py-4 bg-white flex-1 flex flex-col h-auto md:h-[calc(100%-56px)] rounded-b', childrenBg)}
+            >
+                {children}
+            </div>
+        </AnimatedSection>
+    );
+}
