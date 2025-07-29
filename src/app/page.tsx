@@ -84,7 +84,7 @@ export default function Home() {
 
     return (
         <main className="min-h-screen w-full">
-            <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-999 shadow-lg">
+            <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
                 <div
                     className="mx-auto px-4 md:px-10 lg:px-12 xl:px-32 flex min-[1115px]:flex-row flex-col min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full pb-2.5 max-[1115px]:gap-5 max-sm:flex-row">
                     <div className={'flex items-end justify-between h-full max-[1115px]:gap-10 max-sm:gap-0 gap-1'}>
