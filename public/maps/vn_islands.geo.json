@@ -1,0 +1,65 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Đảo Phú Lâm",
+                "group": "Hoàng Sa",
+                "color": "#ff4757"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [112.333, 16.333],
+                        [112.343, 16.333],
+                        [112.343, 16.343],
+                        [112.333, 16.343],
+                        [112.333, 16.333]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Đảo Linh Côn",
+                "group": "Hoàng Sa",
+                "color": "#ff6b6b"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [112.3, 16.3],
+                        [112.31, 16.3],
+                        [112.31, 16.31],
+                        [112.3, 16.31],
+                        [112.3, 16.3]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Đảo Tri Tôn",
+                "group": "Hoàng Sa",
+                "color": "#ff7675"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [112.4, 16.4],
+                        [112.41, 16.4],
+                        [112.41, 16.41],
+                        [112.4, 16.41],
+                        [112.4, 16.4]
+                    ]
+                ]
+            }
+        }
+    ]
+}

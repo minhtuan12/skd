@@ -3,7 +3,7 @@
 import {GeoJSON, MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import {Icon, LatLngTuple} from "leaflet";
-import VietnamGeo from '@/data/vietnam-geo.json'
+import VietnamGeo from '@/data/vn.json'
 import {GeoJsonObject} from "geojson";
 
 const center: LatLngTuple = [16.0, 108.0]; // Vietnam center
@@ -22,7 +22,7 @@ export default function LeafletMap({marks}: IProps) {
     return (
         <MapContainer center={center} zoom={5} style={{height: "100%", width: "100%"}}>
             <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                url="https://api.maptiler.com/tiles/v3/tiles.json?key=57wHhDgo0qhuG0dQOcwD"
             />
             {
                 marks ?

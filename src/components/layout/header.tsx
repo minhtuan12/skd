@@ -1,0 +1,92 @@
+import Image from "next/image";
+import {Menu, menu} from "@/constants/header-menu";
+import Link from "next/link";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {ChevronDown, Search} from "lucide-react";
+import {Input} from "@/components/ui/input";
+
+export default function Header() {
+    return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
+        <div
+            className="mx-auto px-4 md:px-10 lg:px-12 xl:px-32 flex min-[1115px]:flex-row flex-col min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full pb-2.5 max-[1115px]:gap-5 max-sm:flex-row">
+            <div className={'flex items-end justify-between h-full max-[1115px]:gap-10 max-sm:gap-0 gap-1'}>
+                <div className={'flex flex-col items-start w-32 h-full max-sm:w-12'}>
+                    <div className={'w-18 h-18 max-sm:w-12 max-sm:h-12 relative'}>
+                        <Image src={'/logos/principles.png'} alt={''} fill/>
+                    </div>
+                    <h3 className={'absolute max-[1115px]:top-[calc(100%-58px)] max-sm:hidden top-20 text-black max-sm:text-[13px] text-[15px] font-bold'}>SỨC
+                        KHỎE ĐẤT</h3>
+                </div>
+                <div className={'flex flex-col justify-between min-[1115px]:gap-6 gap-2 max-[1115px]:mt-6'}>
+                    {/* Logos */}
+                    <div className={'flex gap-2 max-sm:hidden max-[1115px]:justify-center'}>
+                        <div className={'w-8 h-8 relative'}>
+                            <Image src={'/logos/vietnam_emblem.png'} alt={''} fill/>
+                        </div>
+                        <div className={'w-[114px] h-8 relative'}>
+                            <Image src={'/logos/fao_logo.png'} alt={''} fill/>
+                        </div>
+                        <div className={'w-[137px] h-8 relative'}>
+                            <Image src={'/logos/institute_logo.png'} alt={''} fill/>
+                        </div>
+                    </div>
+                    {/* Headers */}
+                    <div
+                        className="container max-sm:hidden mx-auto flex items-center justify-between text-gray-500 font-semibold text-[13px]">
+                        <nav className="space-x-4 max-[1115px]:text-center">
+                            {
+                                menu.map((item: Menu, index: number) => (
+                                    !item?.children ? <Link key={index} href={item.href}>{item.title}</Link> :
+                                        <DropdownMenu key={index}>
+                                            <DropdownMenuTrigger textOnly>
+                                                <div className={'flex items-center'}>
+                                                    <div className={'hover:opacity-80'}>{item.title}</div>
+                                                    <ChevronDown
+                                                        width={14}
+                                                        className={'mt-[2px]'}
+                                                    />
+                                                </div>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                {item.children.map((child: Menu, i: number) =>
+                                                    <DropdownMenuLabel key={i}>
+                                                        <Link
+                                                            href={item.href + child.href}
+                                                            className={'w-full block'}
+                                                        >
+                                                            {child.title}
+                                                        </Link>
+                                                    </DropdownMenuLabel>)}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                ))
+                            }
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            {/* Search input */}
+            <div className={'flex items-center gap-8 max-sm:mt-4'}>
+                <div className={'max-sm:flex hidden'}>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger textOnly>
+                            <div className={'flex items-center text-gray-500 font-semibold text-[15px]'}>
+                                <div className={'hover:opacity-80'}>Menu</div>
+                                <ChevronDown
+                                    width={14}
+                                    className={'mt-[3px]'}
+                                />
+                            </div>
+                        </DropdownMenuTrigger>
+                    </DropdownMenu>
+                </div>
+                <div className={'w-50 relative h-7'}>
+                    <Input placeholder={'Tìm kiếm...'}
+                           className={'w-full h-full rounded-[30px] !text-[13px] text-black !pr-7 box-border'}/>
+                    <Search color="#8f8f8f" width={16}
+                            className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'}/>
+                </div>
+            </div>
+        </div>
+    </header>
+}
