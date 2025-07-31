@@ -2256,14 +2256,17 @@
             "source": "archipelago-labels",
             "layout": {
                 "text-field": ["get", "name"],
-                "text-font": ["Open Sans Regular"],
+                "text-font": [
+                    "Roboto Medium",
+                    "Noto Sans Regular"
+                ],
                 "text-size": [
                     "interpolate",
                     ["linear"],
                     ["zoom"],
-                    5, 12,
-                    8, 16,
-                    12, 20
+                    5, 11,
+                    8, 15,
+                    12, 18
                 ],
                 "text-anchor": "center",
                 "text-allow-overlap": true,
