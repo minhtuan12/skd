@@ -27,7 +27,7 @@
                     {
                         "type": "Feature",
                         "properties": {
-                            "name": "QUẦN ĐẢO HOÀNG SA",
+                            "name": "Quần đảo Hoàng Sa  (Việt Nam)",
                             "name_en": "QUẦN ĐẢO HOÀNG SA"
                         },
                         "geometry": {
@@ -41,7 +41,7 @@
                     {
                         "type": "Feature",
                         "properties": {
-                            "name": "QUẦN ĐẢO TRƯỜNG SA",
+                            "name": "Quần đảo Trường Sa  (Việt Nam)",
                             "name_en": "QUẦN ĐẢO TRƯỜNG SA"
                         },
                         "geometry": {
