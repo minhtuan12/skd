@@ -1,3 +1,5 @@
+import {routes} from "@/constants/routes";
+
 export interface Menu {
     title: string;
     href: string;
@@ -7,101 +9,101 @@ export interface Menu {
 export const menu: Menu[] = [
     {
         title: 'Trang chủ',
-        href: '/'
+        href: routes.TrangChu
     },
     {
         title: 'Thông tin chính sách',
-        href: '/thong-tin-chinh-sach',
+        href: routes.ThongTinChinhSach,
         children: [
             {
                 title: 'Chiến lược SKĐ Quốc gia',
-                href: '/chien-luoc'
+                href: routes.ChienLuoc
             },
             {
                 title: 'Kế hoạch hành đồng sức khỏe đất',
-                href: '/ke-hoach'
+                href: routes.KeHoach
             },
             {
                 title: 'Các văn bản chính sách liên quan',
-                href: '/chinh-sach'
+                href: routes.ChinhSach
             }
         ]
     },
     {
         title: 'Bản đồ',
-        href: '/ban-do',
+        href: routes.BanDo,
         children: [
             {
                 title: 'Bản đồ đất',
-                href: '/ban-do-dat'
+                href: routes.BanDoDat
             },
             {
                 title: 'Các trung tâm quan trắc đất',
-                href: '/cac-trung-tam-quan-trac-dat'
+                href: routes.CacTrungTamQuanTracDat
             }
         ]
     },
     {
         title: 'Ngân hàng kiến thức',
-        href: '/ngan-hang-kien-thuc',
+        href: routes.NganHangKienThuc,
         children: [
             {
                 title: 'Tài liệu tập huấn',
-                href: '/tai-lieu-tap-huan'
+                href: routes.TaiLieuTapHuan
             },
             {
                 title: 'Kỹ thuật canh tác thân thiện với sức khỏe đất',
-                href: '/ky-thuat-canh-tac'
+                href: routes.KyThuatCanhTac
             },
             {
                 title: 'Kỹ thuật cải tạo đất',
-                href: '/ky-thuat-cai-tao-dat'
+                href: routes.KyThuatCaiTaoDat
             },
             {
                 title: 'Mô hình điển hình',
-                href: '/mo-hinh-dien-hinh'
+                href: routes.MoHinhDienHinh
             }
         ]
     },
     {
-        title:'Tin tức và sự kiện',
-        href: '/tin-tuc-va-su-kien',
+        title: 'Tin tức và sự kiện',
+        href: routes.TinTucVaSuKien,
         children: [
             {
                 title: 'Tin tức và sự kiện',
-                href: '/tin-tuc-su-kien'
+                href: routes.TinTucSuKien
             },
             {
                 title: 'Nghiên cứu',
-                href: '/nghien-cuu'
+                href: routes.NghienCuu
             }
         ]
     },
     {
         title: 'Hỏi đáp và liên hệ',
-        href: '/hoi-dap-va-lien-he',
+        href: routes.HoiDapVaLienHe,
         children: [
             {
                 title: 'Hỏi đáp',
-                href:'/hoi-dap'
+                href: routes.HoiDap
             },
             {
                 title: 'Liên hệ',
-                href:'/lien-he'
+                href: routes.LienHe
             }
         ]
     },
     {
         title: 'Giới thiệu',
-        href: '/gioi-thieu',
+        href: routes.GioiThieu,
         children: [
             {
                 title: 'Giới thiệu về sức khỏe đất',
-                href:'/suc-khoe-dat'
+                href: routes.SucKhoeDat
             },
             {
                 title: 'Giới thiệu về dự án',
-                href:'/du-an'
+                href: routes.DuAn
             }
         ]
     }

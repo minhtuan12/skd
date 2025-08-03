@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {routes} from "@/constants/routes";
 
 export default function Footer() {
 
@@ -141,7 +142,7 @@ export default function Footer() {
                 <p className={'max-sm:text-center'}>© 2025 Bản quyền thuộc về Cổng thông tin Sức khỏe đất.</p>
                 <div className={'flex items-center gap-4 max-sm:w-full max-sm:justify-between'}>
                     <Link href={'#'}>Điều khoản sử dụng</Link>
-                    <Link href={'#'}>ADMIN LOGIN</Link>
+                    <Link href={routes.DangNhapAdmin}>ADMIN LOGIN</Link>
                 </div>
             </div>
         </footer>

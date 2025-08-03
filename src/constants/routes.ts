@@ -1,0 +1,28 @@
+export const routes = {
+    TrangChu: '/',
+
+    DangNhapAdmin: '/admin/login',
+    Dashboard: '/admin',
+
+    ThongTinChinhSach: '/thong-tin-chinh-sach',
+    ChienLuoc: '/chien-luoc',
+    KeHoach: '/ke-hoach',
+    ChinhSach: '/chinh-sach',
+    BanDo: '/ban-do',
+    BanDoDat: '/ban-do-dat',
+    CacTrungTamQuanTracDat: '/cac-trung-tam-quan-trac-dat',
+    NganHangKienThuc: '/ngan-hang-kien-thuc',
+    TaiLieuTapHuan: '/tai-lieu-tap-huan',
+    KyThuatCanhTac: '/ky-thuat-canh-tac',
+    KyThuatCaiTaoDat: '/ky-thuat-cai-tao-dat',
+    MoHinhDienHinh: '/mo-hinh-dien-hinh',
+    TinTucVaSuKien: '/tin-tuc-va-su-kien',
+    TinTucSuKien: '/tin-tuc-su-kien',
+    NghienCuu: '/nghien-cuu',
+    HoiDapVaLienHe: '/hoi-dap-va-lien-he',
+    HoiDap: '/hoi-dap',
+    LienHe: '/lien-he',
+    GioiThieu: '/gioi-thieu',
+    SucKhoeDat: '/suc-khoe-dat',
+    DuAn: '/du-an',
+}
