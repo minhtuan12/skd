@@ -10,7 +10,7 @@ import MobileMenu from "@/components/layout/user/mobile-menu";
 export default function Header() {
     return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
         <div
-            className="mx-auto max-[335px]:!px-2 max-sm:justify-between max-sm:px-8 max-sm:pb-1.5 px-4 md:px-10 lg:px-12 xl:px-32 flex min-[1115px]:flex-row flex-col min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full pb-2.5 max-[1115px]:gap-5 max-sm:flex-row">
+            className="mx-auto max-[335px]:!px-2 max-sm:justify-between max-sm:px-8 max-sm:pb-1.5 px-4 md:px-10 lg:px-20 min-[1280px]:max-[1300px]:px-24 min-[1115px]:max-[1279px]:!px-2 flex min-[1115px]:flex-row flex-col min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full pb-2.5 max-[1115px]:gap-5 max-sm:flex-row">
             <div className={'flex items-end justify-between h-full max-[1115px]:gap-10 max-sm:gap-0 gap-1'}>
                 <div className={'flex flex-col items-start w-32 h-full max-sm:w-12'}>
                     <div className={'w-18 h-18 max-sm:w-12 max-sm:h-12 relative'}>
@@ -35,7 +35,7 @@ export default function Header() {
                     {/* Headers */}
                     <div
                         className="container max-sm:hidden mx-auto flex items-center justify-between text-gray-500 font-semibold text-[13px]">
-                        <nav className="space-x-4 max-[1115px]:text-center">
+                        <nav className="space-x-4 max-[1115px]:text-center min-[1115px]:space-x-2">
                             {
                                 menu.map((item: Menu, index: number) => (
                                     !item?.children ? <Link key={index} href={item.href}>{item.title}</Link> :
