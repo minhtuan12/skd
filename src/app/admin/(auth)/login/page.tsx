@@ -31,7 +31,7 @@ export default function LoginPage() {
                 setError(error as any);
             },
             onSuccess: () => {
-                router.push("/admin")
+                router.push(routes.HomeConfig)
             }
         })
     }
@@ -76,9 +76,10 @@ export default function LoginPage() {
                         {/* Login Form */}
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="username">Tên tài khoản
-                                    <div className={'text-[red] -ml-1'}>*</div>
-                                </Label>
+                                <div className="flex items-center justify-between">
+                                    <Label required htmlFor="username">Tên tài khoản
+                                    </Label>
+                                </div>
                                 <Input
                                     className={error ? 'border-[red] border-solid border' : ''}
                                     id="username"
@@ -91,9 +92,7 @@ export default function LoginPage() {
 
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <Label htmlFor="password">Mật khẩu
-                                        <div className={'text-[red] -ml-1'}>*</div>
-                                    </Label>
+                                    <Label required htmlFor="password">Mật khẩu</Label>
                                 </div>
                                 <div className="relative">
                                     <Input

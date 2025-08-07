@@ -4,8 +4,24 @@ import {ArrowRight, ChevronRight} from "lucide-react";
 import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
+import {INewsAndEvents} from "@/models/config";
+import {dateOptions, NEWS_EVENTS_RESEARCH} from "@/constants/common";
+import Image from "next/image";
 
-export default function Home() {
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+
+async function fetchHomeConfig() {
+    const res = await fetch(`${baseUrl}/api/config?page=home`,
+        {cache: 'no-store', credentials: 'include'}
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch config');
+    }
+    return res.json();
+}
+
+export default async function Home() {
     const news = [
         {
             title: 'Hội Thảo Quốc Gia',
@@ -32,22 +48,26 @@ export default function Home() {
             bgTitleColor: 'bg-orange-500'
         }
     ]
+    const {config: {home}} = await fetchHomeConfig();
 
     return (
         <>
             {/* Hero Section */}
             <AnimatedSection
-                asTag={"section"} className="bg-green-700 text-white py-30 text-center relative"
+                asTag={"section"} className="text-green-500 py-30 text-center relative"
                 initial={{opacity: 0, y: -50}}
                 animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.8}}>
-                <h1 className={'px-4 md:px-0 box-border w-full text-7xl font-bold absolute z-10 text-gray-400 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2'}>Đất
-                    Khỏe Cho Cây Trồng Khỏe</h1>
+                transition={{duration: 0.8}}
+            >
+                <Image
+                    src={home.banner.image_url as string}
+                    alt="Đất khỏe cho cây trồng khỏe"
+                    layout="fill"
+                    objectFit="cover"
+                />
                 <div className={'relative z-20 px-4 md:px-0 box-border'}>
-                    <h2 className="text-4xl font-bold">Bảo vệ sức khỏe đất là bảo vệ tương lai</h2>
-                    <p className="mt-4 text-[14px]">Chung tay hành động vì một nông nghiệp bền vững, thịnh vượng và thân
-                        thiện
-                        với môi trường.</p>
+                    <h2 className="text-4xl font-bold">{home.banner.title}</h2>
+                    <p className="mt-4 text-[14px]">{home.banner.description}</p>
                 </div>
             </AnimatedSection>
 
@@ -80,11 +100,16 @@ export default function Home() {
                 </div>
                 <AnimatedSection
                     asTag={'div'}
-                    className="bg-[#a4ef1f] p-16 sm:p-4 rounded shadow-lg h-full w-full sm:w-1/2 flex items-center justify-center"
+                    className="bg-[#a4ef1f] relative p-16 sm:p-4 rounded shadow-lg h-full w-full sm:w-1/2 flex items-center justify-center"
                     whileHover={{scale: 1.03}}
                     transition={{type: "spring", stiffness: 300}}
                 >
-                    <h2 className="text-center font-semibold mb-2 text-white text-5xl">Sức Khỏe Đất</h2>
+                    <Image
+                        src={home.introduction_image_url}
+                        alt="Giới thiệu về Sức khỏe Đất"
+                        layout="fill"
+                        objectFit="cover"
+                    />
                 </AnimatedSection>
             </AnimatedSection>
 
@@ -133,15 +158,8 @@ export default function Home() {
                                    className={'h-auto md:h-1/2'} childrenBg={'justify-between'}>
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
-                            <div className={'text-[13px] flex-1 overflow-auto max-h-full'}>Lorem ipsum
-                                dolor
-                                sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut
-                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem
-                                ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis
-                                aute
-                                iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt
-                                mollit anim id est laborum.
+                            <div className={'text-[13px] flex-1 overflow-auto max-h-full'}>
+                                {home.agricultural_policy}
                             </div>
                         </div>
                         <Link href="#"
@@ -151,7 +169,7 @@ export default function Home() {
                     </CardWithTitle>
                     <CardWithTitle border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-yellow-300'}
                                    className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}>
-                        <VideoPlayer src={'/videos/knowledge.mp4'} className={''}/>
+                        <VideoPlayer src={home.knowledge_bank_video_url}/>
                         <Link href="#"
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                             tài liệu
@@ -174,17 +192,20 @@ export default function Home() {
                     và tin tức nổi bật trong lĩnh vực.</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                     {
-                        news.map((item, i) => (
+                        home.news_and_events.map((item: INewsAndEvents, i: number) => (
                             <Link href={'#'} key={i}>
                                 <CardWithTitle
                                     border
-                                    title={item.title} bgTitleColor={item.bgTitleColor} titleHeight={'!h-50'}
+                                    title={item.title} bgTitleColor={'green'} titleHeight={'!h-50'}
                                     childrenBg={'bg-gray-100'}
                                     className={'cursor-pointer'}
+                                    bgImageUrl={item.image_url as string}
                                 >
-                                    <div className={'text-[12px] text-gray-500'}>{item.type} | {item.date}</div>
+                                    <div className={'text-[12px] text-gray-500'}>
+                                        {NEWS_EVENTS_RESEARCH[item.type as keyof typeof NEWS_EVENTS_RESEARCH]} | {new Date(item.date).toLocaleDateString('vi-VN', dateOptions as any)}
+                                    </div>
                                     <div className={'flex flex-col justify-between mt-1 flex-1 min-[1400px]:gap-2'}>
-                                        <h4 className={'font-semibold text-base'}>{item.heading}</h4>
+                                        <h4 className={'font-semibold text-base'}>{item.title}</h4>
                                         <p className="text-[12px] text-gray-500 font-medium">{item.description}</p>
                                     </div>
                                 </CardWithTitle>

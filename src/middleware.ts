@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(routes.DangNhapAdmin, request.url));
     }
     if (isLoggedIn && pathname.includes('/login')) {
-        return NextResponse.redirect(new URL(routes.Dashboard, request.url));
+        return NextResponse.redirect(new URL(routes.HomeConfig, request.url));
     }
 
     return NextResponse.next();

@@ -3,6 +3,7 @@
 import React from "react";
 import AnimatedSection from "@/components/custom/animated-section";
 import {cn} from "@/lib/utils";
+import Image from "next/image";
 
 interface IProps {
     title: string;
@@ -11,7 +12,8 @@ interface IProps {
     children: React.ReactNode;
     className?: string;
     childrenBg?: string;
-    border?: boolean
+    border?: boolean;
+    bgImageUrl?: string;
 }
 
 export default function CardWithTitle(
@@ -22,7 +24,8 @@ export default function CardWithTitle(
         children,
         className,
         childrenBg = '',
-        border = false
+        border = false,
+        bgImageUrl = ''
     }: IProps) {
     return (
         <AnimatedSection
@@ -31,9 +34,17 @@ export default function CardWithTitle(
             whileHover={{scale: 1.03}}
             transition={{type: "spring", stiffness: 300}}
         >
-            <h3 className={cn('px-3 box-border text-center text-white text-lg w-full font-medium h-14 flex items-center justify-center', titleHeight)}>
-                {title}
-            </h3>
+            {
+                !bgImageUrl ?
+                    <h3 className={cn('px-3 box-border text-center text-white text-lg w-full font-medium h-14 flex items-center justify-center', titleHeight)}>
+                        {title}
+                    </h3> : <div className={'w-full h-48 relative'}><Image
+                        src={bgImageUrl}
+                        alt={title}
+                        layout="fill"
+                        objectFit="cover"
+                    /></div>
+            }
             <div
                 className={cn('box-border px-4 py-4 bg-white flex-1 flex flex-col h-auto md:h-[calc(100%-56px)] rounded-b', childrenBg)}
             >

@@ -1,6 +1,6 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useRouter} from 'next/navigation';
-import {IAdmin} from "@/models/Admin";
+import {IAdmin} from "@/models/admin";
 import {useEffect} from "react";
 import {routes} from "@/constants/routes";
 

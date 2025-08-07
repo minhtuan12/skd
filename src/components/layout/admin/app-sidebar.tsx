@@ -1,20 +1,6 @@
 'use client'
 
-import {
-    BarChart3,
-    Calendar,
-    ChevronUp,
-    CreditCard,
-    Home,
-    Inbox,
-    Package,
-    Search,
-    Settings,
-    ShoppingCart,
-    User2,
-    Users,
-} from "lucide-react"
-
+import {ChevronUp, Home, User2,} from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -31,62 +17,20 @@ import {
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu"
 import {useAdmin} from "@/contexts/AdminContext";
 import {Skeleton} from "@/components/ui/skeleton";
+import {routes} from "@/constants/routes";
 
-// Menu items.
-const items = [
+// Sidebar items.
+const sideBarItems = [
     {
-        title: "Dashboard",
-        url: "/",
-        icon: Home,
-    },
-    {
-        title: "Orders",
-        url: "#",
-        icon: ShoppingCart,
-    },
-    {
-        title: "Products",
-        url: "#",
-        icon: Package,
-    },
-    {
-        title: "Customers",
-        url: "#",
-        icon: Users,
-    },
-    {
-        title: "Analytics",
-        url: "#",
-        icon: BarChart3,
-    },
-    {
-        title: "Payments",
-        url: "#",
-        icon: CreditCard,
-    },
-]
-
-const secondaryItems = [
-    {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
-        title: "Search",
-        url: "#",
-        icon: Search,
-    },
-    {
-        title: "Inbox",
-        url: "#",
-        icon: Inbox,
-    },
-    {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
-    },
+        title: 'Cấu hình',
+        children: [
+            {
+                title: "Trang chủ",
+                url: routes.HomeConfig,
+                icon: Home,
+            }
+        ]
+    }
 ]
 
 export function AppSidebar() {
@@ -100,7 +44,7 @@ export function AppSidebar() {
                         <SidebarMenuButton size="lg" asChild>
                             <a href="/">
                                 <div
-                                    className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                                    className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
                                     <img src={'/logos/principles.png'} alt={'Principles'}/>
                                 </div>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -113,40 +57,27 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Platform</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon/>
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Tools</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {secondaryItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon/>
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                {
+                    sideBarItems.map((item, index) => (
+                        <SidebarGroup key={index}>
+                            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {item.children.map((child) => (
+                                        <SidebarMenuItem key={child.title}>
+                                            <SidebarMenuButton asChild>
+                                                <a href={child.url}>
+                                                    <child.icon/>
+                                                    <span>{child.title}</span>
+                                                </a>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    ))
+                }
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>

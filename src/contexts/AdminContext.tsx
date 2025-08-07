@@ -1,7 +1,7 @@
 'use client';
 
 import React, {createContext, ReactNode, useContext} from 'react';
-import {IAdmin} from "@/models/Admin";
+import {IAdmin} from "@/models/admin";
 import {useMe} from "@/app/admin/(auth)/(hooks)/use-me";
 import {QueryObserverResult} from "@tanstack/react-query";
 

@@ -2,7 +2,7 @@ export const routes = {
     TrangChu: '/',
 
     DangNhapAdmin: '/admin/login',
-    Dashboard: '/admin',
+    HomeConfig: '/admin/config/home',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',
