@@ -1,3 +1,3 @@
-import {getConfig} from "@/app/api/admin/config/route";
+import {getConfig} from "@/app/api/helpers";
 
 export const GET = getConfig;
