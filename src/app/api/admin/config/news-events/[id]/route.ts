@@ -6,12 +6,12 @@ import {withAuthWithContext} from "@/app/api/middleware";
 
 const {ObjectId} = Types
 
-async function updateNewsEvents(request: NextRequest, {params}: any) {
+async function updateNewsEvents(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
         await connectDb();
 
         const {data} = await request.json();
-        const id = params.id;
+        const {id} = await params;
 
         // Validation
         if (!data || Object.keys(data).length === 0) {

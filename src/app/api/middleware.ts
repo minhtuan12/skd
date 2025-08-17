@@ -4,7 +4,7 @@ import {isAuthenticated} from "@/lib/session";
 type ApiHandler = (request: NextRequest) => Promise<NextResponse> | NextResponse;
 type ApiHandlerContext<T = any> = (
     request: NextRequest,
-    context: { params: T }
+    context: { params: Promise<T> }
 ) => Promise<NextResponse> | NextResponse;
 
 
@@ -40,7 +40,7 @@ export function withAuth(handler: ApiHandler): ApiHandler {
 export function withAuthWithContext<T extends Record<string, string> = {}>(
     handler: ApiHandlerContext<T>
 ): ApiHandlerContext<T> {
-    return async (request: NextRequest, context: { params: T }) => {
+    return async (request: NextRequest, context: { params: Promise<T> }) => {
         try {
             const isLoggedIn = await isAuthenticated();
 
