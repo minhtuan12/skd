@@ -2,6 +2,7 @@ import Config from "@/models/config";
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import {getConfig} from "@/app/api/helpers";
+import {withAuth} from "@/app/api/middleware";
 
 async function updateConfig(request: NextRequest) {
     try {
@@ -32,7 +33,5 @@ async function updateConfig(request: NextRequest) {
     }
 }
 
-// export const GET = withAuth(getConfig);
-export const GET = (getConfig);
-// export const PATCH = withAuth(updateConfig);
-export const PATCH = (updateConfig);
+export const GET = withAuth(getConfig);
+export const PATCH = withAuth(updateConfig);

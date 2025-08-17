@@ -13,11 +13,12 @@ interface IProps {
     setCloneNews?: React.Dispatch<React.SetStateAction<INewsAndEvents[]>> | undefined;
     index?: number;
     imageUrl: string;
-    setNewNewsEvents?: any
+    setNewNewsEvents?: any,
+    fileName: string
 }
 
 const NewsEventsItem = memo((
-    {data, setCloneNews, handleImageChange, index, imageUrl, readonly, setNewNewsEvents}: IProps) => {
+    {data, setCloneNews, handleImageChange, index, imageUrl, readonly, setNewNewsEvents, fileName}: IProps) => {
     const {
         title,
         description,
@@ -58,6 +59,7 @@ const NewsEventsItem = memo((
                 </div>
             </div>
             <UploadFile
+                inputValue={fileName}
                 disabled={readonly}
                 url={(imageUrl && imageUrl !== '/') ? imageUrl : image_url as string}
                 handleChangeFile={e => handleImageChange(e, 'image_url', index as number)}

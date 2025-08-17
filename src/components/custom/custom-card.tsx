@@ -1,6 +1,7 @@
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import React from "react";
 import {cn} from "@/lib/utils";
+import {Badge} from "@/components/ui/badge";
 
 interface IProps {
     title: string | React.ReactNode;
@@ -12,6 +13,7 @@ interface IProps {
     footer?: React.ReactNode;
     children: React.ReactNode;
     onClick?: () => void;
+    badge?: string;
 }
 
 export default function CustomCard(
@@ -24,9 +26,20 @@ export default function CustomCard(
         footerClassName = '',
         footer,
         children,
-        onClick
+        onClick,
+        badge
     }: IProps) {
-    return <Card className={cn(`pb-4 shadow-md ${onClick ? 'cursor-pointer' : ''}`, className)} onClick={onClick}>
+    return <Card
+        className={
+            cn(
+                `pb-4 ${badge ? 'relative' : ''} shadow-md ${onClick ? 'cursor-pointer' : ''}`,
+                className,
+                `${badge === 'Đã ẩn' ? 'bg-gray-100' : ''}`
+            )
+        }
+        onClick={onClick}
+    >
+        {badge ? <Badge className={'absolute -top-2.5 right-2 bg-yellow-700'}>{badge}</Badge> : ''}
         <CardHeader className={headerClassName}>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>

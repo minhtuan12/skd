@@ -97,6 +97,5 @@ async function deleteFile(request: NextRequest) {
     }
 }
 
-// export const POST = withAuth(uploadFile);
-export const POST = (uploadFile);
+export const POST = withAuth(uploadFile);
 export const DELETE = withAuth(deleteFile);

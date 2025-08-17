@@ -20,7 +20,6 @@ export async function getConfig(request: NextRequest) {
             config = await Config.findOne().select(page).lean();
             if (page === 'home' && config?.home?.news_and_events) {
                 const newsAndEvents = await NewsEvents.find({
-                    is_deleted: false,
                     _id: {$in: config.home.news_and_events.map((id: string) => new ObjectId(id))}
                 })
                 config = {

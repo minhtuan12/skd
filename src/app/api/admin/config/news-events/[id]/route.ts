@@ -2,15 +2,16 @@ import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import NewsEvents from "@/models/news-events";
+import {withAuthWithContext} from "@/app/api/middleware";
 
 const {ObjectId} = Types
 
-async function updateNewsEvents(request: NextRequest, context: { params: { id: string } }) {
+async function updateNewsEvents(request: NextRequest, {params}: { params: { id: string } }) {
     try {
         await connectDb();
 
         const {data} = await request.json();
-        const id = context.params.id;
+        const id = params.id;
 
         // Validation
         if (!data || Object.keys(data).length === 0) {
@@ -21,14 +22,18 @@ async function updateNewsEvents(request: NextRequest, context: { params: { id: s
         }
 
         const result = await NewsEvents.findOneAndUpdate(
-            {_id: new ObjectId(id), is_deleted: false},
-            {
+            {_id: new ObjectId(id)},
+            !Object.keys(data).includes('is_deleted') ? {
                 $set: {
                     title: data.title,
                     description: data.description,
                     image_url: data.image_url,
                     date: data.date,
                     type: data.type
+                }
+            } : {
+                $set: {
+                    is_deleted: data.is_deleted,
                 }
             }
         )
@@ -52,4 +57,4 @@ async function updateNewsEvents(request: NextRequest, context: { params: { id: s
     }
 }
 
-export const PATCH = (updateNewsEvents);
+export const PATCH = withAuthWithContext(updateNewsEvents);

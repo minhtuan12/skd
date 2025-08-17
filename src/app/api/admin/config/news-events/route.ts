@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import NewsEvents from "@/models/news-events";
+import {withAuth} from "@/app/api/middleware";
 
 export async function getNewsEvents(request: NextRequest) {
     try {
@@ -9,7 +10,7 @@ export async function getNewsEvents(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const type = searchParams.get('type');
         const typeCondition = type !== 'all' ? {type} : {};
-        const newsEvents = await NewsEvents.find({is_deleted: false, ...typeCondition});
+        const newsEvents = await NewsEvents.find({...typeCondition});
 
         return NextResponse.json({news_events: newsEvents, type});
     } catch (error) {
@@ -57,5 +58,5 @@ async function addNewsEvents(request: NextRequest) {
     }
 }
 
-export const GET = (getNewsEvents);
-export const POST = (addNewsEvents);
+export const GET = withAuth(getNewsEvents);
+export const POST = withAuth(addNewsEvents);

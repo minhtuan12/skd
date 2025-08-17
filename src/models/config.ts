@@ -7,6 +7,7 @@ export interface INewsAndEvents {
     date: string | Date;
     title: string;
     description: string;
+    is_deleted?: boolean;
 }
 
 export interface IHomeConfig {
