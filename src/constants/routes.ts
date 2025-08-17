@@ -3,6 +3,8 @@ export const routes = {
 
     DangNhapAdmin: '/admin/login',
     HomeConfig: '/admin/config/home',
+    NewsConfig: '/admin/config/news',
+    EventsConfig: '/admin/config/events',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

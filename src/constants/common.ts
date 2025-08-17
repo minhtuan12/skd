@@ -1,7 +1,7 @@
 export const NEWS_EVENTS = {
-    NEWS: 'Tin tức',
-    RESEARCH: 'Nghiên cứu',
-    EVENT: 'Sự kiện'
+    news: 'Tin tức',
+    research: 'Nghiên cứu',
+    event: 'Sự kiện'
 }
 
 export const NEWS_EVENTS_RESEARCH = {

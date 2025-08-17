@@ -1,6 +1,6 @@
 import type React from "react"
 import {cn} from "@/lib/utils"
-import {menu, Menu} from "@/constants/header-menu";
+import {menu, Menu} from "@/constants/menu";
 import {MenuItem} from "@/components/layout/user/menu-item";
 
 interface ServerMenuProps {

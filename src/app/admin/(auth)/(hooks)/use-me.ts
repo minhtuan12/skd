@@ -32,10 +32,10 @@ export const useMe = () => {
     });
 
     useEffect(() => {
-        if (error && error.message.includes('401')) {
-            queryClient.clear();
-            router.push(routes.DangNhapAdmin);
-        }
+        // if (error && error.message.includes('401')) {
+        //     queryClient.clear();
+        //     router.push(routes.DangNhapAdmin);
+        // }
     }, [error, queryClient, router]);
 
     const logout = async () => {

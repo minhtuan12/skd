@@ -1,6 +1,6 @@
 'use client'
 
-import {ChevronUp, Home, User2,} from "lucide-react"
+import {ChevronUp, User2,} from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -17,24 +17,12 @@ import {
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu"
 import {useAdmin} from "@/contexts/AdminContext";
 import {Skeleton} from "@/components/ui/skeleton";
-import {routes} from "@/constants/routes";
-
-// Sidebar items.
-const sideBarItems = [
-    {
-        title: 'Cấu hình',
-        children: [
-            {
-                title: "Trang chủ",
-                url: routes.HomeConfig,
-                icon: Home,
-            }
-        ]
-    }
-]
+import {sideBarItems} from "@/constants/menu";
+import {useRouter} from "next/navigation";
 
 export function AppSidebar() {
     const {admin, logout} = useAdmin();
+    const router = useRouter();
 
     return (
         <Sidebar collapsible="icon">
@@ -66,10 +54,11 @@ export function AppSidebar() {
                                     {item.children.map((child) => (
                                         <SidebarMenuItem key={child.title}>
                                             <SidebarMenuButton asChild>
-                                                <a href={child.url}>
+                                                <div onClick={() => router.push(child.url)}
+                                                     className={'cursor-pointer'}>
                                                     <child.icon/>
                                                     <span>{child.title}</span>
-                                                </a>
+                                                </div>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
                                     ))}

@@ -1,4 +1,5 @@
 import {routes} from "@/constants/routes";
+import {CalendarRange, Home, Newspaper} from "lucide-react";
 
 export interface Menu {
     title: string;
@@ -107,4 +108,22 @@ export const menu: Menu[] = [
             }
         ]
     }
+]
+
+export const sideBarItems = [
+    {
+        title: 'Cấu hình',
+        children: [
+            {
+                title: "Trang chủ",
+                url: routes.HomeConfig,
+                icon: Home,
+            },
+            {
+                title: "Tin tức, sự kiện & nghiên cứu",
+                url: routes.NewsConfig,
+                icon: Newspaper,
+            },
+        ]
+    },
 ]

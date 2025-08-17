@@ -11,6 +11,7 @@ interface IProps {
     footerClassName?: string;
     footer?: React.ReactNode;
     children: React.ReactNode;
+    onClick?: () => void;
 }
 
 export default function CustomCard(
@@ -22,9 +23,10 @@ export default function CustomCard(
         contentClassName = '',
         footerClassName = '',
         footer,
-        children
+        children,
+        onClick
     }: IProps) {
-    return <Card className={cn("pb-4 shadow-md", className)}>
+    return <Card className={cn(`pb-4 shadow-md ${onClick ? 'cursor-pointer' : ''}`, className)} onClick={onClick}>
         <CardHeader className={headerClassName}>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>

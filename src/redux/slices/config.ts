@@ -7,12 +7,17 @@ const initialState = {
             description: '',
             image_url: '',
         },
-        introduction_image_url: '',
+        introduction: {
+            image_url: '',
+            content: ''
+        },
         agricultural_policy: '',
         knowledge_bank_video_url: '',
         news_and_events: []
     },
-    global: {}
+    global: {},
+    news: [],
+    newsEventsResearches: []
 }
 
 const configSlice = createSlice({
@@ -26,13 +31,23 @@ const configSlice = createSlice({
         setGlobalConfig: (state, action) => ({
             ...state,
             global: action.payload
-        })
+        }),
+        setNews: (state, action) => ({
+            ...state,
+            news: action.payload
+        }),
+        setNewsEventsResearches: (state, action) => ({
+            ...state,
+            newsEventsResearches: action.payload
+        }),
     },
 })
 
 export const {
     setHomeConfig,
-    setGlobalConfig
+    setGlobalConfig,
+    setNews,
+    setNewsEventsResearches
 } = configSlice.actions
 
 export default configSlice.reducer

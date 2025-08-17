@@ -1,10 +1,10 @@
-import {model, models, Schema} from "mongoose";
+import {model, models, Schema, Types} from "mongoose";
 
 export interface INewsAndEvents {
     _id?: string;
     image_url: string | File;
     type: string;
-    date: string;
+    date: string | Date;
     title: string;
     description: string;
 }
@@ -15,7 +15,10 @@ export interface IHomeConfig {
         description: string;
         image_url: string | File;
     },
-    introduction_image_url: string | File;
+    introduction: {
+        image_url: string | File;
+        content: string;
+    };
     agricultural_policy: string;
     knowledge_bank_video_url: string | File;
     news_and_events: INewsAndEvents[]
@@ -38,7 +41,8 @@ export interface IFooterConfig {
 export interface IConfig {
     _id?: string;
     home: IHomeConfig;
-    footer: IFooterConfig
+    footer: IFooterConfig;
+    news_events: INewsAndEvents[]
 }
 
 const NewsAndEventsSchema = new Schema({
@@ -80,9 +84,15 @@ const ConfigSchema = new Schema({
                 required: true
             }
         },
-        introduction_image_url: {
-            type: String,
-            required: true
+        introduction: {
+            image_url: {
+                type: String,
+                required: true
+            },
+            content: {
+                type: String,
+                required: true
+            }
         },
         agricultural_policy: {
             type: String,
@@ -92,7 +102,10 @@ const ConfigSchema = new Schema({
             type: String,
             required: true
         },
-        news_and_events: [NewsAndEventsSchema]
+        news_and_events: {
+            type: [Types.ObjectId],
+            ref: "NewsEvents",
+        }
     },
     footer: {
         social: {

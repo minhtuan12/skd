@@ -3,6 +3,8 @@
 import React from "react";
 
 export type ButtonHandlers = {
+    visibleReset?: boolean;
+    submitText?: string;
     reset: () => void;
     submit: () => void;
 };

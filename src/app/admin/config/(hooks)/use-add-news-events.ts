@@ -1,11 +1,11 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {toast} from "sonner";
 
-const saveConfig = async (data: any, page: string) => {
-    const response = await fetch(`/api/admin/config`, {
+const addNewsEvents = async (data: any, type: string) => {
+    const response = await fetch(`/api/admin/config/news-events`, {
         credentials: 'include',
-        method: 'PATCH',
-        body: JSON.stringify({data, page}),
+        method: 'POST',
+        body: JSON.stringify({data: {...data, type}}),
     });
 
     if (!response.ok) {
@@ -16,7 +16,7 @@ const saveConfig = async (data: any, page: string) => {
     return response.json();
 };
 
-export const useSaveConfig = (page: string) => {
+export const useAddNewsEvents = (type: string) => {
     const queryClient = useQueryClient();
 
     const {
@@ -26,9 +26,9 @@ export const useSaveConfig = (page: string) => {
         isError,
         error,
     } = useMutation({
-        mutationFn: (payload: any) => saveConfig(payload, page),
+        mutationFn: (payload: any) => addNewsEvents(payload, type),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['config', page]});
+            queryClient.invalidateQueries({queryKey: ['news-events', type]});
         },
         onError: (error) => {
             toast.error(error?.message || 'Đã có lỗi xảy ra');

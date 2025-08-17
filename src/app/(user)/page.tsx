@@ -5,7 +5,7 @@ import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
 import {INewsAndEvents} from "@/models/config";
-import {dateOptions, NEWS_EVENTS_RESEARCH} from "@/constants/common";
+import {dateOptions, NEWS_EVENTS, NEWS_EVENTS_RESEARCH} from "@/constants/common";
 import Image from "next/image";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
@@ -83,12 +83,7 @@ export default async function Home() {
                 <div className={'w-full sm:w-1/2'}>
                     <h2 className="text-2xl font-semibold mb-4">Giới thiệu về Sức khỏe đất</h2>
                     <p className="max-w-2xl text-[14px]">
-                        Sức khỏe đất là khả năng của đất hoạt động như một hệ sinh thái sống, có vai trò duy trì đa dạng
-                        sinh học, năng suất cây trồng, chất lượng nước và không khí, cũng như sức khỏe của con người và
-                        động
-                        vật. Cách tiếp cận "Một Sức khỏe" (One Health) nhấn mạnh mối liên hệ mật thiết và không thể tách
-                        rời
-                        giữa các yếu tố này.
+                        {home.introduction.content}
                     </p>
                     <div className="mt-6">
                         <button
@@ -105,7 +100,7 @@ export default async function Home() {
                     transition={{type: "spring", stiffness: 300}}
                 >
                     <Image
-                        src={home.introduction_image_url}
+                        src={home.introduction.image_url}
                         alt="Giới thiệu về Sức khỏe Đất"
                         layout="fill"
                         objectFit="cover"
@@ -202,9 +197,9 @@ export default async function Home() {
                                     bgImageUrl={item.image_url as string}
                                 >
                                     <div className={'text-[12px] text-gray-500'}>
-                                        {NEWS_EVENTS_RESEARCH[item.type as keyof typeof NEWS_EVENTS_RESEARCH]} | {new Date(item.date).toLocaleDateString('vi-VN', dateOptions as any)}
+                                        {NEWS_EVENTS[item.type as keyof typeof NEWS_EVENTS]} | {new Date(item.date).toLocaleDateString('vi-VN', dateOptions as any)}
                                     </div>
-                                    <div className={'flex flex-col justify-between mt-1 flex-1 min-[1400px]:gap-2'}>
+                                    <div className={'flex flex-col mt-1 flex-1 min-[1400px]:gap-2'}>
                                         <h4 className={'font-semibold text-base'}>{item.title}</h4>
                                         <p className="text-[12px] text-gray-500 font-medium">{item.description}</p>
                                     </div>

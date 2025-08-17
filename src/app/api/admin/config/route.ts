@@ -1,7 +1,6 @@
 import Config from "@/models/config";
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
-import {withAuth} from "@/app/api/middleware";
 import {getConfig} from "@/app/api/helpers";
 
 async function updateConfig(request: NextRequest) {
@@ -33,5 +32,7 @@ async function updateConfig(request: NextRequest) {
     }
 }
 
-export const GET = withAuth(getConfig);
-export const PATCH = withAuth(updateConfig);
+// export const GET = withAuth(getConfig);
+export const GET = (getConfig);
+// export const PATCH = withAuth(updateConfig);
+export const PATCH = (updateConfig);

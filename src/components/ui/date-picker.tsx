@@ -11,18 +11,20 @@ import {dateOptions} from "@/constants/common";
 interface IProps {
     date: Date | undefined;
     setDate: (date: Date | undefined) => void;
+    disabled?: boolean
 }
 
-export function DatePicker({date, setDate}: IProps) {
+export function DatePicker({date, setDate, disabled = false}: IProps) {
     const [open, setOpen] = React.useState(false)
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={setOpen} modal>
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
                     id="date"
                     className="w-full justify-between font-normal"
+                    disabled={disabled}
                 >
                     {date ? date.toLocaleDateString('vi-VN', dateOptions as any) : "Chọn ngày"}
                     <ChevronDownIcon/>
@@ -30,6 +32,7 @@ export function DatePicker({date, setDate}: IProps) {
             </PopoverTrigger>
             <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                 <Calendar
+                    // disabled={disabled}
                     mode="single"
                     selected={date}
                     captionLayout="dropdown"

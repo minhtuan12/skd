@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {Menu, menu} from "@/constants/header-menu";
+import {Menu, menu} from "@/constants/menu";
 import Link from "next/link";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {ChevronDown, Search} from "lucide-react";

@@ -4,7 +4,7 @@ import Link from "next/link"
 import {usePathname} from "next/navigation"
 import {ChevronRight} from "lucide-react"
 import {cn} from "@/lib/utils"
-import type {Menu} from "@/constants/header-menu"
+import type {Menu} from "@/constants/menu"
 import {useEffect, useMemo, useRef} from "react"
 
 interface ClientMenuItemProps {

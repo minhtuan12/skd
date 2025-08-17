@@ -13,7 +13,7 @@ import {IHomeConfig, INewsAndEvents} from "@/models/config";
 import {useConfig} from "@/app/admin/config/(hooks)/use-config";
 import UploadFile from "@/app/admin/config/(components)/upload-file";
 import CustomCard from "@/components/custom/custom-card";
-import NewsAndEvents from "@/app/admin/config/(components)/news_and_events";
+import NewsAndEvents from "@/app/admin/config/(components)/news-and-events";
 import {AdminButtonContext} from "@/contexts/AdminButtonContext";
 import {toast} from "sonner";
 import {useSaveConfig} from "@/app/admin/config/(hooks)/use-save-config";
@@ -27,6 +27,7 @@ export default function HomeConfig() {
     const dispatch = useDispatch();
     const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
     const [newsImageUrls, setNewsImageUrls] = useState<string[]>([]);
+    const [fileInputValue, setFileInputValue] = useState<string[]>(['', '', '']);
 
     const homeConfigRef = useRef(homeConfig);
     const cloneConfigRef = useRef(cloneConfig);
@@ -43,6 +44,8 @@ export default function HomeConfig() {
         ]))
         dispatch(setPageTitle('Trang chủ'))
         setHandlers({
+            submitText: 'Cập nhật',
+            visibleReset: true,
             reset: handleResetValue,
             submit: handleSubmit
         })
@@ -50,8 +53,8 @@ export default function HomeConfig() {
 
     useEffect(() => {
         setHeroImage(homeConfig.banner.image_url);
-        setIntroductionImage(homeConfig.introduction_image_url);
-    }, [homeConfig?.banner.image_url, homeConfig?.introduction_image_url]);
+        setIntroductionImage(homeConfig.introduction.image_url);
+    }, [homeConfig?.banner.image_url, homeConfig?.introduction.image_url]);
 
     useEffect(() => {
         homeConfigRef.current = homeConfig;
@@ -70,41 +73,27 @@ export default function HomeConfig() {
                 // set new preview image url
                 if (key.includes('banner')) {
                     setHeroImage(reader.result as string);
-                } else if (key === 'introduction_image_url') {
+                    setFileInputValue(prev => [file.name, ...prev.slice(1)]);
+                } else if (key.includes('introduction')) {
                     setIntroductionImage(reader.result as string);
-                } else if (index !== -1) {
-                    setNewsImageUrls(prev => [...prev.slice(0, index), reader.result as string, ...prev.slice(index + 1)]);
+                    setFileInputValue(prev => [...prev.slice(0, 1), file.name, ...prev.slice(2)]);
                 }
 
                 // set new state for config
-                if (index !== -1) {
-                    setCloneConfig((prev: IHomeConfig) => ({
+                if (key.includes('.')) {
+                    const [parent, child] = key.split('.');
+                    setCloneConfig(prev => ({
                         ...prev,
-                        news_and_events: [
-                            ...prev.news_and_events.slice(0, index),
-                            {
-                                ...prev.news_and_events[index],
-                                [key]: file,
-                                ...prev.news_and_events.slice(index + 1)
-                            }
-                        ]
+                        [parent]: {
+                            ...prev[parent as keyof typeof cloneConfig] as any,
+                            [child]: file
+                        }
                     }))
                 } else {
-                    if (key.includes('.')) {
-                        const [parent, child] = key.split('.');
-                        setCloneConfig(prev => ({
-                            ...prev,
-                            [parent]: {
-                                ...prev[parent as keyof typeof cloneConfig] as any,
-                                [child]: file
-                            }
-                        }))
-                    } else {
-                        setCloneConfig({
-                            ...cloneConfig,
-                            [key]: file
-                        })
-                    }
+                    setCloneConfig({
+                        ...cloneConfig,
+                        [key]: file
+                    })
                 }
             }
             reader.readAsDataURL(file)
@@ -114,7 +103,7 @@ export default function HomeConfig() {
     const handleChangeVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0]
-            setSelectedVideo(file)
+            setFileInputValue((prev: any) => [...prev.slice(0, 2), file.name]);
             setCloneConfig((prev: IHomeConfig) => ({
                 ...prev,
                 knowledge_bank_video_url: file
@@ -144,15 +133,15 @@ export default function HomeConfig() {
 
     const handleResetValue = () => {
         setCloneConfig(homeConfigRef.current);
+        setHeroImage(homeConfigRef.current.banner.image_url);
+        setIntroductionImage(homeConfigRef.current.introduction.image_url);
+        setFileInputValue(['', '', '']);
         toast.info('Đã hủy các thay đổi');
     }
 
     const validate = () => {
         const currentConfig = cloneConfigRef.current;
-        if (currentConfig.news_and_events.length === 0) {
-            return false;
-        }
-        if (!currentConfig.agricultural_policy || !currentConfig.introduction_image_url || !currentConfig.banner.title || !currentConfig.banner.image_url) {
+        if (!currentConfig.agricultural_policy || !currentConfig.introduction.image_url || !currentConfig.introduction.content || !currentConfig.banner.title || !currentConfig.banner.image_url) {
             return false;
         }
         return true;
@@ -162,16 +151,27 @@ export default function HomeConfig() {
     const handleUploadFiles = () => {
         setLoading(true);
         const currentConfig = cloneConfigRef.current;
+        const oldConfig = homeConfigRef.current;
         const formData = new FormData();
         let uploadFiles = [
-            {file: currentConfig.banner.image_url, key: "banner.image_url", type: 'image'},
-            {file: currentConfig.introduction_image_url, key: "introduction_image_url", type: 'image'},
-            {file: currentConfig.knowledge_bank_video_url, key: "knowledge_bank_video_url", type: 'video'},
-            ...currentConfig.news_and_events.map((item, index) => ({
-                file: item.image_url,
-                key: `news.${index}`,
+            {
+                file: currentConfig.banner.image_url,
+                key: "banner.image_url",
                 type: 'image',
-            }))
+                oldUrl: oldConfig.banner.image_url
+            },
+            {
+                file: currentConfig.introduction.image_url,
+                key: "introduction.image_url",
+                type: 'image',
+                oldUrl: oldConfig.introduction.image_url
+            },
+            {
+                file: currentConfig.knowledge_bank_video_url,
+                key: "knowledge_bank_video_url",
+                type: 'video',
+                oldUrl: oldConfig.knowledge_bank_video_url
+            },
         ]
 
         uploadFiles = uploadFiles.filter(item => typeof item.file !== 'string')
@@ -180,6 +180,7 @@ export default function HomeConfig() {
                 formData.append('file', uploadFile.file);
                 formData.append('key', uploadFile.key);
                 formData.append('type', uploadFile.type);
+                formData.append('oldUrl', uploadFile.oldUrl);
             })
 
             uploadFile(formData, {
@@ -196,18 +197,14 @@ export default function HomeConfig() {
                                     [child]: file.url
                                 }
                             }
-                        } else if (file.key.includes('news')) {
-                            const [_, index] = file.key.split('.');
+                        } else if (file.key.includes('introduction')) {
+                            const [_, child] = file.key.split('.');
                             newConfig = {
                                 ...newConfig,
-                                news_and_events: [
-                                    ...newConfig.news_and_events.slice(0, Number(index)),
-                                    {
-                                        ...newConfig.news_and_events[Number(index)],
-                                        image_url: file.url,
-                                    },
-                                    ...newConfig.news_and_events.slice(Number(index) + 1),
-                                ]
+                                introduction: {
+                                    ...newConfig.introduction,
+                                    [child]: file.url
+                                }
                             }
                         } else {
                             newConfig = {
@@ -227,14 +224,12 @@ export default function HomeConfig() {
     // call api update config
     const handleSubmitUpdateConfig = (newConfig: any) => {
         const updatedConfig = {
-            introduction_image_url: newConfig.introduction_image_url.trim(),
+            introduction: {
+                content: newConfig.introduction.content.trim(),
+                image_url: newConfig.introduction.image_url.trim()
+            },
+            news_and_events: newConfig.news_and_events.map((item: INewsAndEvents) => item._id),
             knowledge_bank_video_url: newConfig.knowledge_bank_video_url.trim(),
-            news_and_events: newConfig.news_and_events.filter((item: INewsAndEvents) => item.title !== '').map((item: INewsAndEvents) => ({
-                ...item,
-                image_url: (item.image_url as string).trim(),
-                title: item.title.trim(),
-                description: item.description.trim()
-            })),
             agricultural_policy: newConfig.agricultural_policy.trim(),
             banner: {
                 title: newConfig.banner.title.trim(),
@@ -249,6 +244,7 @@ export default function HomeConfig() {
             },
             onSettled: () => {
                 setLoading(false);
+                setFileInputValue(['', '', ''])
             }
         });
     }
@@ -256,6 +252,11 @@ export default function HomeConfig() {
     const handleSubmit = () => {
         if (!validate()) {
             toast.warning('Vui lòng nhập đầy đủ dữ liệu bắt buộc!')
+            return;
+        }
+        const currentConfig = cloneConfigRef.current;
+        if (currentConfig.news_and_events.length < 3) {
+            toast.warning('Chọn đủ 3 tin tức, sự kiện và nghiên cứu!')
             return;
         }
         handleUploadFiles();
@@ -294,8 +295,11 @@ export default function HomeConfig() {
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="image" required>Hình ảnh</Label>
-                                    <UploadFile handleChangeFile={e => handleHeroImageChange(e, 'banner.image_url')}
-                                                url={heroImage}/>
+                                    <UploadFile
+                                        inputValue={fileInputValue[0]}
+                                        handleChangeFile={e => handleHeroImageChange(e, 'banner.image_url')}
+                                        url={heroImage}
+                                    />
                                 </div>
                             </div>
                         </CustomCard>
@@ -305,10 +309,23 @@ export default function HomeConfig() {
                             <CustomCard
                                 className={'h-fit'}
                                 title={'Phần giới thiệu'}
-                                description={'Cập nhật ảnh cho phần giới thiệu SKĐ'}
+                                description={'Cập nhật nội dung và ảnh cho phần giới thiệu SKĐ'}
                             >
-                                <UploadFile url={introductionImage}
-                                            handleChangeFile={e => handleHeroImageChange(e, 'introduction_image_url')}/>
+                                <div className={'grid gap-4'}>
+                                    <div className={'grid gap-2'}>
+                                        <Label required htmlFor="introduction">Giới thiệu</Label>
+                                        <Textarea
+                                            id="introduction"
+                                            placeholder="Giới thieệu về Sức khỏe đất"
+                                            value={cloneConfig?.introduction.content || ''}
+                                            onChange={(e) => handleChangeInput(e.target.value, 'introduction.content')}
+                                        />
+                                    </div>
+                                    <UploadFile
+                                        inputValue={fileInputValue[1]}
+                                        url={introductionImage}
+                                        handleChangeFile={e => handleHeroImageChange(e, 'introduction.image_url')}/>
+                                </div>
                             </CustomCard>
 
                             {/* Agricultural Policy */}
@@ -333,8 +350,12 @@ export default function HomeConfig() {
                     </div>
                     <div className={'grid gap-4 grid-cols-1 xl:grid-cols-2 h-fit'}>
                         {/* News and events */}
-                        <NewsAndEvents newsAndEvents={cloneConfig.news_and_events} setCloneConfig={setCloneConfig}
-                                       handleChangeImage={handleHeroImageChange} imageUrls={newsImageUrls}/>
+                        <NewsAndEvents
+                            readonly
+                            newsAndEvents={cloneConfig.news_and_events}
+                            handleChangeImage={handleHeroImageChange} imageUrls={newsImageUrls}
+                            setCloneConfig={setCloneConfig}
+                        />
 
                         {/* Knowledge bank video */}
                         <CustomCard
@@ -342,9 +363,12 @@ export default function HomeConfig() {
                             title={'Ngân hàng kiến thức'}
                             description={'Cập nhật video cho ngân hàng kiến thức'}
                         >
-                            <UploadFile url={cloneConfig?.knowledge_bank_video_url as string}
-                                        handleChangeFile={handleChangeVideo}
-                                        selectedVideo={selectedVideo} video/>
+                            <UploadFile
+                                inputValue={fileInputValue[2]}
+                                url={cloneConfig?.knowledge_bank_video_url as string}
+                                handleChangeFile={handleChangeVideo}
+                                selectedVideo={selectedVideo} video
+                            />
                         </CustomCard>
                     </div>
                 </div>

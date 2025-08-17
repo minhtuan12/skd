@@ -1,18 +1,30 @@
 import Image from "next/image";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import React from "react";
+import React, {useRef} from "react";
 import {cn} from "@/lib/utils";
 import {VideoPlayer} from "@/components/ui/video";
+import {Button} from "@/components/ui/button";
 
-export default function UploadFile({url, className, handleChangeFile, video = false, selectedVideo = null}: {
+export default function UploadFile({
+                                       url,
+                                       className,
+                                       handleChangeFile,
+                                       video = false,
+                                       selectedVideo = null,
+                                       disabled,
+                                       inputValue
+                                   }: {
     url: string | File,
     className?: string,
     handleChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
     video?: boolean;
     selectedVideo?: File | null;
+    disabled?: boolean;
+    inputValue: string
 }) {
     const hasVideoBefore = video && url && typeof url === 'string';
+    const fileRef = useRef(null);
 
     return <div className={cn("grid gap-4", className)}>
         <div
@@ -42,12 +54,17 @@ export default function UploadFile({url, className, handleChangeFile, video = fa
                 </div> : <div className={'text-gray-500 italic'}>Chưa có video</div>
             )}
         </div>
-        <div className="grid gap-2">
-            <Label required htmlFor="upload-file">Tải lên</Label>
-            <Input
-                id="upload-file" type="file" accept={video ? 'video/*' : "image/*"}
-                onChange={handleChangeFile} className={'cursor-pointer'}
-            />
-        </div>
+        {
+            !disabled ? <div className="grid gap-2">
+                <Label required htmlFor="upload-file">Tải lên</Label>
+                <Input
+                    ref={fileRef}
+                    id="upload-file" type="file" accept={video ? 'video/*' : "image/*"}
+                    onChange={handleChangeFile} className={'cursor-pointer hidden'}
+                />
+                <Button className={'hover:bg-gray-100 bg-white text-black border border-solid w-full '}
+                        onClick={() => (fileRef.current as any)?.click()}>{inputValue ? `Đã chọn: ${inputValue}` : 'Chọn file'}</Button>
+            </div> : ''
+        }
     </div>
 }
