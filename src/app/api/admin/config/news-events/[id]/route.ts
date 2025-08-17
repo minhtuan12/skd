@@ -5,12 +5,12 @@ import NewsEvents from "@/models/news-events";
 
 const {ObjectId} = Types
 
-async function updateNewsEvents(request: NextRequest, {params}: { params: { id: string } }) {
+async function updateNewsEvents(request: NextRequest, context: { params: { id: string } }) {
     try {
         await connectDb();
 
         const {data} = await request.json();
-        const {id} = params;
+        const {id} = context.params.id;
 
         // Validation
         if (!data || Object.keys(data).length === 0) {
