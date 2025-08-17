@@ -72,6 +72,7 @@ const NewsAndEvents = memo(
                                             </AccordionTrigger>
                                             <AccordionContent className="p-4 border-t">
                                                 <NewsEventsItem
+                                                    fileName={''}
                                                     readonly={readonly}
                                                     data={item} handleImageChange={handleChangeImage}
                                                     index={index}
