@@ -6,7 +6,7 @@ import {withAuthWithContext} from "@/app/api/middleware";
 
 const {ObjectId} = Types
 
-async function updateNewsEvents(request: NextRequest, {params}: { params: { id: string } }) {
+async function updateNewsEvents(request: NextRequest, {params}: any) {
     try {
         await connectDb();
 
