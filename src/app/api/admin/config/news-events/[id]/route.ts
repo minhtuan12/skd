@@ -10,7 +10,7 @@ async function updateNewsEvents(request: NextRequest, context: { params: { id: s
         await connectDb();
 
         const {data} = await request.json();
-        const {id} = context.params.id;
+        const id = context.params.id;
 
         // Validation
         if (!data || Object.keys(data).length === 0) {
