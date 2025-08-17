@@ -3,7 +3,7 @@ import connectDb from "@/lib/db";
 import NewsEvents from "@/models/news-events";
 import {withAuth} from "@/app/api/middleware";
 
-export async function getNewsEvents(request: NextRequest) {
+async function getNewsEvents(request: NextRequest) {
     try {
         await connectDb();
 

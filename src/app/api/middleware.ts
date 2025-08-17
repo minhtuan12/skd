@@ -7,7 +7,6 @@ type ApiHandlerContext<T = any> = (
     context: { params: Promise<T> }
 ) => Promise<NextResponse> | NextResponse;
 
-
 export function withAuth(handler: ApiHandler): ApiHandler {
     return async (request: NextRequest) => {
         try {
