@@ -17,7 +17,7 @@ export const menu: Menu[] = [
         href: routes.ThongTinChinhSach,
         children: [
             {
-                title: 'Chiến lược SKĐ Quốc gia',
+                title: 'Chiến lược Sức khỏe đất Quốc gia',
                 href: routes.ChienLuoc
             },
             {
