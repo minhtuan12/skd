@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
             new URL('https://res.cloudinary.com/**'),
             new URL('http://res.cloudinary.com/**')
         ]
+    },
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '30mb'
+        }
     }
 };
 

@@ -7,7 +7,9 @@ const uploadFolder = process.env.CLOUDINARY_UPLOAD_FOLDER!;
 
 export const config = {
     api: {
-        bodyParser: false,
+        bodyParser: {
+            sizeLimit: '30mb'
+        },
     },
 };
 
