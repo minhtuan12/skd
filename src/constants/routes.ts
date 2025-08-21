@@ -5,6 +5,7 @@ export const routes = {
     HomeConfig: '/admin/config/home',
     NewsConfig: '/admin/config/news',
     EventsConfig: '/admin/config/events',
+    PolicyConfig: '/admin/config/policy',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

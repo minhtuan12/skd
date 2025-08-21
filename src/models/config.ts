@@ -25,6 +25,18 @@ export interface IHomeConfig {
     news_and_events: INewsAndEvents[]
 }
 
+export interface IPolicyConfig {
+    strategy: {
+        draft_ppt_link: string;
+        converted_image_urls: string[];
+    },
+    plan: {
+        draft_ppt_link: string;
+        converted_image_urls: string[];
+    },
+    document: {}
+}
+
 export interface IFooterConfig {
     social: {
         facebook_url: string;
@@ -107,6 +119,29 @@ const ConfigSchema = new Schema({
             type: [Types.ObjectId],
             ref: "NewsEvents",
         }
+    },
+    policy: {
+        strategy: {
+            draft_ppt_link: {
+                type: String,
+                required: true
+            },
+            converted_image_urls: {
+                type: [String],
+                required: true
+            }
+        },
+        plan: {
+            draft_ppt_link: {
+                type: String,
+                required: true
+            },
+            converted_image_urls: {
+                type: [String],
+                required: true
+            }
+        },
+        document: {}
     },
     footer: {
         social: {

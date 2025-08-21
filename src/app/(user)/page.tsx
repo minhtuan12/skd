@@ -5,7 +5,7 @@ import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
 import {INewsAndEvents} from "@/models/config";
-import {dateOptions, NEWS_EVENTS, NEWS_EVENTS_RESEARCH} from "@/constants/common";
+import {dateOptions, NEWS_EVENTS} from "@/constants/common";
 import Image from "next/image";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
@@ -22,32 +22,6 @@ async function fetchHomeConfig() {
 }
 
 export default async function Home() {
-    const news = [
-        {
-            title: 'Hội Thảo Quốc Gia',
-            type: 'Sự kiện',
-            date: '15/06/2025',
-            heading: 'Hội thảo quốc gia về giải pháp phục hồi đất nông nghiệp bị thoái hóa',
-            description: 'Hội thảo đã quy tụ nhiều chuyên gia đầu ngành để thảo luận về các thách thức và đưa ra giải pháp...',
-            bgTitleColor: 'bg-lime-500'
-        },
-        {
-            title: 'Mô Hình Canh Tác Thông Minh',
-            type: 'Nghiên cứu',
-            date: '12/06/2025',
-            heading: 'Nghiên cứu mới về mô hình canh tác thông minh thích ứng biến đổi khí hậu',
-            description: 'Mô hình mới cho thấy hiệu quả rõ rệt trong việc cải thiện độ phì của đất và tăng năng suất...',
-            bgTitleColor: 'bg-emerald-500'
-        },
-        {
-            title: 'Phát Động Chương Trình',
-            type: 'Tin tức',
-            date: '10/06/2025',
-            heading: 'Phát động chương trình "Triệu nông dân vì sức khỏe đất" tại Đồng bằng sông Cửu Long',
-            description: 'Chương trình nhằm nâng cao nhận thức và tập huấn kỹ thuật cho bà con nông dân trong khu vực...',
-            bgTitleColor: 'bg-orange-500'
-        }
-    ]
     const {config: {home}} = await fetchHomeConfig();
 
     return (

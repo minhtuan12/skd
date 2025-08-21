@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import {routes} from "@/constants/routes";
 import {useDispatch} from "react-redux";
 import {setHomeConfig} from "@/redux/slices/config";
+import {setPolicies} from "@/redux/slices/policy";
 
 const fetchConfig = async (page: string) => {
     const response = await fetch(`/api/admin/config?page=${page}`, {
@@ -42,6 +43,9 @@ export const useConfig = (page: string) => {
             switch (page) {
                 case 'home':
                     dispatch(setHomeConfig(data.config.home))
+                    return;
+                case 'policy':
+                    dispatch(setPolicies(data.config.policy))
                     return;
             }
         }

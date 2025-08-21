@@ -1,7 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {cloudinaryService} from "@/service/cloudinary";
-import {withAuth} from "@/app/api/middleware";
 import {getResourceType} from "@/app/api/helpers";
+import cloudinary from "@/lib/cloudinary";
 
 const uploadFolder = process.env.CLOUDINARY_UPLOAD_FOLDER!;
 
@@ -37,14 +37,26 @@ async function uploadFile(request: NextRequest) {
             const buffer = Buffer.from(bytes);
 
             let result;
-            if (types[i] === 'video') {
-                result = await cloudinaryService.uploadVideoChunked(buffer);
-            } else {
-                result = await cloudinaryService.uploadFile(buffer, {
-                    folder: uploadFolder,
-                    tags: ['upload'],
-                    resource_type: 'auto'
-                });
+            switch (types[i]) {
+                case 'image':
+                    result = await cloudinaryService.uploadFile(buffer, {
+                        folder: uploadFolder,
+                        tags: ['upload'],
+                        resource_type: 'auto'
+                    });
+                    break;
+                case 'video':
+                    result = await cloudinaryService.uploadVideoChunked(buffer);
+                    break;
+                default:
+                    result = await cloudinaryService.uploadFile(buffer, {
+                        folder: uploadFolder,
+                        tags: ['upload'],
+                        resource_type: 'raw',
+                        raw_convert: "aspose",
+                        format: 'pptx'
+                    });
+                    break;
             }
 
             results.push({
@@ -97,5 +109,5 @@ async function deleteFile(request: NextRequest) {
     }
 }
 
-export const POST = withAuth(uploadFile);
-export const DELETE = withAuth(deleteFile);
+// export const POST = withAuth(uploadFile);
+export const POST = (uploadFile);

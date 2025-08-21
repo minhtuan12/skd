@@ -170,7 +170,6 @@ export default function NewsConfig() {
     }
 
     const handleChangeNewsVisibility = () => {
-        console.log(newNewsEvent)
         if (newNewsEvent._id) {
             updateNews({
                 _id: newNewsEvent._id,

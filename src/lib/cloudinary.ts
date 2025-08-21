@@ -18,6 +18,9 @@ export interface CloudinaryUploadOptions {
     overwrite?: boolean;
     unique_filename?: boolean;
     use_filename?: boolean;
+    format?: string;
+    pages?: boolean;
+    raw_convert?: string
 }
 
 export interface CloudinaryUploadResult {
@@ -38,4 +41,5 @@ export interface CloudinaryUploadResult {
     secure_url: string;
     folder: string;
     original_filename: string;
+    [key: string]: any;
 }

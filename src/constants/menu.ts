@@ -21,7 +21,7 @@ export const menu: Menu[] = [
                 href: routes.ChienLuoc
             },
             {
-                title: 'Kế hoạch hành đồng sức khỏe đất',
+                title: 'Kế hoạch hành động sức khỏe đất',
                 href: routes.KeHoach
             },
             {
@@ -122,6 +122,11 @@ export const sideBarItems = [
             {
                 title: "Tin tức, sự kiện & nghiên cứu",
                 url: routes.NewsConfig,
+                icon: Newspaper,
+            },
+            {
+                title: "Thông tin chính sách",
+                url: routes.PolicyConfig,
                 icon: Newspaper,
             },
         ]

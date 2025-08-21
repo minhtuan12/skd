@@ -9,8 +9,8 @@ async function seed() {
     try {
         await mongoose.connect(process.env.MONGODB_URI!);
 
-        const username = "skd-admin";
-        const password = "Skd@admin123";
+        const username = "admin";
+        const password = "Admin123";
 
         const hashed = await bcrypt.hash(password, 10);
         await Admin.findOneAndUpdate({username}, {password: hashed}, {new: true, upsert: true});

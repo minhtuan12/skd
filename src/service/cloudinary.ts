@@ -15,10 +15,17 @@ class CloudinaryService {
                 ...options
             };
 
+            let fileData = '';
+            switch (defaultOptions.resource_type) {
+                case 'auto':
+                    fileData = `data:image/png;base64,${file.toString("base64")}`;
+                    break;
+                case 'raw':
+                    fileData = `data:application/vnd.openxmlformats-officedocument.presentationml.presentation;base64,${file.toString("base64")}`;
+            }
+
             const result = await cloudinary.uploader.upload(
-                Buffer.isBuffer(file)
-                    ? `data:image/png;base64,${file.toString("base64")}`
-                    : file,
+                Buffer.isBuffer(file) ? fileData : file,
                 defaultOptions
             );
             return result as unknown as CloudinaryUploadResult;
@@ -179,6 +186,14 @@ class CloudinaryService {
             throw error;
         }
     }
+
+    async convertPptxToImages(publicId: string) {
+        const result = await cloudinary.api.resource(publicId, {
+            resource_type: "image",
+            pages: true,
+        });
+        return result.pages;
+    };
 }
 
 export const cloudinaryService = new CloudinaryService();
