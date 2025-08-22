@@ -41,5 +41,6 @@ export interface CloudinaryUploadResult {
     secure_url: string;
     folder: string;
     original_filename: string;
+
     [key: string]: any;
 }

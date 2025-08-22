@@ -26,25 +26,6 @@ export default async function Home() {
 
     return (
         <>
-            {/* Hero Section */}
-            <AnimatedSection
-                asTag={"section"} className="text-green-500 py-30 text-center relative"
-                initial={{opacity: 0, y: -50}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.8}}
-            >
-                <Image
-                    src={home.banner.image_url as string}
-                    alt="Đất khỏe cho cây trồng khỏe"
-                    layout="fill"
-                    objectFit="cover"
-                />
-                <div className={'relative z-20 px-4 md:px-0 box-border'}>
-                    <h2 className="text-4xl font-bold">{home.banner.title}</h2>
-                    <p className="mt-4 text-[14px]">{home.banner.description}</p>
-                </div>
-            </AnimatedSection>
-
             {/* Intro Section */}
             <AnimatedSection
                 asTag={'section'}

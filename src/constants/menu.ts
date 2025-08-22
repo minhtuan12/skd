@@ -1,5 +1,5 @@
 import {routes} from "@/constants/routes";
-import {CalendarRange, Home, Newspaper} from "lucide-react";
+import {Home, Newspaper} from "lucide-react";
 
 export interface Menu {
     title: string;

@@ -5,7 +5,7 @@ import connectDb from "@/lib/db";
 export async function GET(request: NextRequest) {
     try {
         await connectDb();
-        const globalConfig = await Config.findOne().select('footer').lean();
+        const globalConfig: any = await Config.findOne().select('home').lean();
         if (!globalConfig) {
             return NextResponse.json(
                 {error: 'Không tồn tại thông tin cấu hình'},
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        return NextResponse.json({globalConfig});
+        return NextResponse.json({config: {...globalConfig.home.banner}});
     } catch (error) {
         console.error('Global config API error:', error);
         return NextResponse.json(

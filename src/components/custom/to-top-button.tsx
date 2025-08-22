@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ChevronUp } from 'lucide-react';
+import {useEffect, useState} from 'react';
+import {ChevronUp} from 'lucide-react';
 
 export default function GoToTopButton() {
     const [visible, setVisible] = useState(false);
@@ -16,7 +16,7 @@ export default function GoToTopButton() {
     }, []);
 
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
     return (
@@ -27,7 +27,7 @@ export default function GoToTopButton() {
             }`}
             aria-label="Scroll to top"
         >
-            <ChevronUp className="w-5 h-5" />
+            <ChevronUp className="w-5 h-5"/>
         </button>
     );
 }

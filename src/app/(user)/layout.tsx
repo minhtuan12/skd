@@ -5,6 +5,8 @@ import React from "react";
 import Header from "@/components/layout/user/header";
 import GoToTopButton from "@/components/custom/to-top-button";
 import Footer from "@/components/layout/user/footer";
+import {fetchGlobalConfig} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-global-config";
+import Hero from "@/components/layout/user/hero";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -21,26 +23,15 @@ export const metadata: Metadata = {
     description: "Sức Khỏe Đất",
 };
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
-
-async function fetchHomeConfig() {
-    const res = await fetch(`${baseUrl}/api/config`,
-        {cache: 'no-store', credentials: 'include'}
-    );
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch config');
-    }
-    return res.json();
-}
-
-export default function RootLayout(
+export default async function RootLayout(
     {
         children,
     }: Readonly<{
         children: React.ReactNode;
     }>
 ) {
+    const heroData = await fetchGlobalConfig();
+
     return (
         <html lang="en">
         <body
@@ -48,6 +39,7 @@ export default function RootLayout(
         >
         <main className="min-h-screen w-full">
             <Header/>
+            <Hero data={heroData.config}/>
             {children}
             <Footer/>
             <GoToTopButton/>

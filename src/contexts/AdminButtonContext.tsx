@@ -13,6 +13,8 @@ export const AdminButtonContext = React.createContext<{
     setHandlers: (h: ButtonHandlers) => void;
     setLoading: (loading: boolean) => void;
 }>({
-    setHandlers: () => {},
-    setLoading: () => {},
+    setHandlers: () => {
+    },
+    setLoading: () => {
+    },
 });

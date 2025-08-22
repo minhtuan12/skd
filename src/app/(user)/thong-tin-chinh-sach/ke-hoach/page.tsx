@@ -1,10 +1,7 @@
 import PptViewer from "@/components/custom/ppt-viewer";
 import {Loader2} from "lucide-react";
 import React from "react";
-import {fetchPolicy} from "@/app/(user)/thong-tin-chinh-sach/fetchPolicy";
-import Image from "next/image";
-import AnimatedSection from "@/components/custom/animated-section";
-import {fetchHomeConfig} from "@/app/(user)/thong-tin-chinh-sach/fetchHomeConfig";
+import {fetchPolicy} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-policy";
 
 async function fetchPlanConfig() {
     try {
@@ -20,26 +17,8 @@ async function fetchPlanConfig() {
 
 export default async function ChienLuoc() {
     const policy = await fetchPlanConfig();
-    const {config: {home}} = await fetchHomeConfig();
 
     return <div className={'box-border pb-12 flex flex-col gap-6'}>
-        <AnimatedSection
-            asTag={"section"} className="text-green-500 py-30 text-center relative"
-            initial={{opacity: 0, y: -50}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.8}}
-        >
-            <Image
-                src={home.banner.image_url as string}
-                alt="Đất khỏe cho cây trồng khỏe"
-                layout="fill"
-                objectFit="cover"
-            />
-            <div className={'relative z-20 px-4 md:px-0 box-border'}>
-                <h2 className="text-4xl font-bold">{home.banner.title}</h2>
-                <p className="mt-4 text-[14px]">{home.banner.description}</p>
-            </div>
-        </AnimatedSection>
         <div className={'flex flex-col gap-6 px-6 xl:px-0'}>
             <h1 className={'font-semibold text-center text-xl'}>KẾ HOẠCH HÀNH ĐỘNG SỨC KHỎE ĐẤT QUỐC GIA</h1>
             <div className={'flex-1'}>

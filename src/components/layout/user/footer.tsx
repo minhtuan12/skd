@@ -2,7 +2,6 @@ import Link from "next/link";
 import {routes} from "@/constants/routes";
 
 export default function Footer() {
-
     const social = [
         {
             href: '#',

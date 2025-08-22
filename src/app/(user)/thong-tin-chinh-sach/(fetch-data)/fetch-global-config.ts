@@ -1,10 +1,7 @@
-import {cloudinaryService} from "@/service/cloudinary";
-import cloudinary from "@/lib/cloudinary";
-
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
-export async function fetchHomeConfig() {
-    const res = await fetch(`${baseUrl}/api/config?page=home`,
+export async function fetchGlobalConfig() {
+    const res = await fetch(`${baseUrl}/api/config/global`,
         {cache: 'no-store', credentials: 'include'}
     );
 
