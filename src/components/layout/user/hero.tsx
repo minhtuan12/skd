@@ -3,7 +3,7 @@ import AnimatedSection from "@/components/custom/animated-section";
 
 export default function Hero({data}: { data: { title: string, description: string, image_url: string } }) {
     return <AnimatedSection
-        asTag={"section"} className="text-green-500 py-30 text-center relative"
+        asTag={"section"} className="text-green-500 py-50 text-center relative"
         initial={{opacity: 0, y: -50}}
         animate={{opacity: 1, y: 0}}
         transition={{duration: 0.8}}

@@ -1,6 +1,6 @@
 'use client'
 
-import {ChevronUp, User2,} from "lucide-react"
+import {ChevronRight, ChevronUp, User2,} from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -12,17 +12,22 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
     SidebarRail,
 } from "@/components/ui/sidebar"
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu"
 import {useAdmin} from "@/contexts/AdminContext";
 import {Skeleton} from "@/components/ui/skeleton";
 import {sideBarItems} from "@/constants/menu";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
+import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
 
 export function AppSidebar() {
     const {admin, logout} = useAdmin();
     const router = useRouter();
+    const pathname = usePathname();
 
     return (
         <Sidebar collapsible="icon">
@@ -51,16 +56,56 @@ export function AppSidebar() {
                             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
                             <SidebarGroupContent>
                                 <SidebarMenu>
-                                    {item.children.map((child) => (
-                                        <SidebarMenuItem key={child.title}>
-                                            <SidebarMenuButton asChild>
-                                                <div onClick={() => router.push(child.url)}
-                                                     className={'cursor-pointer'}>
-                                                    <child.icon/>
-                                                    <span>{child.title}</span>
-                                                </div>
-                                            </SidebarMenuButton>
-                                        </SidebarMenuItem>
+                                    {item.children.map((child, index) => (
+                                        child.children ?
+                                            <Collapsible
+                                                className="group/collapsible" key={index}
+                                                defaultOpen={pathname.includes(child.url)}
+                                            >
+                                                <SidebarMenuItem>
+                                                    <CollapsibleTrigger asChild
+                                                                        className={'[&[data-state=open]>svg]:rotate-90'}>
+                                                        <SidebarMenuButton
+                                                            className={'flex justify-between cursor-pointer'}
+                                                            isActive={pathname.includes(child.url)}>
+                                                            <div className={'flex items-center gap-2'}>
+                                                                <child.icon className={'w-4 h-4'}/>
+                                                                {child.title}
+                                                            </div>
+                                                            <ChevronRight className={'transition-transform'}/>
+                                                        </SidebarMenuButton>
+                                                    </CollapsibleTrigger>
+                                                    <CollapsibleContent>
+                                                        <SidebarMenuSub>
+                                                            {
+                                                                child.children.map((i, idx) => (
+                                                                    <SidebarMenuSubItem key={idx}>
+                                                                        <SidebarMenuSubButton asChild
+                                                                                              isActive={pathname.includes(child.url)}>
+                                                                            <div
+                                                                                onClick={() => router.push(child.url + i.url)}
+                                                                                className={'cursor-pointer'}>
+                                                                                <child.icon/>
+                                                                                <span>{i.title}</span>
+                                                                            </div>
+                                                                        </SidebarMenuSubButton>
+                                                                    </SidebarMenuSubItem>
+                                                                ))
+                                                            }
+                                                        </SidebarMenuSub>
+                                                    </CollapsibleContent>
+                                                </SidebarMenuItem>
+                                            </Collapsible>
+                                            : <SidebarMenuItem key={child.title}>
+                                                <SidebarMenuButton asChild
+                                                                   isActive={pathname[pathname.length - 1] === child.url}>
+                                                    <div onClick={() => router.push(child.url)}
+                                                         className={'cursor-pointer'}>
+                                                        <child.icon/>
+                                                        <span>{child.title}</span>
+                                                    </div>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
                                     ))}
                                 </SidebarMenu>
                             </SidebarGroupContent>

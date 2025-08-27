@@ -8,6 +8,7 @@ const {ObjectId} = Types;
 
 const imageExtensions = ['jpeg', 'png', 'jpg', 'gif', 'bmp', 'tiff', 'tif', 'svg', 'ico', 'webp'];
 const videoExtensions = ['mp4', 'm4v', 'm4p', 'mov', 'qt', 'avi', 'wmv', 'mkv', 'webm', 'mts', 'm2ts', 'ts', 'ogv', 'ogg', '3gp', 'flv'];
+const pageLimit = 4;
 
 export async function getConfig(request: NextRequest) {
     try {
@@ -28,6 +29,88 @@ export async function getConfig(request: NextRequest) {
                         ...config.home,
                         news_and_events: newsAndEvents
                     }
+                }
+            } else if (page === 'news-events') {
+                const type = searchParams.get('type') || 'news';
+                const pageNumber = parseInt(searchParams.get('pageNumber') || '1');
+                if (type === 'researches') {
+                    const result = await NewsEvents.aggregate([
+                        {
+                            $match: {type: 'research', is_deleted: false}
+                        },
+                        {$sort: {createdAt: -1}},
+                        {
+                            $facet: {
+                                data: [
+                                    {$skip: 9 * (pageNumber - 1)},
+                                    {$limit: 9}
+                                ],
+                                totalCount: [
+                                    {$count: "count"}
+                                ]
+                            }
+                        },
+                        {
+                            $project: {
+                                data: 1,
+                                total: {$arrayElemAt: ["$totalCount.count", 0]},
+                                totalPages: {
+                                    $ceil: {$divide: [{$arrayElemAt: ["$totalCount.count", 0]}, 9]}
+                                }
+                            }
+                        }
+                    ]);
+                    config = {researches: result[0]};
+                } else {
+                    const skip = (pageNumber - 1) * pageLimit;
+
+                    const result = await NewsEvents.aggregate([
+                        {
+                            $facet: {
+                                topNews: [
+                                    {$match: {type: "news", is_deleted: false}},
+                                    {$sort: {createdAt: -1}},
+                                    {$limit: 3}
+                                ],
+                                newsData: [
+                                    {$match: {type: "news", is_deleted: false}},
+                                    {$sort: {createdAt: -1}},
+                                    {$skip: 3},
+                                    {$skip: skip},
+                                    {$limit: pageLimit}
+                                ],
+                                newsCount: [
+                                    {$match: {type: "news", is_deleted: false}},
+                                    {$count: "total"}
+                                ],
+                                eventsData: [
+                                    {$match: {type: "event", is_deleted: false}},
+                                    {$sort: {createdAt: -1}},
+                                ],
+                                eventsCount: [
+                                    {$match: {type: "event", is_deleted: false}},
+                                    {$count: "total"}
+                                ]
+                            }
+                        } as any
+                    ])
+                    const data = result[0];
+                    const totalNews = Math.max((data.newsCount[0]?.total || 0) - 3, 0);
+
+                    const news = {
+                        topNews: data.topNews,
+                        data: data.newsData,
+                        total: totalNews,
+                        page: pageNumber,
+                        totalPages: Math.ceil(totalNews / pageLimit),
+                    }
+                    const events = {
+                        data: data.eventsData,
+                        total: data.eventsCount[0]?.total || 0,
+                        page: pageNumber,
+                        totalPages: Math.ceil((data.eventsCount[0]?.total || 0) / pageLimit),
+                    }
+                    config = {news, events};
                 }
             }
         } else {
@@ -59,4 +142,8 @@ export function getResourceType(extension: string) {
         return 'video';
     }
     return 'raw';
+}
+
+export function capitalizeFirstWord(str: string) {
+    return str[0].toUpperCase() + str.slice(1).toLowerCase();
 }

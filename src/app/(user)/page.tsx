@@ -29,7 +29,7 @@ export default async function Home() {
             {/* Intro Section */}
             <AnimatedSection
                 asTag={'section'}
-                className="h-auto sm:h-100 my-14 px-10 lg:px-10 xl:px-40 flex flex-col sm:flex-row items-center justify-between gap-10"
+                className="h-auto my-14 px-10 lg:px-10 xl:px-40 flex flex-col sm:flex-row items-center justify-between gap-10"
                 initial={{opacity: 0, y: 30}}
                 whileInView={{opacity: 1, y: 0}}
                 transition={{duration: 0.6}}
@@ -50,15 +50,17 @@ export default async function Home() {
                 </div>
                 <AnimatedSection
                     asTag={'div'}
-                    className="bg-[#a4ef1f] relative p-16 sm:p-4 rounded shadow-lg h-full w-full sm:w-1/2 flex items-center justify-center"
+                    className="relative p-4 rounded shadow-lg h-full w-full sm:w-1/2 flex items-center justify-center"
                     whileHover={{scale: 1.03}}
                     transition={{type: "spring", stiffness: 300}}
                 >
                     <Image
                         src={home.introduction.image_url}
                         alt="Giới thiệu về Sức khỏe Đất"
-                        layout="fill"
-                        objectFit="cover"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: "auto", height: "auto" }}
                     />
                 </AnimatedSection>
             </AnimatedSection>

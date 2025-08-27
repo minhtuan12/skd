@@ -129,6 +129,18 @@ export const sideBarItems = [
                 url: routes.PolicyConfig,
                 icon: Newspaper,
             },
+            {
+                title: "Ngân hàng kiến thức",
+                url: routes.KnowledgeConfig,
+                icon: Newspaper,
+                children: [
+                    {
+                        title: "Quản lý nhóm cây",
+                        url: routes.TreeTypeManagement,
+                        icon: Newspaper,
+                    },
+                ]
+            },
         ]
     },
 ]

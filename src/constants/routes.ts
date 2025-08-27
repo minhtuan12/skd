@@ -6,6 +6,13 @@ export const routes = {
     NewsConfig: '/admin/config/news',
     EventsConfig: '/admin/config/events',
     PolicyConfig: '/admin/config/policy',
+    // Knowledge
+    KnowledgeConfig: '/admin/config/knowledge',
+    TreeTypeManagement: '/tree-type',
+    Training: '/training',
+    Farming: '/farming',
+    Renovation: '/renovation',
+    Model: '/model',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

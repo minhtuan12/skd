@@ -47,7 +47,7 @@ async function addNewsEvents(request: NextRequest) {
 
         return NextResponse.json(
             JSON.stringify({message: "Thêm mới thành công"}),
-            {status: 200}
+            {status: 201}
         );
     } catch (error) {
         console.error('Config API error:', error);
