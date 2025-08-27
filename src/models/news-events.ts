@@ -18,7 +18,7 @@ const NewsEventsSchema = new Schema({
         required: true
     },
     description: {
-        type: String,
+        type: JSON,
         required: true
     },
     is_deleted: {

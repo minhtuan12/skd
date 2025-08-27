@@ -1,5 +1,6 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
+import DOMPurify from 'isomorphic-dompurify';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -26,4 +27,10 @@ export function formatDate(dateString: string) {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+}
+
+export function sanitizeHtml(dirty: string): string {
+    return DOMPurify.sanitize(dirty, {
+        USE_PROFILES: {html: true},
+    });
 }

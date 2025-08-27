@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import NewsEvents from "@/models/news-events";
 import {withAuthWithContext} from "@/app/api/middleware";
+import {sanitizeHtml} from "@/lib/utils";
 
 const {ObjectId} = Types
 
@@ -26,7 +27,7 @@ async function updateNewsEvents(request: NextRequest, {params}: { params: Promis
             !Object.keys(data).includes('is_deleted') ? {
                 $set: {
                     title: data.title,
-                    description: data.description,
+                    description: sanitizeHtml(data.description),
                     image_url: data.image_url,
                     date: data.date,
                     type: data.type

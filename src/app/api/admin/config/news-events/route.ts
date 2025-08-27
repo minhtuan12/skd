@@ -2,6 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import NewsEvents from "@/models/news-events";
 import {withAuth} from "@/app/api/middleware";
+import {sanitizeHtml} from "@/lib/utils";
 
 async function getNewsEvents(request: NextRequest) {
     try {
@@ -10,7 +11,7 @@ async function getNewsEvents(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const type = searchParams.get('type');
         const typeCondition = type !== 'all' ? {type} : {};
-        const newsEvents = await NewsEvents.find({...typeCondition});
+        const newsEvents = await NewsEvents.find({...typeCondition}).sort('-createdAt');
 
         return NextResponse.json({news_events: newsEvents, type});
     } catch (error) {
@@ -38,7 +39,7 @@ async function addNewsEvents(request: NextRequest) {
 
         const newNewsEvents = new NewsEvents({
             title: data.title,
-            description: data.description,
+            description: sanitizeHtml(data.description),
             image_url: data.image_url,
             date: data.date,
             type: data.type

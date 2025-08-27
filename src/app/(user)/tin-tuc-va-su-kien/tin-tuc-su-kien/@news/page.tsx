@@ -1,7 +1,7 @@
 'use client'
 
 import {INewsAndEvents} from "@/models/config";
-import CardNews from "@/components/custom/card-news";
+import CardNews from './card-news'
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight, Loader2} from "lucide-react";
 import React, {useEffect, useState} from "react";

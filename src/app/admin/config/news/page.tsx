@@ -2,7 +2,7 @@
 
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setBreadcrumb, setPageTitle} from "@/redux/slices/admin";
+import {setBreadcrumb} from "@/redux/slices/admin";
 import {routes} from "@/constants/routes";
 import {Loader2} from "lucide-react";
 import {RootState} from "@/redux/store";
@@ -12,14 +12,13 @@ import {toast} from "sonner";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {useNewsEvents} from "@/app/admin/config/(hooks)/use-news-events";
 import {useAddNewsEvents} from "@/app/admin/config/(hooks)/use-add-news-events";
-import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import NewsEventsItem from "@/app/admin/config/(components)/news-events-item";
 import {NEWS_EVENTS_TYPE} from "@/constants/enums";
 import {Button} from "@/components/ui/button";
 import {useUpdateNewsEvents} from "@/app/admin/config/(hooks)/use-update-news-events";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import CustomCard from "@/components/custom/custom-card";
 import {NEWS_EVENTS} from "@/constants/common";
+import DataTable from "@/app/admin/config/news/data-table";
 
 const defaultItem = {
     date: new Date(),
@@ -55,14 +54,6 @@ export default function NewsConfig() {
             {title: 'Cấu hình', href: routes.NewsConfig},
             {title: 'Quản lý tin tức, sự kiện và nghiên cứu'}
         ]))
-        dispatch(setPageTitle('Quản lý tin tức, sự kiện và nghiên cứu'))
-        setHandlers({
-            visibleReset: false,
-            submitText: 'Thêm mới',
-            reset: () => {
-            },
-            submit: handleAddNews
-        })
     }, [])
 
     useEffect(() => {
@@ -169,11 +160,11 @@ export default function NewsConfig() {
         setCurrentTab(value)
     }
 
-    const handleChangeNewsVisibility = () => {
-        if (newNewsEvent._id) {
+    const handleChangeNewsVisibility = (item: INewsAndEvents) => {
+        if (item._id) {
             updateNews({
-                _id: newNewsEvent._id,
-                is_deleted: !newNewsEvent.is_deleted
+                _id: item._id,
+                is_deleted: !item.is_deleted
             }, {
                 onSuccess: () => {
                     toast.success('Cập nhật thành công');
@@ -186,8 +177,47 @@ export default function NewsConfig() {
         }
     }
 
+    const handleClickEdit = (item: INewsAndEvents) => {
+        setOpenModal(true)
+        setNewNewsEvent(item)
+        setModalTitle(`Cập nhật ${NEWS_EVENTS[currentTab as keyof typeof NEWS_EVENTS]}`)
+    }
+
     return <>
-        <Tabs defaultValue="news" onValueChange={handleChangeTab} value={currentTab}>
+        <div className="flex items-center justify-between space-y-2 flex-wrap">
+            <h2 className="text-3xl font-bold tracking-tight">Quản lý tin tức, sự kiện và nghiên cứu</h2>
+            <div
+                className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
+                {openModal ? <div className={'flex gap-4'}>
+                        <Button
+                            onClick={() => {
+                                setNewNewsEvent(defaultItem);
+                                setOpenModal(false);
+                            }} size={'lg'}
+                            disabled={loadingAdd || loadingUpload || loadingUpdate}
+                        >
+                            Quay lại
+                        </Button>
+                        <Button
+                            onClick={handleSubmit} size={'lg'}
+                            disabled={
+                                !newNewsEvent.title || !newNewsEvent.description || !newNewsEvent.image_url
+                                || loadingAdd || loadingUpload || loadingUpdate
+                            }
+                        >
+                            {(loadingAdd || loadingUpload || loadingUpdate) &&
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                            {modalTitle.includes('Thêm mới') ? 'Lưu' : 'Cập nhật'}
+                        </Button>
+                    </div>
+                    :
+                    <Button onClick={handleAddNews} size={'lg'}>
+                        Thêm mới
+                    </Button>
+                }
+            </div>
+        </div>
+        <Tabs defaultValue="news" onValueChange={handleChangeTab} value={currentTab} className={'pb-10 h-full'}>
             <TabsList className={'w-full'}>
                 <TabsTrigger value="news" className={'data-[state=active]:bg-blue-200'}>Tin tức</TabsTrigger>
                 <TabsTrigger value="event" className={'data-[state=active]:bg-green-200'}>Sự
@@ -200,79 +230,25 @@ export default function NewsConfig() {
                         <TabsContent value={tab} className={'mt-2'} key={tab}>
                             {
                                 loading ? <Loader2 className={'animate-spin'}/> :
-                                    <div className={'grid gap-4 grid-rows-[auto_auto]'}>
-                                        <div
-                                            className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5'}>
-                                            {
-                                                news.map((item: INewsAndEvents, index) => (
-                                                    <CustomCard
-                                                        key={index}
-                                                        title={item.title}
-                                                        onClick={() => {
-                                                            setOpenModal(true)
-                                                            setNewNewsEvent(item)
-                                                            setModalTitle(`Cập nhật ${NEWS_EVENTS[currentTab as keyof typeof NEWS_EVENTS]}`)
-                                                        }}
-                                                        headerClassName={'px-5'}
-                                                        contentClassName={'px-5'}
-                                                        badge={item.is_deleted ? 'Đã ẩn' : ''}
-                                                    >
-                                                        <NewsEventsItem
-                                                            fileName={files[index] || ''}
-                                                            readonly={true}
-                                                            data={item}
-                                                            handleImageChange={handleChangeImage}
-                                                            index={index}
-                                                            imageUrl={(imageUrl && newNewsEvent._id === item._id) ? imageUrl : item.image_url as string}
-                                                        />
-                                                    </CustomCard>
-                                                ))
-                                            }
-                                        </div>
-                                    </div>
+                                    !openModal ? <DataTable
+                                        data={news}
+                                        handleClickEdit={handleClickEdit}
+                                        handleClickDelete={handleChangeNewsVisibility}
+                                        loadingUpdate={loadingUpdate}
+                                    /> : <NewsEventsItem
+                                        isForm
+                                        fileName={''}
+                                        readonly={false}
+                                        data={newNewsEvent}
+                                        setNewNewsEvents={setNewNewsEvent}
+                                        imageUrl={imageUrl}
+                                        handleImageChange={handleChangeImage}
+                                    />
                             }
                         </TabsContent>
                     ))}
                 </>
             }
         </Tabs>
-        <Dialog open={openModal} onOpenChange={setOpenModal}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{modalTitle}</DialogTitle>
-                </DialogHeader>
-                <NewsEventsItem
-                    fileName={''}
-                    readonly={false}
-                    data={newNewsEvent}
-                    setNewNewsEvents={setNewNewsEvent}
-                    imageUrl={imageUrl}
-                    handleImageChange={handleChangeImage}
-                />
-                <div className={'w-full flex justify-between'}>
-                    {modalTitle.includes('Cập nhật') ?
-                        <Button
-                            className={'w-1/3 bg-red-500 hover:bg-red-400'}
-                            disabled={loadingAdd || loadingUpload || loadingUpdate}
-                            onClick={handleChangeNewsVisibility}
-                        >
-                            {(loadingAdd || loadingUpload || loadingUpdate) ?
-                                <Loader2 className={'animate-spin'}/> : ''}
-                            {newNewsEvent.is_deleted ? `Hiện tin` : 'Ẩn tin'}
-                        </Button> : ''
-                    }
-                    <Button className={modalTitle.includes('Cập nhật') ? 'w-1/3' : 'w-full'}
-                            disabled={
-                                !newNewsEvent.title || !newNewsEvent.description || !newNewsEvent.image_url
-                                || loadingAdd || loadingUpload || loadingUpdate
-                            }
-                            onClick={handleSubmit}
-                    >
-                        {(loadingAdd || loadingUpload || loadingUpdate) ?
-                            <Loader2 className={'animate-spin'}/> : ''} Lưu
-                    </Button>
-                </div>
-            </DialogContent>
-        </Dialog>
     </>
 }

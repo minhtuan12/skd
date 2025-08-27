@@ -8,6 +8,7 @@ export interface INewsAndEvents {
     title: string;
     description: string;
     is_deleted?: boolean;
+    createdAt?: string;
 }
 
 export interface IHomeConfig {

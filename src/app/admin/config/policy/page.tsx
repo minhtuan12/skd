@@ -2,7 +2,7 @@
 
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setBreadcrumb, setPageTitle} from "@/redux/slices/admin";
+import {setBreadcrumb} from "@/redux/slices/admin";
 import {routes} from "@/constants/routes";
 import {Loader2} from "lucide-react";
 import {useConfig} from "@/app/admin/config/(hooks)/use-config";
@@ -13,6 +13,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {RootState} from "@/redux/store";
 import {Dropzone, DropzoneContent, DropzoneEmptyState} from "@/components/ui/shadcn-io/dropzone";
 import {toast} from "sonner";
+import {Button} from "@/components/ui/button";
 
 const tabs = ['strategy', 'plan', 'document'];
 
@@ -31,21 +32,13 @@ export default function PolicyConfig() {
     const {setHandlers, setLoading} = useContext(AdminButtonContext);
     const {error, refetch, loading} = useConfig('policy');
     const {mutate, loading: loadingUpdate, isSuccess, isError, error: errorUpdate} = useSaveConfig('policy');
-    const {uploadFile} = useUploadFile();
+    const {uploadFile, loading: loadingUpload} = useUploadFile();
 
     useEffect(() => {
         dispatch(setBreadcrumb([
             {title: 'Cấu hình', href: routes.HomeConfig},
             {title: 'Thông tin chính sách'}
         ]))
-        dispatch(setPageTitle('Thông tin chính sách'))
-        setHandlers({
-            submitText: 'Cập nhật',
-            visibleReset: false,
-            reset: () => {
-            },
-            submit: handleSubmit
-        })
     }, [])
 
     useEffect(() => {
@@ -113,55 +106,67 @@ export default function PolicyConfig() {
         setFiles(files);
     };
 
-    return <Tabs defaultValue="strategy" onValueChange={handleChangeTab} value={currentTab}>
-        <TabsList className={'w-full'}>
-            <TabsTrigger value="strategy" className={'data-[state=active]:bg-blue-200'}>Chiến lược SKĐ Quốc
-                gia</TabsTrigger>
-            <TabsTrigger value="plan" className={'data-[state=active]:bg-green-200'}>Kế hoạch hành động
-                SKĐ</TabsTrigger>
-            <TabsTrigger value="document" className={'data-[state=active]:bg-yellow-200'}>Các văn bản chính
-                sách liên quan</TabsTrigger>
-        </TabsList>
-        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> :
-            <>
-                {tabs.map(tab => (
-                    <TabsContent value={tab} className={'mt-2'} key={tab}>
-                        {
-                            tab !== 'document' ? (loading ? <Loader2 className={'animate-spin'}/> :
-                                    <>
-                                        {pptLink ?
-                                            <div className={'my-6 font-medium'}>
-                                                Dự thảo hiện tại:
-                                                <a href={pptLink} className={'italic underline text-blue-500 ml-1'}
-                                                   target={'_blank'}>
-                                                    Dự thảo
-                                                </a>
-                                            </div> : <div className={'my-6 italic text-gray-500'}>
-                                                Chưa có dự thảo nào
-                                            </div>
-                                        }
-                                        <Dropzone
-                                            accept={{
-                                                "application/vnd.ms-powerpoint": [], // .ppt
-                                                "application/vnd.openxmlformats-officedocument.presentationml.presentation": [], // .pptx
-                                            }}
-                                            maxFiles={1}
-                                            maxSize={1024 * 1024 * 10}
-                                            minSize={1024}
-                                            onDrop={handleDrop}
-                                            onError={console.error}
-                                            src={files}
-                                            className={'h-[calc(100vh-500px)]'}
-                                        >
-                                            <DropzoneEmptyState/>
-                                            <DropzoneContent/>
-                                        </Dropzone>
-                                    </>
-                            ) : <></>
-                        }
-                    </TabsContent>
-                ))}
-            </>
-        }
-    </Tabs>
+    return <>
+        <div className="flex items-center justify-between space-y-2 flex-wrap">
+            <h2 className="text-3xl font-bold tracking-tight">Thông tin chính sách</h2>
+            <div
+                className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
+                <Button onClick={handleSubmit} disabled={loadingUpdate || loadingUpload}>
+                    {(loadingUpdate || loadingUpload) &&
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}Cập nhật
+                </Button>
+            </div>
+        </div>
+        <Tabs defaultValue="strategy" onValueChange={handleChangeTab} value={currentTab}>
+            <TabsList className={'w-full'}>
+                <TabsTrigger value="strategy" className={'data-[state=active]:bg-blue-200'}>Chiến lược SKĐ Quốc
+                    gia</TabsTrigger>
+                <TabsTrigger value="plan" className={'data-[state=active]:bg-green-200'}>Kế hoạch hành động
+                    SKĐ</TabsTrigger>
+                <TabsTrigger value="document" className={'data-[state=active]:bg-yellow-200'}>Các văn bản chính
+                    sách liên quan</TabsTrigger>
+            </TabsList>
+            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> :
+                <>
+                    {tabs.map(tab => (
+                        <TabsContent value={tab} className={'mt-2'} key={tab}>
+                            {
+                                tab !== 'document' ? (loading ? <Loader2 className={'animate-spin'}/> :
+                                        <>
+                                            {pptLink ?
+                                                <div className={'my-6 font-medium'}>
+                                                    Dự thảo hiện tại:
+                                                    <a href={pptLink} className={'italic underline text-blue-500 ml-1'}
+                                                       target={'_blank'}>
+                                                        Dự thảo
+                                                    </a>
+                                                </div> : <div className={'my-6 italic text-gray-500'}>
+                                                    Chưa có dự thảo nào
+                                                </div>
+                                            }
+                                            <Dropzone
+                                                accept={{
+                                                    "application/vnd.ms-powerpoint": [], // .ppt
+                                                    "application/vnd.openxmlformats-officedocument.presentationml.presentation": [], // .pptx
+                                                }}
+                                                maxFiles={1}
+                                                maxSize={1024 * 1024 * 10}
+                                                minSize={1024}
+                                                onDrop={handleDrop}
+                                                onError={console.error}
+                                                src={files}
+                                                className={'h-[calc(100vh-500px)]'}
+                                            >
+                                                <DropzoneEmptyState/>
+                                                <DropzoneContent/>
+                                            </Dropzone>
+                                        </>
+                                ) : <></>
+                            }
+                        </TabsContent>
+                    ))}
+                </>
+            }
+        </Tabs>
+    </>
 }

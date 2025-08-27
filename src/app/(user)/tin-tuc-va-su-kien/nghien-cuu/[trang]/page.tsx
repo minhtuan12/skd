@@ -1,6 +1,6 @@
 import React from "react";
 import {fetchNewsEvents} from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-news-events";
-import CardNews from "@/components/custom/card-news";
+import CardNews from "@/app/(user)/tin-tuc-va-su-kien/tin-tuc-su-kien/@news/card-news";
 import {INewsAndEvents} from "@/models/config";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight} from "lucide-react";

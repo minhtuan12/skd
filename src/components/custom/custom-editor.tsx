@@ -82,7 +82,7 @@ export default function CustomEditor() {
             </div>
 
             {/* Editor */}
-            <EditorContent editor={editor} className="prose max-w-none min-h-[200px]"/>
+            <EditorContent editor={editor} className="prose max-w-none min-h-[200px] h-full"/>
         </div>
     )
 }

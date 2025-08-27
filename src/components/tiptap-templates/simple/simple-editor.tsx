@@ -112,13 +112,6 @@ const MainToolbarContent = ({
             <ToolbarSeparator/>
 
             <ToolbarGroup>
-                <MarkButton type="superscript"/>
-                <MarkButton type="subscript"/>
-            </ToolbarGroup>
-
-            <ToolbarSeparator/>
-
-            <ToolbarGroup>
                 <TextAlignButton align="left"/>
                 <TextAlignButton align="center"/>
                 <TextAlignButton align="right"/>
@@ -127,9 +120,9 @@ const MainToolbarContent = ({
 
             <ToolbarSeparator/>
 
-            <ToolbarGroup>
-                <ImageUploadButton text="Add"/>
-            </ToolbarGroup>
+            {/*<ToolbarGroup>*/}
+            {/*    <ImageUploadButton text="Add"/>*/}
+            {/*</ToolbarGroup>*/}
 
             <Spacer/>
 

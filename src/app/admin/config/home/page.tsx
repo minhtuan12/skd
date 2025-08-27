@@ -1,23 +1,23 @@
 'use client'
 
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setBreadcrumb, setPageTitle} from "@/redux/slices/admin";
+import {setBreadcrumb} from "@/redux/slices/admin";
 import {routes} from "@/constants/routes";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
-import {Loader2} from "lucide-react";
+import {Loader2, RotateCcw} from "lucide-react";
 import {RootState} from "@/redux/store";
 import {IHomeConfig, INewsAndEvents} from "@/models/config";
 import {useConfig} from "@/app/admin/config/(hooks)/use-config";
 import UploadFile from "@/app/admin/config/(components)/upload-file";
 import CustomCard from "@/components/custom/custom-card";
 import NewsAndEvents from "@/app/admin/config/(components)/news-and-events";
-import {AdminButtonContext} from "@/contexts/AdminButtonContext";
 import {toast} from "sonner";
 import {useSaveConfig} from "@/app/admin/config/(hooks)/use-save-config";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
+import {Button} from "@/components/ui/button";
 
 export default function HomeConfig() {
     const homeConfig = useSelector((state: RootState) => state.config.home);
@@ -32,23 +32,15 @@ export default function HomeConfig() {
     const homeConfigRef = useRef(homeConfig);
     const cloneConfigRef = useRef(cloneConfig);
 
-    const {setHandlers, setLoading} = useContext(AdminButtonContext);
     const {error, refetch, loading} = useConfig('home');
     const {mutate, loading: loadingUpdate, isSuccess, isError, error: errorUpdate} = useSaveConfig('home');
-    const {uploadFile} = useUploadFile();
+    const {uploadFile, loading: loadingUpload} = useUploadFile();
 
     useEffect(() => {
         dispatch(setBreadcrumb([
             {title: 'Cấu hình', href: routes.HomeConfig},
             {title: 'Trang chủ'}
         ]))
-        dispatch(setPageTitle('Trang chủ'))
-        setHandlers({
-            submitText: 'Cập nhật',
-            visibleReset: true,
-            reset: handleResetValue,
-            submit: handleSubmit
-        })
     }, [])
 
     useEffect(() => {
@@ -149,7 +141,6 @@ export default function HomeConfig() {
 
     // call api upload files
     const handleUploadFiles = () => {
-        setLoading(true);
         const currentConfig = cloneConfigRef.current;
         const oldConfig = homeConfigRef.current;
         const formData = new FormData();
@@ -239,11 +230,10 @@ export default function HomeConfig() {
         }
         mutate(updatedConfig, {
             onSuccess: () => {
-                setCloneConfig(updatedConfig);
+                // setCloneConfig(updatedConfig);
                 toast.success('Cập nhật thành công');
             },
             onSettled: () => {
-                setLoading(false);
                 setFileInputValue(['', '', ''])
             }
         });
@@ -263,6 +253,21 @@ export default function HomeConfig() {
     }
 
     return <>
+        <div className="flex items-center justify-between space-y-2 flex-wrap">
+            <h2 className="text-3xl font-bold tracking-tight">Trang chủ</h2>
+            <div
+                className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
+                <Button onClick={handleResetValue} disabled={loadingUpdate || loadingUpload} className={'bg-white text-black border-black border hover:bg-gray-100'}>
+                    {(loadingUpdate || loadingUpload) &&
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                    <RotateCcw/>Đặt lại
+                </Button>
+                <Button onClick={handleSubmit} disabled={loadingUpdate || loadingUpload}>
+                    {(loadingUpdate || loadingUpload) &&
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}Cập nhật
+                </Button>
+            </div>
+        </div>
         {
             loading ? <Loader2 className={'animate-spin'}/> :
                 <div className={'grid gap-4 grid-rows-[auto_auto]'}>

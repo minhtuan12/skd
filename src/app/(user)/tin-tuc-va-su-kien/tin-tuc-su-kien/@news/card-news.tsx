@@ -50,7 +50,8 @@ export default function CardNews(
         <div className={'flex flex-col gap-0.5 flex-1'}>
             <p className={'font-medium'}>TIN TỨC</p>
             <h1 className={'text-lg font-medium text-green-700 line-clamp-4'}>{news.title}</h1>
-            <p className={'text-gray-500 text-md line-clamp-2'}>{news.description}</p>
+            <div className={'text-gray-500 text-md line-clamp-2'}
+                 dangerouslySetInnerHTML={{__html: news.description}}/>
         </div>
         {!hideDetailBtn ?
             <div className={'flex justify-end max-sm:w-full'}>

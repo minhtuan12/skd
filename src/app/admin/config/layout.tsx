@@ -9,8 +9,6 @@ import {Separator} from "@/components/ui/separator";
 import {Breadcrumb} from "@/components/layout/admin/breadcrumb";
 import {useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
-import {Button} from "@/components/ui/button";
-import {Loader2, RotateCcw} from "lucide-react";
 import {AdminButtonContext, ButtonHandlers} from "@/contexts/AdminButtonContext"
 
 export default function RootLayout(
@@ -45,22 +43,6 @@ export default function RootLayout(
                             </div>
                         </header>
                         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                            <div className="flex items-center justify-between space-y-2 flex-wrap">
-                                <h2 className="text-3xl font-bold tracking-tight">{pageTitle}</h2>
-                                <div
-                                    className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
-                                    {handlers.visibleReset ?
-                                        <Button onClick={handlers.reset} size={'lg'} disabled={loading}
-                                                className={'bg-[#fff] text-black border border-[black] hover:bg-gray-100'}>
-                                            <RotateCcw/>Đặt lại
-                                        </Button> : ''
-                                    }
-                                    <Button onClick={handlers.submit} size={'lg'} disabled={loading}>
-                                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                                        {handlers.submitText}
-                                    </Button>
-                                </div>
-                            </div>
                             {children}
                         </div>
                     </SidebarInset>

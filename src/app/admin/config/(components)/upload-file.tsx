@@ -6,23 +6,24 @@ import {cn} from "@/lib/utils";
 import {VideoPlayer} from "@/components/ui/video";
 import {Button} from "@/components/ui/button";
 
-export default function UploadFile({
-                                       url,
-                                       className,
-                                       handleChangeFile,
-                                       video = false,
-                                       selectedVideo = null,
-                                       disabled,
-                                       inputValue
-                                   }: {
-    url: string | File,
-    className?: string,
-    handleChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    video?: boolean;
-    selectedVideo?: File | null;
-    disabled?: boolean;
-    inputValue: string
-}) {
+export default function UploadFile(
+    {
+        url,
+        className,
+        handleChangeFile,
+        video = false,
+        selectedVideo = null,
+        disabled,
+        inputValue
+    }: {
+        url: string | File,
+        className?: string,
+        handleChangeFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+        video?: boolean;
+        selectedVideo?: File | null;
+        disabled?: boolean;
+        inputValue: string
+    }) {
     const hasVideoBefore = video && url && typeof url === 'string';
     const fileRef = useRef(null);
 

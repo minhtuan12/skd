@@ -1,6 +1,6 @@
 import Developing from "@/components/custom/developing";
 import {INewsAndEvents} from "@/models/config";
-import CardNews from "@/components/custom/card-news";
+import CardNews from "@/app/(user)/tin-tuc-va-su-kien/tin-tuc-su-kien/@news/card-news";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight} from "lucide-react";
 import React from "react";
