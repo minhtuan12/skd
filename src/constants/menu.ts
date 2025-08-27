@@ -4,7 +4,8 @@ import {Home, Newspaper} from "lucide-react";
 export interface Menu {
     title: string;
     href: string;
-    children?: Menu[]
+    children?: Menu[];
+    hasPages?: boolean;
 }
 
 export const menu: Menu[] = [
@@ -76,7 +77,8 @@ export const menu: Menu[] = [
             },
             {
                 title: 'Nghiên cứu',
-                href: routes.NghienCuu
+                href: routes.NghienCuu,
+                hasPages: true
             }
         ]
     },

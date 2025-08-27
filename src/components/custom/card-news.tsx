@@ -31,7 +31,7 @@ export default function CardNews(
                         alt={news.title}
                         width={0}
                         height={0}
-                        style={{width: '100%', height: '100%'}}
+                        style={{width: '100%', height: imageHeight}}
                         sizes="100vw"
                         className={'rounded-xl object-cover'}
                     /> :

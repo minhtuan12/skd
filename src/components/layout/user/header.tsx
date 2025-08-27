@@ -76,7 +76,7 @@ export default function Header() {
                                                 {item.children.map((child: Menu, i: number) =>
                                                     <DropdownMenuLabel key={i}>
                                                         <Link
-                                                            href={item.href + child.href}
+                                                            href={item.href + child.href + (child.hasPages ? '/1' : '')}
                                                             className={'w-full block'}
                                                         >
                                                             {child.title}
