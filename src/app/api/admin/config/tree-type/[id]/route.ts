@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import TreeType from "@/models/tree-type";
 import {capitalizeFirstWord} from "@/app/api/helpers";
+import {withAuthWithContext} from "@/app/api/middleware";
 
 const {ObjectId} = Types
 
@@ -88,5 +89,5 @@ async function deleteTreeType(request: NextRequest, {params}: { params: Promise<
     }
 }
 
-export const PATCH = (updateTreeType);
-export const DELETE = (deleteTreeType);
+export const PATCH = withAuthWithContext(updateTreeType);
+export const DELETE = withAuthWithContext(deleteTreeType);

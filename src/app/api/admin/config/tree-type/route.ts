@@ -2,6 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import TreeType from "@/models/tree-type";
 import {capitalizeFirstWord} from "@/app/api/helpers";
+import {withAuth} from "@/app/api/middleware";
 
 async function getTreeTypes(request: NextRequest) {
     try {
@@ -102,5 +103,5 @@ async function addTreeType(request: NextRequest) {
     }
 }
 
-export const GET = (getTreeTypes);
-export const POST = (addTreeType);
+export const GET = withAuth(getTreeTypes);
+export const POST = withAuth(addTreeType);

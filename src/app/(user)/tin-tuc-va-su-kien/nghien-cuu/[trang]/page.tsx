@@ -5,8 +5,9 @@ import {INewsAndEvents} from "@/models/config";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight} from "lucide-react";
 
-export default async function NghienCuu({params}: { params: { trang: string } }) {
-    const page = parseInt(params.trang || '1');
+export default async function NghienCuu({params}: { params: Promise<{ trang: string }> }) {
+    const {trang} = await params;
+    const page = parseInt(trang || '1');
     const researches = await fetchNewsEvents('researches', page);
 
     return <div className={'box-border flex flex-col gap-8 mt-10 lg:px-30 px-10 max-sm:px-6 pb-30'}>
