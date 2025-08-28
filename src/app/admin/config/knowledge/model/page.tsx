@@ -16,7 +16,7 @@ import {useUpdateKnowledge} from "@/app/admin/config/(hooks)/use-update-knowledg
 
 const defaultItem: IKnowledge = {
     description: '',
-    name: null,
+    name: '',
     tree_type: null,
     category: KnowledgeTypes.model,
     media: {
