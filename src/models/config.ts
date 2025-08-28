@@ -117,7 +117,7 @@ const ConfigSchema = new Schema({
             required: true
         },
         news_and_events: {
-            type: [Types.ObjectId],
+            type: [Schema.Types.ObjectId],
             ref: "NewsEvents",
         }
     },

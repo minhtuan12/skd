@@ -1,7 +1,8 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 
-const fetchTreeTypes = async (q: string, page: number) => {
-    const response = await fetch(`/api/admin/config/tree-type?q=${q}&page=${page}`, {
+const fetchTreeTypes = async (q: string, page: number, isPublic: boolean = false) => {
+    let url = isPublic ? '/api/config/tree-type' : `/api/admin/config/tree-type?q=${q}&page=${page}`;
+    const response = await fetch(url, {
         credentials: 'include',
     });
 
@@ -13,7 +14,8 @@ const fetchTreeTypes = async (q: string, page: number) => {
     return response.json();
 };
 
-export const useFetchTreeType = (q: string, page: number) => {
+export const useFetchTreeType = (q: string, page: number, isPublic: boolean = false) => {
+    const queryClient = useQueryClient();
     const {
         data,
         isPending: loading,
@@ -21,10 +23,10 @@ export const useFetchTreeType = (q: string, page: number) => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['tree-type', q, page],
+        queryKey: [isPublic ? 'tree-group' : 'tree-type', q, page],
         queryFn: ({queryKey}) => {
             const [_, q, page] = queryKey
-            return fetchTreeTypes(q as string, parseInt(page as string || '1'));
+            return fetchTreeTypes(q as string, parseInt(page as string || '1'), isPublic);
         },
     });
 

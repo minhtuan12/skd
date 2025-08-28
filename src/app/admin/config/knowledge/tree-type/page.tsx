@@ -99,8 +99,8 @@ export default function TreeType() {
                                         <TableCell>{formatDate(type.createdAt as string)}</TableCell>
                                         <TableCell className={'flex items-center justify-center text-center gap-4'}>
                                             <Button onClick={() => handleClickUpdate(type)}><Pencil/>Sửa</Button>
-                                            <Button
-                                                className={'bg-red-500 text-white hover:bg-red-600'}><Trash/>Xóa</Button>
+                                            {/*<Button*/}
+                                            {/*    className={'bg-red-500 text-white hover:bg-red-600'}><Trash/>Xóa</Button>*/}
                                         </TableCell>
                                     </TableRow>
                                 ))}

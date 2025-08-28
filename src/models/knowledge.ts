@@ -1,6 +1,28 @@
-import {model, models, Schema, Types} from "mongoose";
+import {model, models, Schema} from "mongoose";
+import {ITreeType} from "@/models/tree-type";
 
-type KnowledgeType = 'training' | 'renovation' | 'farming' | 'model';
+export type KnowledgeType = 'training' | 'renovation' | 'farming' | 'model';
+
+export interface IKnowledge {
+    _id?: string;
+    media?: {
+        url: string | File,
+        media_type: 'video' | 'image'
+    },
+    category: KnowledgeType,
+    tree_type?: string | null | ITreeType,
+    name?: string,
+    description?: string,
+    is_deleted?: boolean,
+    createdAt?: string
+}
+
+export enum KnowledgeTypes {
+    training = 'training',
+    renovation = 'renovation',
+    farming = 'farming',
+    model = 'model',
+}
 
 const KnowledgeSchema = new Schema({
     media: {
@@ -16,11 +38,10 @@ const KnowledgeSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ['training', 'renovation', 'farming', 'model', null],
-        default: null
+        enum: ['training', 'renovation', 'farming', 'model'],
     },
     tree_type: {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "TreeType",
         default: null
     },
@@ -40,5 +61,5 @@ const KnowledgeSchema = new Schema({
     timestamps: true
 });
 
-const Knowledge = models.Knowledge || model("Knowledge", KnowledgeSchema);
+const Knowledge = models?.Knowledge || model("Knowledge", KnowledgeSchema);
 export default Knowledge;

@@ -60,7 +60,7 @@ export default async function Home() {
                         width={0}
                         height={0}
                         sizes="100vw"
-                        style={{ width: "auto", height: "auto" }}
+                        style={{width: "auto", height: "auto"}}
                     />
                 </AnimatedSection>
             </AnimatedSection>
@@ -158,7 +158,9 @@ export default async function Home() {
                                     </div>
                                     <div className={'flex flex-col mt-1 flex-1 min-[1400px]:gap-2'}>
                                         <h4 className={'font-semibold text-base'}>{item.title}</h4>
-                                        <p className="text-[12px] text-gray-500 font-medium">{item.description}</p>
+                                        <div className="text-[12px] text-gray-500 font-medium"
+                                             dangerouslySetInnerHTML={{__html: item.description}}
+                                        />
                                     </div>
                                 </CardWithTitle>
                             </Link>

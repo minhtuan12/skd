@@ -1,5 +1,5 @@
 import {routes} from "@/constants/routes";
-import {Home, Newspaper} from "lucide-react";
+import {Home, Newspaper, Tractor, TreePalm} from "lucide-react";
 
 export interface Menu {
     title: string;
@@ -51,19 +51,23 @@ export const menu: Menu[] = [
         children: [
             {
                 title: 'Tài liệu tập huấn',
-                href: routes.TaiLieuTapHuan
+                href: routes.TaiLieuTapHuan,
+                hasPages: true
             },
             {
                 title: 'Kỹ thuật canh tác thân thiện với sức khỏe đất',
-                href: routes.KyThuatCanhTac
+                href: routes.KyThuatCanhTac,
+                hasPages: true
             },
             {
                 title: 'Kỹ thuật cải tạo đất',
-                href: routes.KyThuatCaiTaoDat
+                href: routes.KyThuatCaiTaoDat,
+                hasPages: true
             },
             {
                 title: 'Mô hình điển hình',
-                href: routes.MoHinhDienHinh
+                href: routes.MoHinhDienHinh,
+                hasPages: true
             }
         ]
     },
@@ -139,6 +143,26 @@ export const sideBarItems = [
                     {
                         title: "Quản lý nhóm cây",
                         url: routes.TreeTypeManagement,
+                        icon: TreePalm,
+                    },
+                    {
+                        title: "Tài liệu tập huấn",
+                        url: routes.Training,
+                        icon: Newspaper,
+                    },
+                    {
+                        title: "Kỹ thuật canh tác",
+                        url: routes.Farming,
+                        icon: Tractor,
+                    },
+                    {
+                        title: "Kỹ thuật cải tạo đất",
+                        url: routes.Renovation,
+                        icon: Newspaper,
+                    },
+                    {
+                        title: "Mô hình điển hình",
+                        url: routes.Model,
                         icon: Newspaper,
                     },
                 ]

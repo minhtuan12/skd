@@ -81,11 +81,11 @@ export function AppSidebar() {
                                                                 child.children.map((i, idx) => (
                                                                     <SidebarMenuSubItem key={idx}>
                                                                         <SidebarMenuSubButton asChild
-                                                                                              isActive={pathname.includes(child.url)}>
+                                                                                              isActive={pathname.includes(i.url)}>
                                                                             <div
                                                                                 onClick={() => router.push(child.url + i.url)}
                                                                                 className={'cursor-pointer'}>
-                                                                                <child.icon/>
+                                                                                <i.icon/>
                                                                                 <span>{i.title}</span>
                                                                             </div>
                                                                         </SidebarMenuSubButton>
