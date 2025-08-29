@@ -22,6 +22,12 @@ export default function CardNews(
         imageHeight?: number,
     }
 ) {
+    const tag = {
+        news: 'TIN TỨC',
+        event: 'SỰ KIỆN',
+        research: 'NGHIÊN CỨU'
+    }
+
     return <div className={cn(className, 'flex flex-col gap-4')}>
         {
             !hideImage ? <div className={cn(imageClassname, `rounded-xl h-[${imageHeight}px]`)}>
@@ -48,7 +54,7 @@ export default function CardNews(
             </div> : ''
         }
         <div className={'flex flex-col gap-0.5 flex-1'}>
-            <p className={'font-medium'}>TIN TỨC</p>
+            <p className={'font-medium'}>{tag[news.type as keyof typeof tag]}</p>
             <h1 className={'text-lg font-medium text-green-700 line-clamp-4'}>{news.title}</h1>
             <div className={'text-gray-500 text-md line-clamp-2'}
                  dangerouslySetInnerHTML={{__html: news.description}}/>

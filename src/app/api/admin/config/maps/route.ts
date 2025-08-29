@@ -1,0 +1,53 @@
+import {NextRequest, NextResponse} from "next/server";
+import connectDb from "@/lib/db";
+import {capitalizeFirstWord} from "@/app/api/helpers";
+import {withAuth} from "@/app/api/middleware";
+import MapModel from "@/models/map";
+
+async function getMaps(request: NextRequest) {
+    try {
+        await connectDb();
+
+        const maps = await MapModel.find({is_deleted: false}).sort('-createdAt');
+        return NextResponse.json({maps});
+    } catch (error) {
+        console.error('Get maps API error:', error);
+        return NextResponse.json(
+            {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
+            {status: 500}
+        );
+    }
+}
+
+async function addMap(request: NextRequest) {
+    try {
+        await connectDb();
+
+        const {data} = await request.json();
+
+        // Validation
+        if (!data?.name || !data.image_url) {
+            return NextResponse.json(
+                {error: 'Thiếu dữ liệu'},
+                {status: 400}
+            );
+        }
+
+        const map = new MapModel({name: data.name.trim(), image_url: data.image_url});
+        await map.save();
+
+        return NextResponse.json(
+            JSON.stringify({message: "Thêm mới thành công"}),
+            {status: 201}
+        );
+    } catch (error) {
+        console.error('Map API error:', error);
+        return NextResponse.json(
+            {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
+            {status: 500}
+        );
+    }
+}
+
+export const GET = (getMaps);
+export const POST = (addMap);

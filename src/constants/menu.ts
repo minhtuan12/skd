@@ -1,5 +1,5 @@
 import {routes} from "@/constants/routes";
-import {Home, Newspaper, Tractor, TreePalm} from "lucide-react";
+import {Home, MapPin, Newspaper, Tractor, TreePalm} from "lucide-react";
 
 export interface Menu {
     title: string;
@@ -52,7 +52,6 @@ export const menu: Menu[] = [
             {
                 title: 'Tài liệu tập huấn',
                 href: routes.TaiLieuTapHuan,
-                hasPages: true
             },
             {
                 title: 'Kỹ thuật canh tác thân thiện với sức khỏe đất',
@@ -166,6 +165,11 @@ export const sideBarItems = [
                         icon: Newspaper,
                     },
                 ]
+            },
+            {
+                title: "Bản đồ đất",
+                url: routes.MapConfig,
+                icon: MapPin,
             },
         ]
     },

@@ -1,7 +1,6 @@
 'use client'
 
 import React from "react";
-import AnimatedSection from "@/components/custom/animated-section";
 import {cn} from "@/lib/utils";
 import Image from "next/image";
 
@@ -28,12 +27,8 @@ export default function CardWithTitle(
         bgImageUrl = ''
     }: IProps) {
     return (
-        <AnimatedSection
-            asTag={'div'}
-            className={cn(`rounded rounded-b-[5px] shadow-lg ${bgTitleColor} flex flex-col ${border ? 'border border-solid h-full' : ''}`, className)}
-            whileHover={{scale: 1.03}}
-            transition={{type: "spring", stiffness: 300}}
-        >
+        <div
+            className={cn(`rounded rounded-b-[5px] shadow-lg ${bgTitleColor} flex flex-col ${border ? 'border border-solid h-full' : ''}`, className)}>
             {
                 !bgImageUrl ?
                     <h3 className={cn('px-3 box-border text-center text-white text-lg w-full font-medium h-14 flex items-center justify-center', titleHeight)}>
@@ -50,6 +45,6 @@ export default function CardWithTitle(
             >
                 {children}
             </div>
-        </AnimatedSection>
+        </div>
     );
 }

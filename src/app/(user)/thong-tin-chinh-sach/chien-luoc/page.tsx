@@ -18,7 +18,7 @@ async function fetchStrategyConfig() {
 export default async function ChienLuoc() {
     const policy = await fetchStrategyConfig();
 
-    return <div className={'box-border pb-12 flex flex-col gap-6'}>
+    return <div className={'box-border pb-18 pt-8 flex flex-col gap-6'}>
         <div className={'flex flex-col gap-6 px-6 xl:px-0'}>
             <h1 className={'font-semibold text-center text-xl'}>CHIẾN LƯỢC SỨC KHỎE ĐẤT QUỐC GIA</h1>
             <div className={'flex-1'}>

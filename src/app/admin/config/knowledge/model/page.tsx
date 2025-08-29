@@ -174,7 +174,7 @@ export default function Model() {
         {loading ? <Loader2 className={'animate-spin'}/> :
             !openModal ? <DataTable
                 category={KnowledgeTypes.model}
-                data={data.knowledge}
+                data={data?.knowledge || []}
                 handleClickEdit={handleClickEdit}
                 // handleClickDelete={handleChangeNewsVisibility}
             /> : <KnowledgeForm

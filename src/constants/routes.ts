@@ -13,6 +13,8 @@ export const routes = {
     Farming: '/farming',
     Renovation: '/renovation',
     Model: '/model',
+    // Map
+    MapConfig: '/admin/config/map',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

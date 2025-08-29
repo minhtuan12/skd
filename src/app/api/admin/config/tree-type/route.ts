@@ -24,8 +24,8 @@ async function getTreeTypes(request: NextRequest) {
             {
                 $facet: {
                     data: [
-                        {$skip: (page - 1) * 10},
-                        {$limit: 10},
+                        {$skip: 0},
+                        {$limit: 10000},
                     ],
                     totalCount: [
                         {$count: "count"}
