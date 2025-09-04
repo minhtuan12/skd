@@ -12,7 +12,8 @@ export default function MapForm({data, handleChangeData, handleDrop}: {
 }) {
     const {
         name,
-        image_url
+        image_url,
+        data_url
     } = data;
 
     return <div className={'h-full pb-10'}>
@@ -23,7 +24,14 @@ export default function MapForm({data, handleChangeData, handleDrop}: {
                     <Label required htmlFor="name">Tên bản đồ</Label>
                     <Input
                         id="name" placeholder="Nhập tên bản đồ" value={name}
-                        onChange={e => handleChangeData(e.target.value)}
+                        onChange={e => handleChangeData(e.target.value, 'name')}
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="data_url">Link dữ liệu</Label>
+                    <Input
+                        id="data_url" placeholder="Nhập link dữ liệu" value={data_url || ''}
+                        onChange={e => handleChangeData(e.target.value, 'data_url')}
                     />
                 </div>
                 <div className={'flex flex-col gap-2'}>

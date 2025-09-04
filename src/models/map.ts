@@ -4,6 +4,7 @@ export interface IMap {
     _id?: string;
     name: string;
     image_url: string | File;
+    data_url: string | null;
     createdAt?: string;
 }
 
@@ -15,6 +16,10 @@ const MapSchema = new Schema({
     image_url: {
         type: String,
         required: true
+    },
+    data_url: {
+        type: String,
+        default: null
     },
     is_deleted: {
         type: Boolean,

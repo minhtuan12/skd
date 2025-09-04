@@ -9,7 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useMapPagination from "@/app/(user)/ban-do/ban-do-dat/use-pagination";
 
-export default function MapList({maps}: { maps: IMap[] }) {
+export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenMap: any }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentPage, setCurrentPage] = useState(0)
     const {totalPages} = useMapPagination(maps);
@@ -49,9 +49,18 @@ export default function MapList({maps}: { maps: IMap[] }) {
             >
                 {maps.map((item: IMap, index: number) => (
                     <CardWithTitle
+                        onClick={() => {
+                            setChosenMap(item.data_url ? {
+                                url: item.data_url,
+                                type: 'map'
+                            } : {
+                                url: item.image_url,
+                                type: 'image'
+                            })
+                        }}
                         key={index} title={item.name}
                         bgTitleColor={index % 2 == 0 ? 'bg-blue-500' : 'bg-orange-500'}
-                        className={'flex-shrink-0 w-full md:w-[calc((100%-32px)/3)] xl:w-[calc((100%-64px)/5)] [scroll-snap-align:start]'}
+                        className={'cursor-pointer flex-shrink-0 w-full md:w-[calc((100%-32px)/3)] xl:w-[calc((100%-64px)/5)] [scroll-snap-align:start]'}
                         titleHeight={'line-clamp-1 truncate pt-3'}
                     >
                         <div className={'flex flex-col gap-3 h-full'}>

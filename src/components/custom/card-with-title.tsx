@@ -13,6 +13,7 @@ interface IProps {
     childrenBg?: string;
     border?: boolean;
     bgImageUrl?: string;
+    onClick?: () => void;
 }
 
 export default function CardWithTitle(
@@ -24,10 +25,12 @@ export default function CardWithTitle(
         className,
         childrenBg = '',
         border = false,
-        bgImageUrl = ''
+        bgImageUrl = '',
+        onClick,
     }: IProps) {
     return (
         <div
+            onClick={onClick}
             className={cn(`rounded rounded-b-[5px] shadow-lg ${bgTitleColor} flex flex-col ${border ? 'border border-solid h-full' : ''}`, className)}>
             {
                 !bgImageUrl ?

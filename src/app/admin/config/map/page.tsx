@@ -21,7 +21,7 @@ export default function Map() {
     const {mutate: addMap, loading, isSuccess} = useAddMap();
     const {mutate: updateMap, loading: loadingUpdate, isSuccess: isSuccessUpdate} = useUpdateMap();
 
-    const [map, setMap] = useState<IMap>({name: '', image_url: ''});
+    const [map, setMap] = useState<IMap>({name: '', image_url: '', data_url: ''});
     const [modalTitle, setModalTitle] = useState<string>('Thêm bản đồ mới');
     const [openModal, setOpenModal] = useState(false);
     const [oldImageUrl, setOldImageUrl] = useState('');
@@ -29,15 +29,15 @@ export default function Map() {
 
     function handleOpenCreateModal() {
         setModalTitle('Thêm bản đồ mới');
-        setMap({name: '', image_url: ''});
+        setMap({name: '', image_url: '', data_url: ''});
         setOpenModal(true);
     }
 
     function handleSubmit(newMap: any) {
         if (modalTitle.includes('Thêm')) {
-            addMap({name: newMap.name, image_url: newMap.image_url}, {
+            addMap({name: newMap.name, image_url: newMap.image_url, data_url: newMap.data_url}, {
                 onSuccess: () => {
-                    setMap({name: '', image_url: ''});
+                    setMap({name: '', image_url: '', data_url: ''});
                     setOpenModal(false);
                 }
             });
@@ -45,7 +45,7 @@ export default function Map() {
             updateMap(newMap, {
                 onSuccess: () => {
                     setOldImageUrl('');
-                    setMap({name: '', image_url: ''});
+                    setMap({name: '', image_url: '', data_url: ''});
                     setOpenModal(false);
                 }
             });
@@ -82,8 +82,8 @@ export default function Map() {
         }
     }
 
-    function handleChangeInput(value: string) {
-        setMap({...map, name: value});
+    function handleChangeInput(value: string, key: string) {
+        setMap({...map, [key]: value});
     }
 
     const handleDrop = (files: File[]) => {
@@ -117,7 +117,7 @@ export default function Map() {
                 {openModal ? <div className={'flex gap-4'}>
                         <Button
                             onClick={() => {
-                                setMap({name: '', image_url: ''});
+                                setMap({name: '', image_url: '', data_url: ''});
                                 setOpenModal(false);
                                 setOldImageUrl('');
                             }} size={'lg'}
@@ -172,7 +172,8 @@ export default function Map() {
                                             />
                                         </TableCell>
                                         <TableCell className="font-medium pl-5">{item.name}</TableCell>
-                                        <TableCell className={'text-center'}>{formatDate(item.createdAt as string)}</TableCell>
+                                        <TableCell
+                                            className={'text-center'}>{formatDate(item.createdAt as string)}</TableCell>
                                         <TableCell className={'text-center'}>
                                             <Button onClick={() => handleClickUpdate(item)}><Pencil/>Sửa</Button>
                                             {/*<Button*/}

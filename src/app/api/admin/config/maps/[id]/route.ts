@@ -1,8 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import {Types} from "mongoose";
-import {capitalizeFirstWord} from "@/app/api/helpers";
-import {withAuthWithContext} from "@/app/api/middleware";
 import MapModel from "@/models/map";
 
 const {ObjectId} = Types
@@ -24,7 +22,13 @@ async function updateMap(request: NextRequest, {params}: { params: Promise<{ id:
 
         const result = await MapModel.findOneAndUpdate(
             {_id: new ObjectId(id)},
-            {$set: {name: data.name.trim(), image_url: data.image_url}},
+            {
+                $set: {
+                    name: data.name.trim(),
+                    image_url: data.image_url,
+                    data_url: data.data_url ? data.data_url.trim() : null
+                }
+            },
         )
 
         if (!result) {

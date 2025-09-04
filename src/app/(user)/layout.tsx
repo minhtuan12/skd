@@ -7,6 +7,7 @@ import GoToTopButton from "@/components/custom/to-top-button";
 import Footer from "@/components/layout/user/footer";
 import {fetchGlobalConfig} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-global-config";
 import Hero from "@/components/layout/user/hero";
+import {Toaster} from "@/components/ui/sonner";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default async function RootLayout(
             {children}
             <Footer/>
             <GoToTopButton/>
+            <Toaster position="top-center" richColors/>
         </main>
         </body>
         </html>

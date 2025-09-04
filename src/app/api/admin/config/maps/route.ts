@@ -1,7 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
-import {capitalizeFirstWord} from "@/app/api/helpers";
-import {withAuth} from "@/app/api/middleware";
 import MapModel from "@/models/map";
 
 async function getMaps(request: NextRequest) {
@@ -33,7 +31,11 @@ async function addMap(request: NextRequest) {
             );
         }
 
-        const map = new MapModel({name: data.name.trim(), image_url: data.image_url});
+        const map = new MapModel({
+            name: data.name.trim(),
+            image_url: data.image_url,
+            data_url: data.data_url ? data.data_url.trim() : null
+        });
         await map.save();
 
         return NextResponse.json(
