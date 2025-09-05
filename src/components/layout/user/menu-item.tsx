@@ -72,7 +72,7 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
 
     return (
         <Link
-            href={currentItemHref}
+            href={item.hasPages ? (currentItemHref + '/1') : currentItemHref}
             className={cn(
                 "flex items-center gap-2 w-full py-2 px-3 rounded-md",
                 "hover:bg-accent hover:text-accent-foreground transition-colors",
