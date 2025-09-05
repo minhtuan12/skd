@@ -16,6 +16,7 @@ export async function fetchPolicy(page: 'strategy' | 'plan' | 'document') {
     if (!policy[page]?.draft_ppt_link) {
         return {
             draft_ppt_link: '#',
+            download_notification: '',
             slides: []
         };
     }

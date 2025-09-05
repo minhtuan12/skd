@@ -1,12 +1,11 @@
 'use client'
 
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setBreadcrumb} from "@/redux/slices/admin";
 import {routes} from "@/constants/routes";
 import {Loader2} from "lucide-react";
 import {useConfig} from "@/app/admin/config/(hooks)/use-config";
-import {AdminButtonContext} from "@/contexts/AdminButtonContext";
 import {useSaveConfig} from "@/app/admin/config/(hooks)/use-save-config";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -14,6 +13,9 @@ import {RootState} from "@/redux/store";
 import {Dropzone, DropzoneContent, DropzoneEmptyState} from "@/components/ui/shadcn-io/dropzone";
 import {toast} from "sonner";
 import {Button} from "@/components/ui/button";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {setPolicies} from "@/redux/slices/policy";
 
 const tabs = ['strategy', 'plan', 'document'];
 
@@ -28,8 +30,7 @@ export default function PolicyConfig() {
         files: files
     });
     const dispatch = useDispatch();
-
-    const {setHandlers, setLoading} = useContext(AdminButtonContext);
+    console.log(policies)
     const {error, refetch, loading} = useConfig('policy');
     const {mutate, loading: loadingUpdate, isSuccess, isError, error: errorUpdate} = useSaveConfig('policy');
     const {uploadFile, loading: loadingUpload} = useUploadFile();
@@ -53,11 +54,12 @@ export default function PolicyConfig() {
         const data = mutableRef.current;
         const key = data.currentTab;
 
-        if (res.url) {
+        if (res?.url) {
             mutate({
                 ...data.policies,
                 [key]: {
                     ...data.policies[key as keyof typeof policies] as any,
+                    download_notification: (policies[key as keyof typeof policies] as any).download_notification,
                     draft_ppt_link: res.url,
                 }
             }, {
@@ -65,8 +67,19 @@ export default function PolicyConfig() {
                     toast.success('Cập nhật thành công');
                 },
                 onSettled: () => {
-                    setLoading(false);
                     setFiles(undefined);
+                }
+            })
+        } else {
+            mutate({
+                ...data.policies,
+                [key]: {
+                    ...data.policies[key as keyof typeof policies] as any,
+                    download_notification: (policies[key as keyof typeof policies] as any).download_notification,
+                }
+            }, {
+                onSuccess: () => {
+                    toast.success('Cập nhật thành công');
                 }
             })
         }
@@ -75,7 +88,6 @@ export default function PolicyConfig() {
     const handleSubmit = () => {
         const data = mutableRef.current;
         if (data.files?.[0]) {
-            setLoading(true);
             const formData = new FormData();
             let uploadedFile = {
                 file: data.files[0],
@@ -91,10 +103,9 @@ export default function PolicyConfig() {
                 onSuccess: (res) => {
                     handleSubmitPolicy(res.data[0]);
                 },
-                onError: () => {
-                    setLoading(false);
-                }
             })
+        } else {
+            handleSubmitPolicy(null);
         }
     }
 
@@ -105,6 +116,16 @@ export default function PolicyConfig() {
     const handleDrop = (files: File[]) => {
         setFiles(files);
     };
+
+    const handleChangeData = (value: string) => {
+        dispatch(setPolicies({
+            ...policies,
+            [currentTab]: {
+                ...policies[currentTab as keyof typeof policies] as any,
+                download_notification: value
+            }
+        }))
+    }
 
     return <>
         <div className="flex items-center justify-between space-y-2 flex-wrap">
@@ -144,6 +165,15 @@ export default function PolicyConfig() {
                                                     Chưa có dự thảo nào
                                                 </div>
                                             }
+                                            <div className="grid gap-2 mb-8">
+                                                <Label htmlFor="download_notification" className={'font-medium text-md'}>Nội dung thông báo tải
+                                                    xuống</Label>
+                                                <Input
+                                                    id="download_notification" placeholder="Nhập nội dung thông báo"
+                                                    value={(policies[currentTab as keyof typeof policies] as any)?.download_notification || ''}
+                                                    onChange={e => handleChangeData(e.target.value)}
+                                                />
+                                            </div>
                                             <Dropzone
                                                 accept={{
                                                     "application/vnd.ms-powerpoint": [], // .ppt

@@ -16,8 +16,8 @@ interface Props {
 
 const MapLibre = (
     {
-        center = [105.8544, 21.0285],
-        zoom = 5,
+        center = [107.3, 16.0285],
+        zoom = 4.2,
         marks = [],
         className = '',
         interactive = false,

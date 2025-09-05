@@ -48,27 +48,20 @@ export default async function Home() {
                         </button>
                     </div>
                 </div>
-                <AnimatedSection
-                    asTag={'div'}
-                    className="relative p-4 rounded shadow-lg h-full w-full sm:w-1/2 flex items-center justify-center"
-                    whileHover={{scale: 1.03}}
-                    transition={{type: "spring", stiffness: 300}}
-                >
-                    <Image
-                        src={home.introduction.image_url}
-                        alt="Giới thiệu về Sức khỏe Đất"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{width: "auto", height: "auto"}}
-                    />
-                </AnimatedSection>
+                <Image
+                    src={home.introduction.image_url}
+                    alt="Giới thiệu về Sức khỏe Đất"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    className={'w-[35%] h-auto max-md:w-[45%] max-sm:w-[60%]'}
+                />
             </AnimatedSection>
 
             {/* Grid Sections */}
             <section
                 className="h-auto min-[1595px]:h-[1000px] min-[2015px]:h-[1300px] box-border py-16 px-10 lg:px-10 xl:px-40 grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 mb-18 bg-[#FAF9FF]">
-                <CardWithTitle border title={'Bản đồ Đất Việt Nam'} bgTitleColor={'bg-blue-500'}
+                <CardWithTitle border title={'Bản đồ đất'} bgTitleColor={'bg-blue-500'}
                                className={'lg:h-[700px] h-[600px] min-[1595px]:!h-full'}>
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
@@ -76,12 +69,13 @@ export default async function Home() {
                             <MapWrapper/>
                         </div>
                     </div>
-                    <Link href="#" className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                    <Link href="/ban-do/ban-do-dat"
+                          className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                         bản
                         đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                 </CardWithTitle>
 
-                <CardWithTitle border title={'Bản đồ các trung tâm quan trắc'} bgTitleColor={'bg-yellow-400'}
+                <CardWithTitle border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={'bg-yellow-400'}
                                className={'lg:h-[700px] h-[600px] min-[1595px]:!h-full'}>
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Ngân hàng kiến thức</h5>
@@ -100,7 +94,8 @@ export default async function Home() {
                             ]}/>
                         </div>
                     </div>
-                    <Link href="#" className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                    <Link href="/ban-do/cac-trung-tam-quan-trac-dat"
+                          className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                         tài liệu
                         <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                 </CardWithTitle>
@@ -167,6 +162,8 @@ export default async function Home() {
                         ))
                     }
                 </div>
+                <Link href={'/tin-tuc-va-su-kien/tin-tuc-su-kien'} className={'text-blue-600 font-medium flex items-center justify-end mt-5'}>Xem thêm <ChevronRight
+                    className={'w-4 h-4 text-blue-600 mt-0.5'}/></Link>
             </AnimatedSection>
         </>
     );

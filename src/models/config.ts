@@ -29,11 +29,11 @@ export interface IHomeConfig {
 export interface IPolicyConfig {
     strategy: {
         draft_ppt_link: string;
-        converted_image_urls: string[];
+        download_notification: string;
     },
     plan: {
         draft_ppt_link: string;
-        converted_image_urls: string[];
+        download_notification: string;
     },
     document: {}
 }
@@ -127,9 +127,9 @@ const ConfigSchema = new Schema({
                 type: String,
                 required: true
             },
-            converted_image_urls: {
-                type: [String],
-                required: true
+            download_notification: {
+                type: String,
+                default: ''
             }
         },
         plan: {
@@ -137,9 +137,9 @@ const ConfigSchema = new Schema({
                 type: String,
                 required: true
             },
-            converted_image_urls: {
-                type: [String],
-                required: true
+            download_notification: {
+                type: String,
+                default: ''
             }
         },
         document: {}

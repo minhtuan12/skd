@@ -4,13 +4,20 @@ import "@cyntler/react-doc-viewer/dist/index.css";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {useRef, useState} from "react";
 import {Button} from "@/components/ui/button";
+import {toast} from "sonner";
 
 interface PowerpointViewerProps {
     slides: string[];
     pptUrl: string;
+    downloadNotification?: string
 }
 
-export default function PowerpointViewer({slides, pptUrl}: PowerpointViewerProps) {
+export default function PowerpointViewer(
+    {
+        slides,
+        pptUrl,
+        downloadNotification = 'Trang web đang thử nghiệm, chưa hỗ trợ download, xin liên hệ admin'
+    }: PowerpointViewerProps) {
     const [current, setCurrent] = useState(0);
     const thumbnailsRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +80,12 @@ export default function PowerpointViewer({slides, pptUrl}: PowerpointViewerProps
                 </div>
             </div>
             <div className="w-full max-w-5xl flex justify-start cursor-pointer">
-                <a className={'underline flex justify-start mt-2 text-lg'} href={pptUrl}>
+                <a className={'underline flex justify-start mt-2 text-lg'} href={''} onClick={(e) => {
+                    e.preventDefault();
+                    if (downloadNotification) {
+                        toast.info(downloadNotification)
+                    }
+                }}>
                     Tải xuống dự thảo
                 </a>
             </div>

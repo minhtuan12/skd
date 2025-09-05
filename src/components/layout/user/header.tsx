@@ -10,19 +10,20 @@ import MobileMenu from "@/components/layout/user/mobile-menu";
 export default function Header() {
     return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
         <div
-            className="mx-auto max-lg:px-8 max-[335px]:!px-2 max-sm:justify-between max-sm:pb-1.5 px-4 md:px-10 lg:px-22 min-[1280px]:max-[1300px]:px-24 flex max-[1115px]:!px-12 min-[1115px]:flex-row flex-col min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full pb-2.5 max-[1115px]:gap-5 max-sm:flex-row max-sm:!px-4">
+            className="pb-1 mx-auto max-lg:px-8 max-[335px]:!px-2 max-[1024px]:justify-between max-sm:pb-1.5 px-4 md:px-10 lg:px-22 min-[1280px]:max-[1300px]:px-24 flex max-[1115px]:!px-12 min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full min-[1024px]:pb-2.5 max-[1115px]:gap-5 max-sm:flex-row max-sm:!px-4 min-[1024px]:max-[1115px]:pt-4">
             <div
-                className={'max-sm:w-fit flex items-end justify-between h-full max-[1115px]:gap-10 max-sm:gap-0 gap-1 w-full'}>
-                <div
-                    className={'flex flex-col items-start w-32 h-full max-sm:w-12 max-[1115px]:relative max-[1115px]:-top-5 max-sm:top-0'}>
-                    <div className={'w-18 h-18 max-sm:w-12 max-sm:h-12 relative'}>
+                className={'max-[1024px]:w-fit flex items-end justify-between h-full max-[1115px]:gap-10 max-sm:gap-0 gap-1 w-full'}>
+                <Link
+                    href={'/'}
+                    className={'flex flex-col items-start w-32 h-full max-[1024px]:w-12 max-[1115px]:relative max-[1115px]:-top-5 max-[1024px]:top-0 min-[1024px]:max-[1115px]:-top-4'}>
+                    <div className={'w-18 h-18 max-[1024px]:w-12 max-[1024px]:h-12 relative'}>
                         <Image src={'/logos/principles.png'} alt={''} fill/>
                     </div>
-                    <h3 className={'absolute max-[1115px]:top-[97%] max-sm:hidden top-20 text-black max-sm:text-[13px] text-[15px] font-bold'}>SỨC
+                    <h3 className={'absolute max-[1115px]:top-[97%] max-[1024px]:hidden top-20 text-black max-sm:text-[13px] text-[15px] font-bold'}>SỨC
                         KHỎE ĐẤT</h3>
-                </div>
+                </Link>
                 <div
-                    className={'flex flex-col justify-between min-[1115px]:gap-6 gap-2 max-[1115px]:mt-6 flex-1 max-sm:hidden'}>
+                    className={'flex flex-col justify-between min-[1115px]:gap-4 gap-2 flex-1 max-[1024px]:hidden'}>
                     {/* Logos */}
                     <div
                         className={'flex items-center min-[1115px]:gap-20 max-[1115px]:justify-between max-lg:justify-center'}>
@@ -50,7 +51,7 @@ export default function Header() {
 
                     {/* Headers */}
                     <div
-                        className="container max-sm:hidden mx-auto flex items-center justify-between text-gray-500 font-semibold text-[13px]">
+                        className="container max-[1024px]:hidden mx-auto flex items-center justify-between text-gray-500 font-semibold text-[13px]">
                         <nav
                             className="max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             {
@@ -101,7 +102,7 @@ export default function Header() {
             </div>
 
             {/* Mobile menu */}
-            <div className={'max-sm:flex hidden'}>
+            <div className={'max-[1024px]:flex hidden'}>
                 <MobileMenuWrapper>
                     <MobileMenu/>
                 </MobileMenuWrapper>

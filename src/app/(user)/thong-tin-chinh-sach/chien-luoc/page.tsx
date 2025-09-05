@@ -10,6 +10,7 @@ async function fetchStrategyConfig() {
         console.error(error);
         return {
             draft_ppt_link: '#',
+            download_notification: '',
             slides: []
         };
     }
@@ -28,7 +29,10 @@ export default async function ChienLuoc() {
                         policy.draft_ppt_link === '#' ?
                             <div className={'text-gray-500 font-medium italic  w-full text-center'}>
                                 Chưa có bản dự thảo nào
-                            </div> : <PptViewer slides={policy.slides} pptUrl={policy.draft_ppt_link}/>
+                            </div> : <PptViewer
+                                slides={policy.slides} pptUrl={policy.draft_ppt_link}
+                                downloadNotification={policy.download_notification}
+                            />
                     )
                 }
             </div>
