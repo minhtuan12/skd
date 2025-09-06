@@ -3,6 +3,7 @@ import {model, models, Schema} from "mongoose";
 export interface IMap {
     _id?: string;
     name: string;
+    source: string;
     image_url: string | File;
     data_url: string | null;
     createdAt?: string;
@@ -20,6 +21,10 @@ const MapSchema = new Schema({
     data_url: {
         type: String,
         default: null
+    },
+    source: {
+        type: String,
+        required: true
     },
     is_deleted: {
         type: Boolean,

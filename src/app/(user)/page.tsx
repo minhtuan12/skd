@@ -37,7 +37,7 @@ export default async function Home() {
             >
                 <div className={'w-full sm:w-1/2'}>
                     <h2 className="text-2xl font-semibold mb-4">Giới thiệu về Sức khỏe đất</h2>
-                    <p className="max-w-2xl text-[14px]">
+                    <p className="max-w-2xl text-[14px] text-justify">
                         {home.introduction.content}
                     </p>
                     <div className="mt-6">
@@ -105,7 +105,7 @@ export default async function Home() {
                                    className={'h-auto md:h-1/2'} childrenBg={'justify-between'}>
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
-                            <div className={'text-[13px] flex-1 overflow-auto max-h-full'}>
+                            <div className={'text-[13px] flex-1 overflow-auto max-h-full text-justify pr-2'}>
                                 {home.agricultural_policy}
                             </div>
                         </div>

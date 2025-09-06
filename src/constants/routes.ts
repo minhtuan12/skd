@@ -5,7 +5,11 @@ export const routes = {
     HomeConfig: '/admin/config/home',
     NewsConfig: '/admin/config/news',
     EventsConfig: '/admin/config/events',
+    // Policy
     PolicyConfig: '/admin/config/policy',
+    Strategy: '/strategy',
+    Plan: '/plan',
+    Document: '/document',
     // Knowledge
     KnowledgeConfig: '/admin/config/knowledge',
     TreeTypeManagement: '/tree-type',

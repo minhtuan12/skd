@@ -6,7 +6,6 @@ import {useDispatch} from "react-redux";
 import {Loader2, Pencil} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
-import {formatDate} from "@/lib/utils";
 import {useFetchMaps} from "@/app/admin/config/(hooks)/use-map";
 import {useAddMap} from "@/app/admin/config/(hooks)/use-add-map";
 import {useUpdateMap} from "@/app/admin/config/(hooks)/use-update-map";
@@ -21,7 +20,7 @@ export default function Map() {
     const {mutate: addMap, loading, isSuccess} = useAddMap();
     const {mutate: updateMap, loading: loadingUpdate, isSuccess: isSuccessUpdate} = useUpdateMap();
 
-    const [map, setMap] = useState<IMap>({name: '', image_url: '', data_url: ''});
+    const [map, setMap] = useState<IMap>({name: '', image_url: '', data_url: '', source: ''});
     const [modalTitle, setModalTitle] = useState<string>('Thêm bản đồ mới');
     const [openModal, setOpenModal] = useState(false);
     const [oldImageUrl, setOldImageUrl] = useState('');
@@ -29,15 +28,15 @@ export default function Map() {
 
     function handleOpenCreateModal() {
         setModalTitle('Thêm bản đồ mới');
-        setMap({name: '', image_url: '', data_url: ''});
+        setMap({name: '', image_url: '', data_url: '', source: ''});
         setOpenModal(true);
     }
 
     function handleSubmit(newMap: any) {
         if (modalTitle.includes('Thêm')) {
-            addMap({name: newMap.name, image_url: newMap.image_url, data_url: newMap.data_url}, {
+            addMap({name: newMap.name, image_url: newMap.image_url, data_url: newMap.data_url, source: newMap.source}, {
                 onSuccess: () => {
-                    setMap({name: '', image_url: '', data_url: ''});
+                    setMap({name: '', image_url: '', data_url: '', source: ''});
                     setOpenModal(false);
                 }
             });
@@ -45,7 +44,7 @@ export default function Map() {
             updateMap(newMap, {
                 onSuccess: () => {
                     setOldImageUrl('');
-                    setMap({name: '', image_url: '', data_url: ''});
+                    setMap({name: '', image_url: '', data_url: '', source: ''});
                     setOpenModal(false);
                 }
             });
@@ -117,7 +116,7 @@ export default function Map() {
                 {openModal ? <div className={'flex gap-4'}>
                         <Button
                             onClick={() => {
-                                setMap({name: '', image_url: '', data_url: ''});
+                                setMap({name: '', image_url: '', data_url: '', source: ''});
                                 setOpenModal(false);
                                 setOldImageUrl('');
                             }} size={'lg'}
@@ -128,7 +127,7 @@ export default function Map() {
                         <Button
                             onClick={handleUploadFiles} size={'lg'}
                             disabled={
-                                !map.name || !map.image_url
+                                !map.name || !map.image_url || !map.source
                                 || loading || loadingUpload || loadingUpdate
                             }
                         >
@@ -154,7 +153,7 @@ export default function Map() {
                                     <TableHead className={'text-center w-20'}>STT</TableHead>
                                     <TableHead className={'text-center w-60'}>Bản đồ</TableHead>
                                     <TableHead className={'pl-5'}>Tên bản đồ</TableHead>
-                                    <TableHead className={'text-center'}>Ngày tạo</TableHead>
+                                    <TableHead className={'pl-5'}>Nguồn</TableHead>
                                     <TableHead className={'text-center w-100'}>Hành động</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -172,8 +171,7 @@ export default function Map() {
                                             />
                                         </TableCell>
                                         <TableCell className="font-medium pl-5">{item.name}</TableCell>
-                                        <TableCell
-                                            className={'text-center'}>{formatDate(item.createdAt as string)}</TableCell>
+                                        <TableCell className="font-medium pl-5">{item.source}</TableCell>
                                         <TableCell className={'text-center'}>
                                             <Button onClick={() => handleClickUpdate(item)}><Pencil/>Sửa</Button>
                                             {/*<Button*/}

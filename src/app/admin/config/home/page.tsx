@@ -25,7 +25,6 @@ export default function HomeConfig() {
     const [heroImage, setHeroImage] = useState("");
     const [introductionImage, setIntroductionImage] = useState("");
     const dispatch = useDispatch();
-    const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
     const [newsImageUrls, setNewsImageUrls] = useState<string[]>([]);
     const [fileInputValue, setFileInputValue] = useState<string[]>(['', '', '']);
 
@@ -92,19 +91,6 @@ export default function HomeConfig() {
         }
     }
 
-    const handleChangeVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0]
-            setFileInputValue((prev: any) => [...prev.slice(0, 2), file.name]);
-            setCloneConfig((prev: IHomeConfig) => ({
-                ...prev,
-                knowledge_bank_video_url: file
-            }))
-        } else {
-            setSelectedVideo(null)
-        }
-    }
-
     const handleChangeInput = (value: string, key: string) => {
         if (key.includes('.')) {
             const [parent, child] = key.split('.');
@@ -156,12 +142,6 @@ export default function HomeConfig() {
                 key: "introduction.image_url",
                 type: 'image',
                 oldUrl: oldConfig.introduction.image_url
-            },
-            {
-                file: currentConfig.knowledge_bank_video_url,
-                key: "knowledge_bank_video_url",
-                type: 'video',
-                oldUrl: oldConfig.knowledge_bank_video_url
             },
         ]
 
@@ -257,7 +237,8 @@ export default function HomeConfig() {
             <h2 className="text-3xl font-bold tracking-tight">Trang chủ</h2>
             <div
                 className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
-                <Button onClick={handleResetValue} disabled={loadingUpdate || loadingUpload} className={'bg-white text-black border-black border hover:bg-gray-100'}>
+                <Button onClick={handleResetValue} disabled={loadingUpdate || loadingUpload}
+                        className={'bg-white text-black border-black border hover:bg-gray-100'}>
                     {(loadingUpdate || loadingUpload) &&
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                     <RotateCcw/>Đặt lại
@@ -321,7 +302,7 @@ export default function HomeConfig() {
                                         <Label required htmlFor="introduction">Giới thiệu</Label>
                                         <Textarea
                                             id="introduction"
-                                            placeholder="Giới thieệu về Sức khỏe đất"
+                                            placeholder="Giới thiệu về Sức khỏe đất"
                                             value={cloneConfig?.introduction.content || ''}
                                             onChange={(e) => handleChangeInput(e.target.value, 'introduction.content')}
                                         />
@@ -368,12 +349,15 @@ export default function HomeConfig() {
                             title={'Ngân hàng kiến thức'}
                             description={'Cập nhật video cho ngân hàng kiến thức'}
                         >
-                            <UploadFile
-                                inputValue={fileInputValue[2]}
-                                url={cloneConfig?.knowledge_bank_video_url as string}
-                                handleChangeFile={handleChangeVideo}
-                                selectedVideo={selectedVideo} video
-                            />
+                            <div className="grid gap-2">
+                                <Label required htmlFor="knowledge_bank_video_url">Đường dẫn video</Label>
+                                <Input
+                                    id="knowledge_bank_video_url"
+                                    placeholder="Nhập đường dẫn video"
+                                    value={cloneConfig?.knowledge_bank_video_url || ''}
+                                    onChange={(e) => handleChangeInput(e.target.value, 'knowledge_bank_video_url')}
+                                />
+                            </div>
                         </CustomCard>
                     </div>
                 </div>

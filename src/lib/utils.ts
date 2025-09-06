@@ -1,6 +1,7 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
 import DOMPurify from 'isomorphic-dompurify';
+import slugify from "slugify";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -33,4 +34,21 @@ export function sanitizeHtml(dirty: string): string {
     return DOMPurify.sanitize(dirty, {
         USE_PROFILES: {html: true},
     });
+}
+
+export function isDirectVideoLink(url: string): boolean {
+    return /\.(mp4|webm|ogg)$/i.test(url);
+}
+
+export function getSlugFromTitle(title: string) {
+    return slugify(title, {lower: true, strict: true});
+}
+
+export function getIdFromSlug(slug: string) {
+    return slug.split("-").pop() ?? "";
+}
+
+export function buildDetailPath(title: string, id: string) {
+    const slug = slugify(title, {lower: true, strict: true});
+    return `${slug}-${id}`;
 }

@@ -7,12 +7,12 @@ import React, {useState} from "react";
 import Image from "next/image";
 
 export default function MapWrapper({maps}: { maps: IMap[] }) {
-    const [chosenMap, setChosenMap] = useState<null | { url: string, type: string }>(null);
+    const [chosenMap, setChosenMap] = useState<null | { url: string, type: string, source: string }>(null);
 
     return <div className={'flex flex-col gap-14'}>
         {maps ? <>
         {chosenMap ?
-            <div className={'lg:px-26 px-10 max-sm:px-6 mx-auto'}>
+            <div className={'lg:px-26 px-10 max-sm:px-6'}>
                 {
                     chosenMap.type === 'image' ?
                         <Image
@@ -33,6 +33,7 @@ export default function MapWrapper({maps}: { maps: IMap[] }) {
                             }
                         />
                 }
+                <div className={'italic text-end mt-2 mr-2 text-gray-600'}><span className={'font-medium'}>Nguồn:</span> {chosenMap.source}</div>
             </div> : ''
         }
             <div className={'bg-gray-50 lg:px-26 px-10 max-sm:px-6 py-12'}>

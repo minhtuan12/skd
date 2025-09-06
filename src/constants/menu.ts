@@ -27,7 +27,8 @@ export const menu: Menu[] = [
             },
             {
                 title: 'Các văn bản chính sách liên quan',
-                href: routes.ChinhSach
+                href: routes.ChinhSach,
+                hasPages: true
             }
         ]
     },
@@ -50,10 +51,6 @@ export const menu: Menu[] = [
         href: routes.NganHangKienThuc,
         children: [
             {
-                title: 'Tài liệu tập huấn',
-                href: routes.TaiLieuTapHuan,
-            },
-            {
                 title: 'Kỹ thuật canh tác thân thiện với sức khỏe đất',
                 href: routes.KyThuatCanhTac,
                 hasPages: true
@@ -67,7 +64,11 @@ export const menu: Menu[] = [
                 title: 'Mô hình điển hình',
                 href: routes.MoHinhDienHinh,
                 hasPages: true
-            }
+            },
+            {
+                title: 'Tài liệu tập huấn',
+                href: routes.TaiLieuTapHuan,
+            },
         ]
     },
     {
@@ -133,6 +134,23 @@ export const sideBarItems = [
                 title: "Thông tin chính sách",
                 url: routes.PolicyConfig,
                 icon: Newspaper,
+                children: [
+                    {
+                        title: "Kế hoạch hành động SKĐ",
+                        url: routes.Plan,
+                        icon: Newspaper,
+                    },
+                    {
+                        title: "Chiến lược SKĐ Quốc gia",
+                        url: routes.Strategy,
+                        icon: Newspaper,
+                    },
+                    {
+                        title: "Văn bản chính sách",
+                        url: routes.Document,
+                        icon: Newspaper,
+                    },
+                ]
             },
             {
                 title: "Ngân hàng kiến thức",
@@ -143,11 +161,6 @@ export const sideBarItems = [
                         title: "Quản lý nhóm cây",
                         url: routes.TreeTypeManagement,
                         icon: TreePalm,
-                    },
-                    {
-                        title: "Tài liệu tập huấn",
-                        url: routes.Training,
-                        icon: Newspaper,
                     },
                     {
                         title: "Kỹ thuật canh tác",
@@ -162,6 +175,11 @@ export const sideBarItems = [
                     {
                         title: "Mô hình điển hình",
                         url: routes.Model,
+                        icon: Newspaper,
+                    },
+                    {
+                        title: "Tài liệu tập huấn",
+                        url: routes.Training,
                         icon: Newspaper,
                     },
                 ]

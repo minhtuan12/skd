@@ -24,7 +24,7 @@ async function addMap(request: NextRequest) {
         const {data} = await request.json();
 
         // Validation
-        if (!data?.name || !data.image_url) {
+        if (!data?.name || !data.image_url || !data.source) {
             return NextResponse.json(
                 {error: 'Thiếu dữ liệu'},
                 {status: 400}
@@ -34,7 +34,8 @@ async function addMap(request: NextRequest) {
         const map = new MapModel({
             name: data.name.trim(),
             image_url: data.image_url,
-            data_url: data.data_url ? data.data_url.trim() : null
+            data_url: data.data_url ? data.data_url.trim() : null,
+            source: data.source.trim()
         });
         await map.save();
 

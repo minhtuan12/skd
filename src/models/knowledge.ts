@@ -42,7 +42,7 @@ const KnowledgeSchema = new Schema({
     },
     tree_type: {
         type: Schema.Types.ObjectId,
-        ref: "TreeType",
+        ref: "TreeTypes",
         default: null
     },
     name: {

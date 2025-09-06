@@ -19,5 +19,5 @@ const TreeTypeSchema = new Schema({
     timestamps: true
 });
 
-const TreeType = models.TreeType || model("TreeType", TreeTypeSchema);
+const TreeType = models.TreeTypes || model("TreeTypes", TreeTypeSchema);
 export default TreeType;

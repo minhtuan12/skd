@@ -12,6 +12,7 @@ export default function MapForm({data, handleChangeData, handleDrop}: {
 }) {
     const {
         name,
+        source,
         image_url,
         data_url
     } = data;
@@ -25,6 +26,13 @@ export default function MapForm({data, handleChangeData, handleDrop}: {
                     <Input
                         id="name" placeholder="Nhập tên bản đồ" value={name}
                         onChange={e => handleChangeData(e.target.value, 'name')}
+                    />
+                </div>
+                <div className="grid gap-2">
+                    <Label required htmlFor="source">Nguồn</Label>
+                    <Input
+                        id="source" placeholder="Nhập nguồn" value={source}
+                        onChange={e => handleChangeData(e.target.value, 'source')}
                     />
                 </div>
                 <div className="grid gap-2">

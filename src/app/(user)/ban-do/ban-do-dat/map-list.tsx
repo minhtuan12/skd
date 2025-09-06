@@ -52,10 +52,12 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                         onClick={() => {
                             setChosenMap(item.data_url ? {
                                 url: item.data_url,
-                                type: 'map'
+                                type: 'map',
+                                source: item.source
                             } : {
                                 url: item.image_url,
-                                type: 'image'
+                                type: 'image',
+                                source: item.source
                             })
                         }}
                         key={index} title={item.name}

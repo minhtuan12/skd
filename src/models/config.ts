@@ -22,7 +22,7 @@ export interface IHomeConfig {
         content: string;
     };
     agricultural_policy: string;
-    knowledge_bank_video_url: string | File;
+    knowledge_bank_video_url: string;
     news_and_events: INewsAndEvents[]
 }
 

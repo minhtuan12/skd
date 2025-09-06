@@ -33,5 +33,5 @@ async function updateConfig(request: NextRequest) {
     }
 }
 
-export const GET = withAuth(getConfig);
-export const PATCH = withAuth(updateConfig);
+export const GET = (getConfig);
+export const PATCH = (updateConfig);

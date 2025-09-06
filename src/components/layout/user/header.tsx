@@ -16,7 +16,7 @@ export default function Header() {
                 <Link
                     href={'/'}
                     className={'flex flex-col items-start w-32 h-full max-[1024px]:w-12 max-[1115px]:relative max-[1115px]:-top-5 max-[1024px]:top-0 min-[1024px]:max-[1115px]:-top-4'}>
-                    <div className={'w-18 h-18 max-[1024px]:w-12 max-[1024px]:h-12 relative'}>
+                    <div className={'w-18 h-18 max-[1024px]:w-12 max-[1024px]:h-12 relative ml-5'}>
                         <Image src={'/logos/principles.png'} alt={''} fill/>
                     </div>
                     <h3 className={'absolute max-[1115px]:top-[97%] max-[1024px]:hidden top-20 text-black max-sm:text-[13px] text-[15px] font-bold'}>SỨC
@@ -27,7 +27,7 @@ export default function Header() {
                     {/* Logos */}
                     <div
                         className={'flex items-center min-[1115px]:gap-20 max-[1115px]:justify-between max-lg:justify-center'}>
-                        <div className={'flex gap-2 max-sm:hidden max-[1115px]:justify-center'}>
+                        <div className={'flex gap-4 max-sm:hidden max-[1115px]:justify-center'}>
                             <div className={'w-8 h-8 relative'}>
                                 <Image src={'/logos/vietnam_emblem.png'} alt={''} fill/>
                             </div>
@@ -37,9 +37,12 @@ export default function Header() {
                             <div className={'w-[137px] h-8 relative'}>
                                 <Image src={'/logos/institute_logo.png'} alt={''} fill/>
                             </div>
+                            <div className={'w-[73px] h-8 relative'}>
+                                <Image src={'/logos/aei_logo.png'} alt={''} fill/>
+                            </div>
                         </div>
                         {/* Search input */}
-                        <div className={'hidden items-center gap-8 max-sm:mt-0 max-[1315px]:flex max-lg:hidden'}>
+                        <div className={'hidden items-center gap-8 max-sm:mt-0 max-[1352px]:flex max-lg:hidden'}>
                             <div className={'w-50 relative h-7 max-[335px]:w-36'}>
                                 <Input placeholder={'Tìm kiếm...'}
                                        className={'w-full h-full rounded-[30px] !text-[13px] text-black !pr-7 box-border'}/>
@@ -51,7 +54,7 @@ export default function Header() {
 
                     {/* Headers */}
                     <div
-                        className="container max-[1024px]:hidden mx-auto flex items-center justify-between text-gray-500 font-semibold text-[13px]">
+                        className="container max-[1024px]:hidden flex items-center justify-between text-gray-500 font-semibold text-[13px]">
                         <nav
                             className="max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             {
@@ -92,7 +95,7 @@ export default function Header() {
                 </div>
             </div>
             {/* Search input */}
-            <div className={'flex items-center gap-8 max-sm:mt-0 max-[1315px]:hidden max-lg:flex'}>
+            <div className={'flex items-center gap-8 max-sm:mt-0 max-[1352px]:hidden max-lg:flex'}>
                 <div className={'w-50 relative h-7 max-[335px]:w-36'}>
                     <Input placeholder={'Tìm kiếm...'}
                            className={'w-full h-full rounded-[30px] !text-[13px] text-black !pr-7 box-border'}/>
