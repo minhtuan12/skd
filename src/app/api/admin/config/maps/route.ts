@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import MapModel from "@/models/map";
+import {withAuth} from "@/app/api/middleware";
 
 async function getMaps(request: NextRequest) {
     try {
@@ -52,5 +53,5 @@ async function addMap(request: NextRequest) {
     }
 }
 
-export const GET = (getMaps);
-export const POST = (addMap);
+export const GET = withAuth(getMaps);
+export const POST = withAuth(addMap);

@@ -11,7 +11,7 @@ const initialState = {
             image_url: '',
             content: ''
         },
-        agricultural_policy: '',
+        agricultural_policy: [],
         knowledge_bank_video_url: '',
         news_and_events: []
     },

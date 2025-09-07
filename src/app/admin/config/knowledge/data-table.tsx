@@ -47,11 +47,11 @@ export default function DataTable(
                     </TableCell>
                     {
                         !notTechnique ? <>
-                            <TableCell className={'font-semibold whitespace-normal pl-4'}>{item.name}</TableCell>
-                            <TableCell className={'font-semibold whitespace-normal pl-4'}>
+                            <TableCell className={'font-medium whitespace-normal pl-4'}>{item.name}</TableCell>
+                            <TableCell className={'font-medium whitespace-normal pl-4'}>
                                 {(item.tree_type as ITreeType)?.name}
                             </TableCell>
-                        </> : <TableCell className={'font-semibold whitespace-normal pl-4'}>
+                        </> : <TableCell className={'font-medium whitespace-normal pl-4'}>
                             <div className={'line-clamp-4'} dangerouslySetInnerHTML={{__html: item.description as string}}/>
                         </TableCell>
                     }

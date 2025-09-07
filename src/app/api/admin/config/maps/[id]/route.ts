@@ -2,6 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import MapModel from "@/models/map";
+import {withAuthWithContext} from "@/app/api/middleware";
 
 const {ObjectId} = Types
 
@@ -51,4 +52,4 @@ async function updateMap(request: NextRequest, {params}: { params: Promise<{ id:
     }
 }
 
-export const PATCH = (updateMap);
+export const PATCH = withAuthWithContext(updateMap);

@@ -33,7 +33,7 @@ export default function DataTable(
                             className={'object-cover'}
                         />
                     </TableCell>
-                    <TableCell className={'font-semibold whitespace-normal pl-4'}>{item.title}</TableCell>
+                    <TableCell className={'font-medium whitespace-normal pl-4'}>{item.title}</TableCell>
                     <TableCell className={'text-center'}>{formatDate(item.createdAt as string)}</TableCell>
                     <TableCell className={'text-center space-x-4'}>
                         <Button onClick={() => handleClickEdit(item)}><Pencil/>Sửa</Button>

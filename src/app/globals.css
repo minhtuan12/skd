@@ -141,3 +141,12 @@ a {
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
+
+.prose a {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.prose a:hover {
+    color: #1d4ed8;
+}

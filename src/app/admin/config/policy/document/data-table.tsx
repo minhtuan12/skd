@@ -34,7 +34,7 @@ export default function DataTable(
                             className={'object-cover'}
                         />
                     </TableCell>
-                    <TableCell className={'font-semibold whitespace-normal pl-4'}>{item.title}</TableCell>
+                    <TableCell className={'font-medium whitespace-normal pl-4'}>{item.title}</TableCell>
                     <TableCell className={'font-medium whitespace-normal pl-4'}>
                         {
                             item.description.description_type === 'text' ?

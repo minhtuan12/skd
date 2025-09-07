@@ -62,6 +62,11 @@ import {handleImageUpload, MAX_FILE_SIZE} from "@/lib/tiptap-utils"
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
+import {Table} from "@tiptap/extension-table";
+import {TableRow} from "@tiptap/extension-table-row";
+import {TableHeader} from "@tiptap/extension-table-header";
+import {TableCell} from "@tiptap/extension-table-cell";
+import Link from "@tiptap/extension-link";
 
 const MainToolbarContent = ({
                                 onHighlighterClick,
@@ -120,9 +125,11 @@ const MainToolbarContent = ({
 
             <ToolbarSeparator/>
 
-            {/*<ToolbarGroup>*/}
-            {/*    <ImageUploadButton text="Add"/>*/}
-            {/*</ToolbarGroup>*/}
+            <ToolbarGroup>
+                <ImageUploadButton/>
+            </ToolbarGroup>
+
+            <ToolbarSeparator/>
 
             <Spacer/>
 
@@ -183,10 +190,15 @@ export function SimpleEditor({content, handleChange}: any) {
         extensions: [
             StarterKit.configure({
                 horizontalRule: false,
-                link: {
-                    openOnClick: false,
-                    enableClickSelection: true,
-                },
+                // link: {
+                //     openOnClick: false,
+                //     enableClickSelection: true,
+                // },
+            }),
+            Link.configure({
+                openOnClick: false,
+                autolink: true,
+                linkOnPaste: true,
             }),
             HorizontalRule,
             TextAlign.configure({types: ["heading", "paragraph"]}),
@@ -205,6 +217,12 @@ export function SimpleEditor({content, handleChange}: any) {
                 upload: handleImageUpload,
                 onError: (error) => console.error("Upload failed:", error),
             }),
+            Table.configure({
+                resizable: true,
+            }),
+            TableRow,
+            TableHeader,
+            TableCell,
         ],
         content,
         onUpdate: handleChange

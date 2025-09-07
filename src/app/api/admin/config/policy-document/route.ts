@@ -57,5 +57,5 @@ async function addDocument(request: NextRequest) {
     }
 }
 
-export const GET = (getPolicyDocuments);
-export const POST = (addDocument);
+export const GET = withAuth(getPolicyDocuments);
+export const POST = withAuth(addDocument);

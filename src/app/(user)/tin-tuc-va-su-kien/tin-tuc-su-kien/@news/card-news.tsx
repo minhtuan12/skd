@@ -1,8 +1,9 @@
 import {INewsAndEvents} from "@/models/config";
 import Image from "next/image";
-import {cn} from "@/lib/utils";
+import {buildDetailPath, cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {ChevronRight} from "lucide-react";
+import Link from "next/link";
 
 export default function CardNews(
     {
@@ -27,8 +28,12 @@ export default function CardNews(
         event: 'SỰ KIỆN',
         research: 'NGHIÊN CỨU'
     }
+    const detailPath = buildDetailPath(news.title, news._id as string);
 
-    return <div className={cn(className, 'flex flex-col gap-4')}>
+    return <Link
+        href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}
+        className={cn(className, 'flex flex-col gap-4')}
+    >
         {
             !hideImage ? <div className={cn(imageClassname, `rounded-xl h-[${imageHeight}px]`)}>
                 {imageHeight ?
@@ -61,11 +66,13 @@ export default function CardNews(
         </div>
         {!hideDetailBtn ?
             <div className={'flex justify-end max-sm:w-full'}>
-                <Button
-                    className={'max-sm:w-full flex bg-white border-black border text-black justify-center h-8 hover:bg-white hover:text-green-700 hover:border-green-700'}>
-                    Xem chi tiết<ChevronRight className={'max-sm:hidden flex'}/>
-                </Button>
+                <Link href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}>
+                    <Button
+                        className={'max-sm:w-full flex bg-white border-black border text-black justify-center h-8 hover:bg-white hover:text-green-700 hover:border-green-700'}>
+                        Xem chi tiết<ChevronRight className={'max-sm:hidden flex'}/>
+                    </Button>
+                </Link>
             </div> : ''
         }
-    </div>
+    </Link>
 }

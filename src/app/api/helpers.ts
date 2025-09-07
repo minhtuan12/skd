@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import Config from "@/models/config";
 import NewsEvents from "@/models/news-events";
 import {Types} from "mongoose";
+import PolicyDocument from "@/models/policy-document";
 
 const {ObjectId} = Types;
 
@@ -23,22 +24,33 @@ export async function getConfig(request: NextRequest) {
                 const newsAndEvents = await NewsEvents.find({
                     _id: {$in: config.home.news_and_events.map((id: string) => new ObjectId(id))}
                 })
+                const policyDocuments = await PolicyDocument.find({
+                    _id: {$in: config.home.agricultural_policy.map((id: string) => new ObjectId(id))}
+                })
                 config = {
                     ...config,
                     home: {
                         ...config.home,
-                        news_and_events: newsAndEvents
+                        news_and_events: newsAndEvents,
+                        agricultural_policy: policyDocuments
                     }
                 }
             } else if (page === 'news-events') {
                 const type = searchParams.get('type') || 'news';
                 const pageNumber = parseInt(searchParams.get('pageNumber') || '1');
+                if (pageNumber === 0) {
+                    config = await NewsEvents.find({
+                        is_deleted: false,
+                        type
+                    }).sort('-date');
+                    return NextResponse.json({config: {[type]: config}});
+                }
                 if (type === 'researches') {
                     const result = await NewsEvents.aggregate([
                         {
                             $match: {type: 'research', is_deleted: false}
                         },
-                        {$sort: {createdAt: -1}},
+                        {$sort: {date: -1}},
                         {
                             $facet: {
                                 data: [
@@ -69,12 +81,12 @@ export async function getConfig(request: NextRequest) {
                             $facet: {
                                 topNews: [
                                     {$match: {type: "news", is_deleted: false}},
-                                    {$sort: {createdAt: -1}},
+                                    {$sort: {date: -1}},
                                     {$limit: 3}
                                 ],
                                 newsData: [
                                     {$match: {type: "news", is_deleted: false}},
-                                    {$sort: {createdAt: -1}},
+                                    {$sort: {date: -1}},
                                     {$skip: 3},
                                     {$skip: skip},
                                     {$limit: pageLimit}

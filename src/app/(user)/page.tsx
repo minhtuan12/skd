@@ -1,12 +1,14 @@
 import Link from "next/link";
 import AnimatedSection from "@/components/custom/animated-section";
-import {ArrowRight, ChevronRight} from "lucide-react";
+import {ArrowRight, ChevronRight, Dot} from "lucide-react";
 import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
 import {INewsAndEvents} from "@/models/config";
 import {dateOptions, NEWS_EVENTS} from "@/constants/common";
 import Image from "next/image";
+import {IPolicyDocument} from "@/models/policy-document";
+import {buildDetailPath} from "@/lib/utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -42,7 +44,7 @@ export default async function Home() {
                     </p>
                     <div className="mt-6">
                         <button
-                            className="cursor-pointer hover:opacity-90 font-semibold bg-blue-600 text-white px-5 py-2.5 rounded-[10px] flex items-center justify-center gap-2">
+                            className="cursor-pointer hover:opacity-90 font-medium bg-blue-600 text-white px-5 py-2.5 rounded-[10px] flex items-center justify-center gap-2">
                             Tìm hiểu thêm
                             <ArrowRight width={16} strokeWidth={'3'}/>
                         </button>
@@ -105,19 +107,22 @@ export default async function Home() {
                                    className={'h-auto md:h-1/2'} childrenBg={'justify-between'}>
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
-                            <div className={'text-[13px] flex-1 overflow-auto max-h-full text-justify pr-2'}>
-                                {home.agricultural_policy}
+                            <div
+                                className={'flex flex-col gap-2 text-[13px] flex-1 overflow-auto max-h-full text-justify pr-2'}>
+                                {home.agricultural_policy.map((item: IPolicyDocument) => (
+                                    <div key={item._id} className={'flex items-center'}><Dot/>{item.title}</div>
+                                ))}
                             </div>
                         </div>
-                        <Link href="#"
-                              className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
-                            chính sách
+                        <Link href="/thong-tin-chinh-sach/chinh-sach/1"
+                              className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">
+                            Xem chính sách
                             <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                     </CardWithTitle>
                     <CardWithTitle border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-yellow-300'}
                                    className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}>
                         <VideoPlayer src={home.knowledge_bank_video_url}/>
-                        <Link href="#"
+                        <Link href="/ngan-hang-kien-thuc/ky-thuat-cai-tao-dat/1"
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                             tài liệu
                             <ChevronRight width={13} className={'mt-[3px]'}/></Link>
@@ -139,8 +144,10 @@ export default async function Home() {
                     và tin tức nổi bật trong lĩnh vực.</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                     {
-                        home.news_and_events.map((item: INewsAndEvents, i: number) => (
-                            <Link href={'#'} key={i}>
+                        home.news_and_events.map((item: INewsAndEvents, i: number) => {
+                            const detailPath = buildDetailPath(item.title, item._id as string);
+
+                            return <Link href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`} key={i}>
                                 <CardWithTitle
                                     border
                                     title={item.title} bgTitleColor={'green'} titleHeight={'!h-50'}
@@ -159,10 +166,11 @@ export default async function Home() {
                                     </div>
                                 </CardWithTitle>
                             </Link>
-                        ))
+                        })
                     }
                 </div>
-                <Link href={'/tin-tuc-va-su-kien/tin-tuc-su-kien'} className={'text-blue-600 font-medium flex items-center justify-end mt-5'}>Xem thêm <ChevronRight
+                <Link href={'/tin-tuc-va-su-kien/tin-tuc-su-kien'}
+                      className={'text-blue-600 font-medium flex items-center justify-end mt-5'}>Xem thêm <ChevronRight
                     className={'w-4 h-4 text-blue-600 mt-0.5'}/></Link>
             </AnimatedSection>
         </>

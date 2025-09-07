@@ -1,4 +1,5 @@
 import {model, models, Schema, Types} from "mongoose";
+import {IPolicyDocument} from "@/models/policy-document";
 
 export interface INewsAndEvents {
     _id?: string;
@@ -21,7 +22,7 @@ export interface IHomeConfig {
         image_url: string | File;
         content: string;
     };
-    agricultural_policy: string;
+    agricultural_policy: string[] | IPolicyDocument[];
     knowledge_bank_video_url: string;
     news_and_events: INewsAndEvents[]
 }
@@ -109,8 +110,8 @@ const ConfigSchema = new Schema({
             }
         },
         agricultural_policy: {
-            type: String,
-            required: true
+            type: [Schema.Types.ObjectId],
+            ref: 'PolicyDocuments'
         },
         knowledge_bank_video_url: {
             type: String,

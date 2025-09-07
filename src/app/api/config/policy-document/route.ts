@@ -11,6 +11,11 @@ async function getPolicyDocument(request: NextRequest) {
         const page = parseInt(searchParams.get('page') || '1');
 
         // const queryCondition = q ? {name: {$regex: q, $options: 'i'}} : {};
+        if (page === 0) {
+            const documents = await PolicyDocument.find({is_deleted: false}).sort('-createdAt');
+            return NextResponse.json({documents});
+        }
+
         const result = await PolicyDocument.aggregate([
             {
                 $match: {
@@ -47,7 +52,6 @@ async function getPolicyDocument(request: NextRequest) {
                 }
             }
         ]);
-
         return NextResponse.json({documents: result?.[0] || null});
     } catch (error) {
         console.error('Get policy document API error:', error);

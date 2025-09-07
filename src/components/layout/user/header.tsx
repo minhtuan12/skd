@@ -54,7 +54,7 @@ export default function Header() {
 
                     {/* Headers */}
                     <div
-                        className="container max-[1024px]:hidden flex items-center justify-between text-gray-500 font-semibold text-[13px]">
+                        className="container max-[1024px]:hidden flex items-center justify-between text-gray-600 medium text-[13px]">
                         <nav
                             className="max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             {

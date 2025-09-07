@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import {sanitizeHtml} from "@/lib/utils";
 import PolicyDocument from "@/models/policy-document";
+import {withAuthWithContext} from "@/app/api/middleware";
 
 const {ObjectId} = Types
 
@@ -55,4 +56,4 @@ async function updatePolicyDocument(request: NextRequest, {params}: { params: Pr
     }
 }
 
-export const PATCH = (updatePolicyDocument);
+export const PATCH = withAuthWithContext(updatePolicyDocument);

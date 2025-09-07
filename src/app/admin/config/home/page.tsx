@@ -18,6 +18,8 @@ import {toast} from "sonner";
 import {useSaveConfig} from "@/app/admin/config/(hooks)/use-save-config";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {Button} from "@/components/ui/button";
+import PolicySelection from "@/app/admin/config/(components)/policy-selection";
+import {IPolicyDocument} from "@/models/policy-document";
 
 export default function HomeConfig() {
     const homeConfig = useSelector((state: RootState) => state.config.home);
@@ -119,7 +121,7 @@ export default function HomeConfig() {
 
     const validate = () => {
         const currentConfig = cloneConfigRef.current;
-        if (!currentConfig.agricultural_policy || !currentConfig.introduction.image_url || !currentConfig.introduction.content || !currentConfig.banner.title || !currentConfig.banner.image_url) {
+        if (!currentConfig.introduction.image_url || !currentConfig.introduction.content || !currentConfig.banner.title || !currentConfig.banner.image_url) {
             return false;
         }
         return true;
@@ -201,7 +203,7 @@ export default function HomeConfig() {
             },
             news_and_events: newConfig.news_and_events.map((item: INewsAndEvents) => item._id),
             knowledge_bank_video_url: newConfig.knowledge_bank_video_url.trim(),
-            agricultural_policy: newConfig.agricultural_policy.trim(),
+            agricultural_policy: newConfig.agricultural_policy.map((item: IPolicyDocument) => item._id),
             banner: {
                 title: newConfig.banner.title.trim(),
                 description: newConfig.banner.description.trim(),
@@ -315,23 +317,10 @@ export default function HomeConfig() {
                             </CustomCard>
 
                             {/* Agricultural Policy */}
-                            <CustomCard
-                                title={'Chính sách Nông Nghiệp'}
-                                description={'Cập nhật chính sách'}
-                                className={'sm:col-span-1'}
-                            >
-                                <div className="grid gap-4">
-                                    <div className="grid gap-2">
-                                        <Label required htmlFor="policy">Chính sách</Label>
-                                        <Textarea
-                                            id="policy"
-                                            placeholder="Nhập chính sách"
-                                            value={cloneConfig?.agricultural_policy || ''}
-                                            onChange={(e) => handleChangeInput(e.target.value, 'agricultural_policy')}
-                                        />
-                                    </div>
-                                </div>
-                            </CustomCard>
+                            <PolicySelection
+                                policy={cloneConfig.agricultural_policy as IPolicyDocument[]}
+                                setCloneConfig={setCloneConfig}
+                            />
                         </div>
                     </div>
                     <div className={'grid gap-4 grid-cols-1 xl:grid-cols-2 h-fit'}>
