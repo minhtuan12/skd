@@ -17,7 +17,6 @@ export default function DataTable(
                 <TableHead className={'text-center w-16'}>STT</TableHead>
                 <TableHead className={'text-center w-70'}>Hình ảnh</TableHead>
                 <TableHead className={'pl-4 w-60'}>Chính sách</TableHead>
-                <TableHead className={'w-60'}>Nội dung</TableHead>
                 <TableHead className={'text-center w-80'}>Hành động</TableHead>
             </TableRow>
         </TableHeader>
@@ -35,18 +34,6 @@ export default function DataTable(
                         />
                     </TableCell>
                     <TableCell className={'font-medium whitespace-normal pl-4'}>{item.title}</TableCell>
-                    <TableCell className={'font-medium whitespace-normal pl-4'}>
-                        {
-                            item.description.description_type === 'text' ?
-                                <div className={'line-clamp-4'}
-                                     dangerouslySetInnerHTML={{__html: item.description.content as string}}
-                                />
-                                : <a target={'_blank'} href={item.description.content}
-                                     className={'text-underline text-blue-500'}>
-                                    Link văn bản
-                                </a>
-                        }
-                    </TableCell>
                     <TableCell className={'text-center space-x-4'}>
                         <Button onClick={() => handleClickEdit(item)}><Pencil/>Sửa</Button>
                         {/*<Button onClick={() => handleClickDelete(item)}*/}
