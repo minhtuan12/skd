@@ -1,5 +1,5 @@
 import {routes} from "@/constants/routes";
-import {Home, MapPin, Newspaper, Tractor, TreePalm} from "lucide-react";
+import {Home, MapPin, Newspaper, TreePalm} from "lucide-react";
 
 export interface Menu {
     title: string;
@@ -49,27 +49,7 @@ export const menu: Menu[] = [
     {
         title: 'Ngân hàng kiến thức',
         href: routes.NganHangKienThuc,
-        children: [
-            {
-                title: 'Kỹ thuật canh tác thân thiện với sức khỏe đất',
-                href: routes.KyThuatCanhTac,
-                hasPages: true
-            },
-            {
-                title: 'Kỹ thuật cải tạo đất',
-                href: routes.KyThuatCaiTaoDat,
-                hasPages: true
-            },
-            {
-                title: 'Mô hình điển hình',
-                href: routes.MoHinhDienHinh,
-                hasPages: true
-            },
-            {
-                title: 'Tài liệu tập huấn',
-                href: routes.TaiLieuTapHuan,
-            },
-        ]
+        children: []
     },
     {
         title: 'Tin tức và sự kiện',
@@ -158,29 +138,9 @@ export const sideBarItems = [
                 icon: Newspaper,
                 children: [
                     {
-                        title: "Quản lý nhóm cây",
-                        url: routes.TreeTypeManagement,
+                        title: "Quản lý trang",
+                        url: routes.Pages,
                         icon: TreePalm,
-                    },
-                    {
-                        title: "Kỹ thuật canh tác",
-                        url: routes.Farming,
-                        icon: Tractor,
-                    },
-                    {
-                        title: "Kỹ thuật cải tạo đất",
-                        url: routes.Renovation,
-                        icon: Newspaper,
-                    },
-                    {
-                        title: "Mô hình điển hình",
-                        url: routes.Model,
-                        icon: Newspaper,
-                    },
-                    {
-                        title: "Tài liệu tập huấn",
-                        url: routes.Training,
-                        icon: Newspaper,
                     },
                 ]
             },

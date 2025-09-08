@@ -9,14 +9,16 @@ import {toast} from "sonner";
 interface PowerpointViewerProps {
     slides: string[];
     pptUrl: string;
-    downloadNotification?: string
+    downloadNotification?: string,
+    downloadable?: boolean
 }
 
 export default function PowerpointViewer(
     {
         slides,
         pptUrl,
-        downloadNotification = 'Trang web đang thử nghiệm, chưa hỗ trợ download, xin liên hệ admin'
+        downloadNotification = 'Trang web đang thử nghiệm, chưa hỗ trợ download, xin liên hệ admin',
+        downloadable = true
     }: PowerpointViewerProps) {
     const [current, setCurrent] = useState(0);
     const thumbnailsRef = useRef<HTMLDivElement>(null);
@@ -79,16 +81,18 @@ export default function PowerpointViewer(
                     </Button>
                 </div>
             </div>
-            <div className="w-full max-w-5xl flex justify-start cursor-pointer">
-                <a className={'underline flex justify-start mt-2 text-lg'} href={''} onClick={(e) => {
-                    e.preventDefault();
-                    if (downloadNotification) {
-                        toast.info(downloadNotification)
-                    }
-                }}>
-                    Tải xuống dự thảo
-                </a>
-            </div>
+            {downloadable ?
+                <div className="w-full max-w-5xl flex justify-start">
+                    <a className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'} href={pptUrl} onClick={(e) => {
+                        e.preventDefault();
+                        if (downloadNotification) {
+                            toast.info(downloadNotification)
+                        }
+                    }}>
+                        Tải xuống
+                    </a>
+                </div> : ''
+            }
         </div>
     );
 }

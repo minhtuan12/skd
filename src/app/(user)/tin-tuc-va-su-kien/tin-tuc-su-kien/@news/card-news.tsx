@@ -30,8 +30,7 @@ export default function CardNews(
     }
     const detailPath = buildDetailPath(news.title, news._id as string);
 
-    return <Link
-        href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}
+    return <div
         className={cn(className, 'flex flex-col gap-4')}
     >
         {
@@ -60,7 +59,12 @@ export default function CardNews(
         }
         <div className={'flex flex-col gap-0.5 flex-1'}>
             <p className={'font-medium'}>{tag[news.type as keyof typeof tag]}</p>
-            <h1 className={'text-lg font-medium text-green-700 line-clamp-4'}>{news.title}</h1>
+            <Link
+                href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}
+                className={'text-lg font-medium text-green-700 line-clamp-4'}
+            >
+                {news.title}
+            </Link>
             <div className={'text-gray-500 text-md line-clamp-2'}
                  dangerouslySetInnerHTML={{__html: news.description}}/>
         </div>
@@ -74,5 +78,5 @@ export default function CardNews(
                 </Link>
             </div> : ''
         }
-    </Link>
+    </div>
 }

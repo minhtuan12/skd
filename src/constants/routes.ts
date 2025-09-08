@@ -12,11 +12,7 @@ export const routes = {
     Document: '/document',
     // Knowledge
     KnowledgeConfig: '/admin/config/knowledge',
-    TreeTypeManagement: '/tree-type',
-    Training: '/training',
-    Farming: '/farming',
-    Renovation: '/renovation',
-    Model: '/model',
+    Pages: '/pages',
     // Map
     MapConfig: '/admin/config/map',
 

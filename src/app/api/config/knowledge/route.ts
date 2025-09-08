@@ -1,6 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import Knowledge from "@/models/knowledge";
+import KnowledgeCategory from "@/models/knowledge-category";
+import {Types} from "mongoose";
+import PolicyDocument from "@/models/policy-document";
+
+const {ObjectId} = Types;
 
 async function getKnowledge(request: NextRequest) {
     try {
@@ -9,10 +14,22 @@ async function getKnowledge(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const q = searchParams.get('q') || '';
         const page = parseInt(searchParams.get('page') || '1');
-        const category = searchParams.get('category') || '';
+        const categoryId = searchParams.get('category') || '';
+
+        if (page === 0) {
+            const knowledge = await Knowledge.find({is_deleted: false}).sort('-createdAt').populate('category');
+            return NextResponse.json({knowledge});
+        }
 
         // const queryCondition = q ? {name: {$regex: q, $options: 'i'}} : {};
-        const queryCondition = category ? {category} : {};
+        let queryCondition: any = {};
+        const category = await KnowledgeCategory.findById(categoryId).populate("children");
+        if (category?.children && category.children.length > 0) {
+            const childrenIds = category.children.map((c: any) => c._id);
+            queryCondition.category = {$in: childrenIds};
+        } else {
+            queryCondition.category = new ObjectId(categoryId);
+        }
         const result = await Knowledge.aggregate([
             {
                 $match: {
@@ -51,7 +68,15 @@ async function getKnowledge(request: NextRequest) {
             }
         ]);
 
-        return NextResponse.json({knowledge: result?.[0] || null});
+        return NextResponse.json({
+            knowledge: {
+                ...result?.[0],
+                data: result?.[0]?.data?.map((i: any) => ({
+                    ...i,
+                    category_name: category.name
+                }))
+            }
+        });
     } catch (error) {
         console.error('Get knowledge API error:', error);
         return NextResponse.json(

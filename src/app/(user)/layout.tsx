@@ -1,5 +1,5 @@
 import type {Metadata} from "next";
-import {Lato} from "next/font/google";
+// import {Lato} from "next/font/google";
 import "../globals.css";
 import React from "react";
 import Header from "@/components/layout/user/header";
@@ -8,13 +8,13 @@ import Footer from "@/components/layout/user/footer";
 import {fetchGlobalConfig} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-global-config";
 import Hero from "@/components/layout/user/hero";
 import {Toaster} from "@/components/ui/sonner";
-
-const lato = Lato({
-    subsets: ["latin"],
-    weight: ["100", "300", "400", "700", "900"],
-    variable: "--font-lato",
-    style: ["italic", "normal"]
-});
+//
+// const lato = Lato({
+//     subsets: ["latin"],
+//     weight: ["100", "300", "400", "700", "900"],
+//     variable: "--font-lato",
+//     style: ["italic", "normal"]
+// });
 
 export const metadata: Metadata = {
     title: "Sức Khỏe Đất",
@@ -31,9 +31,9 @@ export default async function RootLayout(
     const heroData = await fetchGlobalConfig();
 
     return (
-        <html lang="en" className={`${lato.className}`}>
+        <html lang="en">
         <body
-            className={`${lato.variable} antialiased`}
+            className={` antialiased`}
         >
         <main className="min-h-screen w-full">
             <Header/>

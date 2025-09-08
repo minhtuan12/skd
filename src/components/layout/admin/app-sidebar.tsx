@@ -1,6 +1,6 @@
 'use client'
 
-import {ChevronRight, ChevronUp, User2,} from "lucide-react"
+import {ChevronRight, ChevronUp, Loader2, Newspaper, User2,} from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -23,11 +23,44 @@ import {Skeleton} from "@/components/ui/skeleton";
 import {sideBarItems} from "@/constants/menu";
 import {usePathname, useRouter} from "next/navigation";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
+import {useFetchKnowledgeCategory} from "@/app/admin/config/(hooks)/use-knowledge-category";
+import {routes} from "@/constants/routes";
+import {IKnowledgeCategory} from "@/models/knowledge-category";
+import {useMemo} from "react";
+import {useDispatch} from "react-redux";
 
 export function AppSidebar() {
     const {admin, logout} = useAdmin();
     const router = useRouter();
     const pathname = usePathname();
+    const {loading, data} = useFetchKnowledgeCategory();
+    const items = useMemo(() => {
+        if (data?.pages) {
+            return sideBarItems.map(item => {
+                return {
+                    ...item,
+                    children: item.children.map((child: any) => {
+                        if (child.url.includes(routes.KnowledgeConfig)) {
+                            return {
+                                ...child,
+                                children: [
+                                    ...child.children,
+                                    ...data.pages.map((i: IKnowledgeCategory) => ({
+                                        title: i.name,
+                                        url: `/${i._id}`,
+                                        icon: Newspaper,
+                                    }))
+                                ]
+                            }
+                        }
+                        return child;
+                    })
+                }
+            })
+        }
+        return sideBarItems;
+    }, [data]);
+    const dispatch = useDispatch();
 
     return (
         <Sidebar collapsible="icon">
@@ -50,8 +83,10 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                {
-                    sideBarItems.map((item, index) => (
+                {loading ? <div className={'h-full w-full flex items-center justify-center'}>
+                        <Loader2 className={'w-5 h-5 animate-spin'}/>
+                    </div> :
+                    items.map((item, index) => (
                         <SidebarGroup key={index}>
                             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
                             <SidebarGroupContent>
@@ -78,12 +113,16 @@ export function AppSidebar() {
                                                     <CollapsibleContent>
                                                         <SidebarMenuSub>
                                                             {
-                                                                child.children.map((i, idx) => (
+                                                                child.children.map((i: any, idx: number) => (
                                                                     <SidebarMenuSubItem key={idx}>
-                                                                        <SidebarMenuSubButton asChild
-                                                                                              isActive={pathname.includes(i.url)}>
+                                                                        <SidebarMenuSubButton
+                                                                            asChild
+                                                                            isActive={pathname.includes(i.url)}
+                                                                        >
                                                                             <div
-                                                                                onClick={() => router.push(child.url + i.url)}
+                                                                                onClick={() => {
+                                                                                    router.push(child.url + i.url)
+                                                                                }}
                                                                                 className={'cursor-pointer'}>
                                                                                 <i.icon/>
                                                                                 <span>{i.title}</span>

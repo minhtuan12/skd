@@ -20,11 +20,7 @@ export default function PolicyCard(
     const detailPath = buildDetailPath(item.title, item._id as string);
 
     return <Link
-        target={'_blank'}
-        href={
-            item.description.description_type === 'link' ? item.description.content :
-                `/thong-tin-chinh-sach/chinh-sach/chi-tiet/${detailPath}`
-        }
+        href={item.link || `/thong-tin-chinh-sach/chinh-sach/chi-tiet/${detailPath}`}
         className={cn(className, 'flex flex-col gap-2.5')}
     >
         <div className={cn(imageClassname, `rounded-xl`)}>
@@ -44,9 +40,9 @@ export default function PolicyCard(
             </p>
             <h1 className={'text-lg font-medium text-green-700 line-clamp-4'}>{item.title}</h1>
             {
-                item.description.description_type === 'text' ? <div
+                item.text ? <div
                     className={'text-gray-500 text-md line-clamp-2'}
-                    dangerouslySetInnerHTML={{__html: item.description.content}}
+                    dangerouslySetInnerHTML={{__html: item.text as string}}
                 /> : ''
             }
         </div>

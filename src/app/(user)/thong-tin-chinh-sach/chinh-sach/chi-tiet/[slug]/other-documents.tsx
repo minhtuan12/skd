@@ -47,10 +47,7 @@ function DocumentList({documents, exceptId}: { documents: any, exceptId: string 
                                     const detailPath = buildDetailPath(item.title, item._id as string);
 
                                     return <Link
-                                        href={
-                                            item.description.description_type === 'link' ? item.description.content :
-                                                `/thong-tin-chinh-sach/chinh-sach/chi-tiet/${detailPath}`
-                                        }
+                                        href={item.link || `/thong-tin-chinh-sach/chinh-sach/chi-tiet/${detailPath}`}
                                         key={item._id}
                                         className={'rounded-md w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >

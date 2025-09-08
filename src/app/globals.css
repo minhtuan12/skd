@@ -150,3 +150,7 @@ a {
 .prose a:hover {
     color: #1d4ed8;
 }
+
+button[aria-label="Download"] {
+    display: none !important;
+}

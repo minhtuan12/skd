@@ -67,6 +67,7 @@ import {TableRow} from "@tiptap/extension-table-row";
 import {TableHeader} from "@tiptap/extension-table-header";
 import {TableCell} from "@tiptap/extension-table-cell";
 import Link from "@tiptap/extension-link";
+import {cn} from "@/lib/utils";
 
 const MainToolbarContent = ({
                                 onHighlighterClick,
@@ -167,7 +168,7 @@ const MobileToolbarContent = ({
     </>
 )
 
-export function SimpleEditor({content, handleChange}: any) {
+export function SimpleEditor({content, handleChange, className}: any) {
     const isMobile = useIsMobile()
     const {height} = useWindowSize()
     const [mobileView, setMobileView] = React.useState<
@@ -269,7 +270,7 @@ export function SimpleEditor({content, handleChange}: any) {
                 <EditorContent
                     editor={editor}
                     role="presentation"
-                    className="simple-editor-content"
+                    className={cn("simple-editor-content", className)}
                 />
             </EditorContext.Provider>
         </div>

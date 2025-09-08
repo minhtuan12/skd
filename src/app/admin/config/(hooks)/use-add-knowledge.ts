@@ -1,6 +1,5 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {toast} from "sonner";
-import {KnowledgeType} from "@/models/knowledge";
 
 const addKnowledge = async (data: any) => {
     const response = await fetch(`/api/admin/config/knowledge`, {
@@ -17,7 +16,7 @@ const addKnowledge = async (data: any) => {
     return response.json();
 };
 
-export const useAddKnowledge = (category: KnowledgeType) => {
+export const useAddKnowledge = (categoryId: string) => {
     const queryClient = useQueryClient();
 
     const {
@@ -29,7 +28,7 @@ export const useAddKnowledge = (category: KnowledgeType) => {
     } = useMutation({
         mutationFn: (payload: any) => addKnowledge(payload),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['knowledge', category]});
+            queryClient.invalidateQueries({queryKey: [`knowledge-${categoryId}`, categoryId]});
         },
         onError: (error) => {
             toast.error(error?.message || 'Đã có lỗi xảy ra');

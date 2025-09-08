@@ -22,36 +22,21 @@ async function updateKnowledge(request: NextRequest, {params}: { params: Promise
             );
         }
 
-        let newKnowledge;
-        switch (data.category) {
-            case "training":
-                break;
-            case "renovation":
-                newKnowledge = {
-                    name: data.name,
-                    media: data.media,
-                    tree_type: data.tree_type,
-                    description: sanitizeHtml(data.description),
-                    category: data.category
-                };
-                break;
-            case "farming":
-                newKnowledge = {
-                    name: data.name,
-                    media: data.media,
-                    tree_type: data.tree_type,
-                    description: sanitizeHtml(data.description),
-                    category: data.category
-                };
-                break;
-            case "model":
-                newKnowledge = {
-                    name: data.name,
-                    media: data.media,
-                    description: sanitizeHtml(data.description),
-                    category: data.category
-                }
-        }
+        const newKnowledge = {
+            name: data.name,
+            media: data.media,
+            category: data.category,
+            text: data.text ? sanitizeHtml(data.text) : '',
+            slide: {
+                url: data.slide.url || null,
+                downloadable: data.slide.downloadable
+            },
+            pdf: {
+                url: data.pdf.url || null,
+                downloadable: data.pdf.downloadable
+            },
+            link: data.link || ''
+        };
 
         const result = await Knowledge.findOneAndUpdate(
             {_id: new ObjectId(id)},
@@ -69,7 +54,7 @@ async function updateKnowledge(request: NextRequest, {params}: { params: Promise
             {status: 200}
         );
     } catch (error) {
-        console.error('Update tree type API error:', error);
+        console.error('Update knowledge API error:', error);
         return NextResponse.json(
             {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
             {status: 500}

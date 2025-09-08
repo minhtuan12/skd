@@ -17,10 +17,16 @@ import {routes} from "@/constants/routes";
 
 const defaultItem: IPolicyDocument = {
     title: '',
-    description: {
-        content: '',
-        description_type: 'link'
+    text: '',
+    slide: {
+        url: null,
+        downloadable: true
     },
+    pdf: {
+        url: null,
+        downloadable: true
+    },
+    link: null,
     image_url: ''
 }
 
@@ -59,30 +65,30 @@ export default function () {
     }
 
     const handleChangeData = (value: any, key: string) => {
-        if (key.includes('description')) {
-            if (key.includes('content')) {
-                setNewDocument((prev: any) => ({
-                    ...prev,
-                    description: {
-                        ...newDocument.description,
-                        content: value
-                    }
-                }))
-            } else {
-                setNewDocument((prev: any) => ({
-                    ...prev,
-                    description: {
-                        content: '',
-                        description_type: value,
-                    }
-                }))
+        setNewDocument((prev: any) => ({
+            ...prev,
+            [key]: value
+        }))
+    }
+
+    const handleChangeCheck = (checked: boolean, key: string) => {
+        setNewDocument({
+            ...newDocument,
+            [key]: {
+                ...newDocument[key as keyof typeof newDocument] as any,
+                downloadable: checked
             }
-        } else {
-            setNewDocument((prev: any) => ({
-                ...prev,
-                [key]: value
-            }))
-        }
+        })
+    }
+
+    const handleChangeFile = (file: File, key: string) => {
+        setNewDocument({
+            ...newDocument,
+            [key]: {
+                ...newDocument[key as keyof typeof newDocument] as any,
+                url: file
+            }
+        })
     }
 
     // call api add document
@@ -116,23 +122,54 @@ export default function () {
     // call api upload files
     const handleUploadFiles = () => {
         const formData = new FormData();
-        let uploadedFile = {
-            file: newDocument.image_url,
-            key: `document.0`,
-            type: 'image',
+        let uploadFiles = [
+            {
+                file: newDocument.image_url,
+                key: `image_url`,
+                type: 'image',
+            },
+            {
+                file: newDocument.slide.url,
+                key: "slide.url",
+                type: 'raw',
+            },
+            {
+                file: newDocument.pdf.url,
+                key: "pdf.url",
+                type: 'pdf',
+            },
+        ]
+        uploadFiles = uploadFiles.filter(item => (item.file && typeof item.file !== 'string'));
+        if (newDocument.link) {
+            uploadFiles = uploadFiles.filter(item => item.key === 'image');
         }
-
-        if (typeof newDocument.image_url !== 'string') {
-            formData.append('file', uploadedFile.file as File);
-            formData.append('key', uploadedFile.key);
-            formData.append('type', uploadedFile.type as string);
+        if (uploadFiles.length > 0) {
+            uploadFiles.forEach(uploadFile => {
+                formData.append('file', uploadFile.file as File);
+                formData.append('key', uploadFile.key);
+                formData.append('type', uploadFile.type as string);
+            })
 
             uploadFile(formData, {
                 onSuccess: (res) => {
                     let clone = newDocument;
-                    clone = {
-                        ...clone,
-                        image_url: res.data[0].url
+                    const files = res.data;
+                    for (let file of files) {
+                        if (file.key.includes('.')) {
+                            const [parent, child] = file.key.split('.');
+                            clone = {
+                                ...clone,
+                                [parent]: {
+                                    ...clone[parent as keyof typeof clone] as any,
+                                    [child]: file.url
+                                }
+                            }
+                        } else {
+                            clone = {
+                                ...clone,
+                                image_url: file.url
+                            }
+                        }
                     }
                     handleSubmitDocument(clone);
                 },
@@ -185,7 +222,7 @@ export default function () {
                         <Button
                             onClick={handleSubmit} size={'lg'}
                             disabled={
-                                !newDocument.title || !newDocument.image_url || !newDocument.description.content
+                                !newDocument.title || !newDocument.image_url
                                 || loadingAdd || loadingUpload || loadingUpdate
                             }
                         >
@@ -207,6 +244,8 @@ export default function () {
                 handleClickEdit={handleClickEdit}
                 // handleClickDelete={handleChangeNewsVisibility}
             /> : <DocumentForm
+                handleChangeFile={handleChangeFile}
+                handleChangeCheck={handleChangeCheck}
                 data={newDocument}
                 handleChangeData={handleChangeData}
                 imageUrl={imageUrl}

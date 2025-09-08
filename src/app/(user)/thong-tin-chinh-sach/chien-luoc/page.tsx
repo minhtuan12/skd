@@ -30,7 +30,7 @@ export default async function ChienLuoc() {
                             <div className={'text-gray-500 font-medium italic  w-full text-center'}>
                                 Chưa có bản dự thảo nào
                             </div> : <PptViewer
-                                slides={policy.slides} pptUrl={policy.draft_ppt_link}
+                                slides={policy.slides} pptUrl={''}
                                 downloadNotification={policy.download_notification}
                             />
                     )

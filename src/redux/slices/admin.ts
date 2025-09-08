@@ -9,7 +9,8 @@ const adminSlice = createSlice({
     name: 'admin',
     initialState: {
         breadcrumb: [],
-        pageTitle: ''
+        pageTitle: '',
+        knowledgePageTitle: ''
     },
     reducers: {
         setBreadcrumb: (state, action) => ({
@@ -19,6 +20,10 @@ const adminSlice = createSlice({
         setPageTitle: (state, action) => ({
             ...state,
             pageTitle: action.payload
+        }),
+        setKnowledgePageTitle: (state, action) => ({
+            ...state,
+            knowledgePageTitle: action.payload
         })
     },
 })
@@ -26,6 +31,7 @@ const adminSlice = createSlice({
 export const {
     setBreadcrumb,
     setPageTitle,
+    setKnowledgePageTitle
 } = adminSlice.actions
 
 export default adminSlice.reducer

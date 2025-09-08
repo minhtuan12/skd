@@ -6,8 +6,38 @@ import {ChevronDown, Search} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
+import {buildDetailPath} from "@/lib/utils";
+import {routes} from "@/constants/routes";
 
-export default function Header() {
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+
+async function fetchKnowledgeCategory() {
+    const res = await fetch(`${baseUrl}/api/config/knowledge-category`,
+        {cache: 'no-store', credentials: 'include'}
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch knowledge category');
+    }
+    return res.json();
+}
+
+export default async function Header() {
+    const categories = await fetchKnowledgeCategory();
+    const menuItems = menu.map(item => {
+        if (item.href === routes.NganHangKienThuc) {
+            return {
+                ...item,
+                children: categories?.pages?.map((i: any) => ({
+                    title: i.name,
+                    href: `/${buildDetailPath(i.name, i._id)}`,
+                    hasPages: true
+                }))
+            };
+        }
+        return item;
+    })
+
     return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
         <div
             className="pb-1 mx-auto max-lg:px-8 max-[335px]:!px-2 max-[1024px]:justify-between max-sm:pb-1.5 px-4 md:px-10 lg:px-22 min-[1280px]:max-[1300px]:px-24 flex max-[1115px]:!px-12 min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full min-[1024px]:pb-2.5 max-[1115px]:gap-5 max-sm:flex-row max-sm:!px-4 min-[1024px]:max-[1115px]:pt-4">
@@ -58,7 +88,7 @@ export default function Header() {
                         <nav
                             className="max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             {
-                                menu.map((item: Menu, index: number) => (
+                                menuItems.map((item: Menu, index: number) => (
                                     !item?.children ? <Link key={index} href={item.href} className={'flex w-fit mt-1'}>
                                             {item.title}
                                             <ChevronDown

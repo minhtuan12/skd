@@ -1,7 +1,7 @@
 import {model, models, Schema} from "mongoose";
-import {ITreeType} from "@/models/tree-type";
+import {IKnowledgeCategory} from "@/models/knowledge-category";
 
-export type KnowledgeType = 'training' | 'renovation' | 'farming' | 'model';
+// export type KnowledgeType = 'training' | 'renovation' | 'farming' | 'model';
 
 export interface IKnowledge {
     _id?: string;
@@ -9,20 +9,28 @@ export interface IKnowledge {
         url: string | File,
         media_type: 'video' | 'image'
     },
-    category: KnowledgeType,
-    tree_type?: string | null | ITreeType,
-    name?: string,
-    description?: string,
+    category: string | null | IKnowledgeCategory,
+    name: string,
+    text: string,
+    slide: {
+        url: string | null,
+        downloadable: boolean,
+    },
+    pdf: {
+        url: string | null,
+        downloadable: boolean,
+    },
+    link: string | null,
     is_deleted?: boolean,
     createdAt?: string
 }
-
-export enum KnowledgeTypes {
-    training = 'training',
-    renovation = 'renovation',
-    farming = 'farming',
-    model = 'model',
-}
+//
+// export enum KnowledgeTypes {
+//     training = 'training',
+//     renovation = 'renovation',
+//     farming = 'farming',
+//     model = 'model',
+// }
 
 const KnowledgeSchema = new Schema({
     media: {
@@ -37,19 +45,38 @@ const KnowledgeSchema = new Schema({
         }
     },
     category: {
-        type: String,
-        enum: ['training', 'renovation', 'farming', 'model'],
-    },
-    tree_type: {
         type: Schema.Types.ObjectId,
-        ref: "TreeTypes",
-        default: null
+        ref: 'KnowledgeCategories'
     },
     name: {
         type: String,
-        default: null
+        required: true,
     },
-    description: {
+    text: {
+        type: String,
+        default: ''
+    },
+    slide: {
+        url: {
+            type: String,
+            default: null
+        },
+        downloadable: {
+            type: Boolean,
+            default: false
+        }
+    },
+    pdf: {
+        url: {
+            type: String,
+            default: null
+        },
+        downloadable: {
+            type: Boolean,
+            default: false
+        }
+    },
+    link: {
         type: String,
         default: null
     },

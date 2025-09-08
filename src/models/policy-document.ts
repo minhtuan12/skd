@@ -4,10 +4,16 @@ export interface IPolicyDocument {
     _id?: string,
     title: string,
     image_url: string | File,
-    description: {
-        description_type: 'link' | 'text',
-        content: string,
+    text: string,
+    slide: {
+        url: string | null,
+        downloadable: boolean,
     },
+    pdf: {
+        url: string | null,
+        downloadable: boolean,
+    },
+    link: string | null,
     createdAt?: Date,
 }
 
@@ -20,16 +26,33 @@ const PolicyDocumentSchema = new Schema({
         type: String,
         required: true
     },
-    description: {
-        description_type: {
+    text: {
+        type: String,
+        default: ''
+    },
+    slide: {
+        url: {
             type: String,
-            enum: ['link', 'text'],
-            required: true
+            default: null
         },
-        content: {
-            type: String,
-            required: true
+        downloadable: {
+            type: Boolean,
+            default: false
         }
+    },
+    pdf: {
+        url: {
+            type: String,
+            default: null
+        },
+        downloadable: {
+            type: Boolean,
+            default: false
+        }
+    },
+    link: {
+        type: String,
+        default: null
     },
     is_deleted: {
         type: Boolean,

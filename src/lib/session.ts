@@ -6,7 +6,7 @@ export const sessionOptions = {
     cookieName: "skd-session",
     cookieOptions: {
         // secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60
+        maxAge: 60 * 60 * 60
     },
 };
 

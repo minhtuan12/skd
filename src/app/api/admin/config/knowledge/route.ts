@@ -3,6 +3,10 @@ import connectDb from "@/lib/db";
 import Knowledge from "@/models/knowledge";
 import {sanitizeHtml} from "@/lib/utils";
 import {withAuth} from "@/app/api/middleware";
+import {Types} from "mongoose";
+import KnowledgeCategory from "@/models/knowledge-category";
+
+const {ObjectId} = Types
 
 async function getKnowledge(request: NextRequest) {
     try {
@@ -11,14 +15,28 @@ async function getKnowledge(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const q = searchParams.get('q') || '';
         const page = parseInt(searchParams.get('page') || '1');
-        const category = searchParams.get('category') || '';
+        const categoryId = searchParams.get('category') || '';
 
         // const queryCondition = q ? {name: {$regex: q, $options: 'i'}} : {};
-        const queryCondition = category ? {category} : {};
+        let queryCondition: any = {};
+        const category = await KnowledgeCategory.findById(categoryId).populate("children");
+        if (category?.children && category.children.length > 0) {
+            const childrenIds = category.children.map((c: any) => c._id);
+            queryCondition.category = {$in: childrenIds};
+        } else {
+            queryCondition.category = new ObjectId(categoryId);
+        }
+
         const knowledge = await Knowledge.find({
             is_deleted: false,
             ...queryCondition
-        }).populate('tree_type').sort('-createdAt');
+        }).populate({
+            path: 'category',
+            populate: {
+                path: 'children',
+                model: 'KnowledgeCategories'
+            }
+        }).sort('-createdAt');
 
         return NextResponse.json({knowledge});
     } catch (error) {
@@ -44,36 +62,21 @@ async function addKnowledge(request: NextRequest) {
             );
         }
 
-        let newKnowledge;
-        switch (data.category) {
-            case "training":
-                break;
-            case "renovation":
-                newKnowledge = new Knowledge({
-                    name: data.name,
-                    media: data.media,
-                    tree_type: data.tree_type,
-                    description: sanitizeHtml(data.description),
-                    category: data.category
-                });
-                break;
-            case "farming":
-                newKnowledge = new Knowledge({
-                    name: data.name,
-                    media: data.media,
-                    tree_type: data.tree_type,
-                    description: sanitizeHtml(data.description),
-                    category: data.category
-                });
-                break;
-            case "model":
-                newKnowledge = new Knowledge({
-                    media: data.media,
-                    description: sanitizeHtml(data.description),
-                    category: data.category
-                })
-                break;
-        }
+        const newKnowledge = new Knowledge({
+            name: data.name,
+            media: data.media,
+            category: data.category,
+            text: data.text ? sanitizeHtml(data.text) : '',
+            slide: {
+                url: data.slide.url || null,
+                downloadable: data.slide.downloadable
+            },
+            pdf: {
+                url: data.pdf.url || null,
+                downloadable: data.pdf.downloadable
+            },
+            link: data.link || ''
+        });
 
         await newKnowledge.save();
 

@@ -1,8 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
-import {KnowledgeType} from "@/models/knowledge";
 
-const fetchKnowledge = async (category: KnowledgeType) => {
-    const response = await fetch(`/api/admin/config/knowledge?category=${category}`, {
+const fetchKnowledge = async (categoryId: string) => {
+    const response = await fetch(`/api/admin/config/knowledge?category=${categoryId}`, {
         credentials: 'include',
     });
 
@@ -14,7 +13,7 @@ const fetchKnowledge = async (category: KnowledgeType) => {
     return response.json();
 };
 
-export const useFetchKnowledge = (category: KnowledgeType) => {
+export const useFetchKnowledge = (categoryId: string) => {
     const {
         data,
         isPending: loading,
@@ -23,10 +22,10 @@ export const useFetchKnowledge = (category: KnowledgeType) => {
         error,
         refetch
     } = useQuery({
-        queryKey: [category, category],
+        queryKey: [`knowledge-${categoryId}`, categoryId],
         queryFn: ({queryKey}) => {
-            const [_, category] = queryKey
-            return fetchKnowledge(category as KnowledgeType);
+            const [_, categoryId] = queryKey
+            return fetchKnowledge(categoryId);
         },
     });
 

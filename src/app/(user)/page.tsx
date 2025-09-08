@@ -23,8 +23,20 @@ async function fetchHomeConfig() {
     return res.json();
 }
 
+async function fetchKnowledgeCategories() {
+    const res = await fetch(`${baseUrl}/api/config/knowledge-category`,
+        {cache: 'no-store', credentials: 'include'}
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch config');
+    }
+    return res.json();
+}
+
 export default async function Home() {
     const {config: {home}} = await fetchHomeConfig();
+    const {pages} = await fetchKnowledgeCategories();
 
     return (
         <>
@@ -122,7 +134,7 @@ export default async function Home() {
                     <CardWithTitle border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-yellow-300'}
                                    className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}>
                         <VideoPlayer src={home.knowledge_bank_video_url}/>
-                        <Link href="/ngan-hang-kien-thuc/ky-thuat-cai-tao-dat/1"
+                        <Link href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                             tài liệu
                             <ChevronRight width={13} className={'mt-[3px]'}/></Link>

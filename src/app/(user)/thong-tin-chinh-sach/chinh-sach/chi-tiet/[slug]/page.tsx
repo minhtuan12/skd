@@ -5,11 +5,13 @@ import Image from "next/image";
 import React from "react";
 import OtherDocuments from "@/app/(user)/thong-tin-chinh-sach/chinh-sach/chi-tiet/[slug]/other-documents";
 import {fetchPolicyDocument} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-policy-document";
+import PptViewer from "@/components/custom/ppt-viewer";
+import PdfViewer from "@/components/custom/pdf-viewer";
 
 export default async function ({params}: { params: Promise<{ slug: string }> }) {
     const {slug} = await params;
     const id: string = getIdFromSlug(slug);
-    const doc: IPolicyDocument = await fetchDetailDocument(id);
+    const doc: IPolicyDocument & { slides: string[] } = await fetchDetailDocument(id);
     const otherDocuments = await fetchPolicyDocument(0);
 
     return (
@@ -24,13 +26,33 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                         width={0} height={0}
                         style={{width: '100%', height: '100%'}}
                     />
-                    <div dangerouslySetInnerHTML={{__html: doc.description.content}} className={'xl:text-justify pr-2 box-border prose'}/>
+                    {
+                        doc.text ? <div
+                            dangerouslySetInnerHTML={{__html: doc.text}}
+                            className={'xl:text-justify pr-2 box-border prose'}
+                        /> : ''
+                    }
+                    <div className={'flex flex-col gap-14'}>
+                        {
+                            doc.slide.url ? <div className={'mt-3'}><PptViewer
+                                slides={doc.slides} pptUrl={doc.slide.url}
+                                downloadNotification={''}
+                                downloadable={doc.slide.downloadable}
+                            /></div> : ''
+                        }
+                        {
+                            doc.pdf.url ? <div className={'mt-3'}>
+                                <PdfViewer url={doc.pdf.url} downloadable={doc.pdf.downloadable}/>
+                            </div> : ''
+                        }
+                    </div>
                 </div>
 
                 {/* Others */}
                 <div className={'flex flex-col gap-14'}>
                     <div className={'flex justify-center w-full'}>
-                        <h1 className={'font-medium text-center text-2xl w-fit border-t-green-600 text-green-700 border-t-3 pt-2'}>Các văn bản chính sách liên quan</h1>
+                        <h1 className={'font-medium text-center text-2xl w-fit border-t-green-600 text-green-700 border-t-3 pt-2'}>Các
+                            văn bản chính sách liên quan</h1>
                     </div>
                     <div className={'w-full xl:px-14 lg:px-8'}>
                         <OtherDocuments documents={otherDocuments} exceptId={id}/>
