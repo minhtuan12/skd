@@ -61,7 +61,7 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                             })
                         }}
                         key={index} title={item.name}
-                        bgTitleColor={index % 2 == 0 ? 'bg-blue-500' : 'bg-orange-500'}
+                        bgTitleColor={index % 2 == 0 ? 'bg-[#c7ceea]' : 'bg-[#FFDAC1]'}
                         className={'cursor-pointer flex-shrink-0 w-full md:w-[calc((100%-32px)/3)] xl:w-[calc((100%-64px)/5)] [scroll-snap-align:start]'}
                         titleHeight={'line-clamp-1 truncate pt-3'}
                     >

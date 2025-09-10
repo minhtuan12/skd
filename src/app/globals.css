@@ -49,6 +49,7 @@
 }
 
 :root {
+    font-family: 'Lato', sans-serif;
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -148,7 +149,7 @@ button[aria-label="Download"] {
 }
 
 .prose {
-    font-family: 'Lato', system-ui !important;
+    font-family: 'Lato', sans-serif !important;
     max-width: unset !important;
     width: 100% !important;
     color: unset !important;

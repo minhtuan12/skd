@@ -49,9 +49,9 @@ export default async function Home() {
                 transition={{duration: 0.6}}
                 viewport={{once: true}}
             >
-                <div className={'w-full sm:w-1/2'}>
-                    <h2 className="text-2xl font-semibold mb-4">Giới thiệu về Sức khỏe đất</h2>
-                    <p className="max-w-2xl text-[14px] text-justify">
+                <div className={'max-md:w-full w-1/2'}>
+                    <h2 className="text-4xl max-lg:text-2xl font-semibold mb-4">Giới thiệu về Sức khỏe đất</h2>
+                    <p className="max-w-2xl text-lg max-lg:text-base text-justify">
                         {home.introduction.content}
                     </p>
                     <div className="mt-6">
@@ -68,15 +68,15 @@ export default async function Home() {
                     width={0}
                     height={0}
                     sizes="100vw"
-                    className={'w-[35%] h-auto max-md:w-[45%] max-sm:w-[60%]'}
+                    className={'w-[35%] 2xl:w-[calc(100vw-95%)] h-auto max-md:w-[45%] max-sm:w-[60%] max-lg:w-1/2'}
                 />
             </AnimatedSection>
 
             {/* Grid Sections */}
             <section
                 className="h-auto min-[1595px]:h-[1000px] min-[2015px]:h-[1300px] box-border py-16 px-10 lg:px-10 xl:px-40 grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 mb-18 bg-[#FAF9FF]">
-                <CardWithTitle border title={'Bản đồ đất'} bgTitleColor={'bg-blue-500'}
-                               className={'lg:h-[700px] h-[600px] min-[1595px]:!h-full'}>
+                <CardWithTitle border title={'Bản đồ đất'} bgTitleColor={'bg-[#c7ceea]'}
+                               className={'max-md:h-150 h-full min-[1595px]:!h-full'}>
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
                         <div className={'flex-1'}>
@@ -89,8 +89,8 @@ export default async function Home() {
                         đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                 </CardWithTitle>
 
-                <CardWithTitle border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={'bg-yellow-400'}
-                               className={'lg:h-[700px] h-[600px] min-[1595px]:!h-full'}>
+                <CardWithTitle border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={'bg-[#FFDAC1]'}
+                               className={'max-md:h-150 h-full min-[1595px]:!h-full'}>
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Ngân hàng kiến thức</h5>
                         <div className={'flex-1'}>
@@ -115,23 +115,23 @@ export default async function Home() {
                 </CardWithTitle>
 
                 <div className={'flex flex-col gap-5 max-md:h-auto h-[600px] lg:h-auto'}>
-                    <CardWithTitle border title={'Chính Sách Nông Nghiệp'} bgTitleColor={'bg-orange-400'}
+                    <CardWithTitle border title={'Chính Sách Nông Nghiệp'} bgTitleColor={'bg-[#ff9aa2]'}
                                    className={'h-auto md:h-1/2'} childrenBg={'justify-between'}>
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
-                            <div
-                                className={'flex flex-col gap-2 text-[13px] flex-1 overflow-auto max-h-full text-justify pr-2'}>
+                            <ul
+                                className={'flex flex-col gap-2 text-[13px] flex-1 overflow-auto max-h-full text-justify pr-2 list-disc'}>
                                 {home.agricultural_policy.map((item: IPolicyDocument) => (
-                                    <div key={item._id} className={'flex items-center'}><Dot/>{item.title}</div>
+                                    <li key={item._id} className={'flex items-center'}>• {item.title}</li>
                                 ))}
-                            </div>
+                            </ul>
                         </div>
                         <Link href="/thong-tin-chinh-sach/chinh-sach/1"
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">
                             Xem chính sách
                             <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                     </CardWithTitle>
-                    <CardWithTitle border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-yellow-300'}
+                    <CardWithTitle border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-[#ffffd8]'}
                                    className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}>
                         <VideoPlayer src={home.knowledge_bank_video_url}/>
                         <Link href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}

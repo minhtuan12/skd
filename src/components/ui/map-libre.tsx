@@ -8,10 +8,11 @@ import {cn} from "@/lib/utils";
 interface Props {
     center?: [number, number];
     zoom?: number;
-    marks?: [number, number][];
+    marks?: any;
     className?: string;
     interactive?: boolean;
     tilerApiKey?: string;
+    exactLoc?: number[]
 }
 
 const MapLibre = (
@@ -22,6 +23,7 @@ const MapLibre = (
         className = '',
         interactive = false,
         tilerApiKey,
+        exactLoc = [],
         ...props
     }: Props) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -36,17 +38,33 @@ const MapLibre = (
         });
 
         if (marks.length > 0) {
-            marks.forEach((loc: [number, number]) => {
-                const popup = new maplibregl.Popup({offset: 25});
-                new maplibregl.Marker({color: "#1081e0"})
-                    .setLngLat(loc)
-                    .setPopup(popup)
-                    .addTo(map);
+            marks.forEach((item: any) => {
+                if (Array.isArray(item)) {
+                    const popup = new maplibregl.Popup({offset: 25});
+                    new maplibregl.Marker({color: "#1081e0"})
+                        .setLngLat(item as [number, number])
+                        .setPopup(popup)
+                        .addTo(map);
+                } else {
+                    const popup = new maplibregl.Popup({offset: 25}).setHTML(item.popup);
+                    new maplibregl.Marker({color: "#1081e0"})
+                        .setLngLat(item.location)
+                        .setPopup(popup)
+                        .addTo(map);
+                }
+            });
+        }
+
+        if (exactLoc?.length > 0) {
+            map.flyTo({
+                center: exactLoc as [number, number],
+                zoom: 12,
+                essential: true
             });
         }
 
         return () => map.remove();
-    }, [center, zoom]);
+    }, [center, zoom, exactLoc]);
 
     return (
         <div ref={mapContainerRef} className={cn('w-full h-full', className)}/>

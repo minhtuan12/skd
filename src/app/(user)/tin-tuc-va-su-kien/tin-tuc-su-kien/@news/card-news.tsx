@@ -34,7 +34,7 @@ export default function CardNews(
         className={cn(className, 'flex flex-col gap-4')}
     >
         {
-            !hideImage ? <div className={cn(imageClassname, `rounded-xl`)}>
+            !hideImage ? <div className={cn(imageClassname, `rounded-md`)}>
                 {imageHeight ?
                     <Image
                         src={news.image_url as string}
@@ -43,7 +43,7 @@ export default function CardNews(
                         height={0}
                         style={{width: '100%', height: imageHeight}}
                         sizes="100vw"
-                        className={'rounded-xl object-cover'}
+                        className={'rounded-md object-cover'}
                     /> :
                     <Image
                         src={news.image_url as string}
@@ -52,7 +52,7 @@ export default function CardNews(
                         height={0}
                         sizes="100vw"
                         style={{width: "100%", height: "auto"}}
-                        className={'rounded-xl'}
+                        className={'rounded-md'}
                     />
                 }
             </div> : ''

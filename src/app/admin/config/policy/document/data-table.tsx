@@ -39,8 +39,8 @@ export default function DataTable(
                         />
                     </TableCell>
                     <TableCell className={'font-medium whitespace-normal pl-4'}>{item.title}</TableCell>
-                    <TableCell className={'text-gray-500 whitespace-normal line-clamp-4 w-70'}>
-                        {item.text ? <div className={'prose'} dangerouslySetInnerHTML={{__html: item.text}}/> : <i>Không có</i>}
+                    <TableCell className={'text-gray-500 whitespace-normal line-clamp-4'}>
+                        {item.text ? <div className={'prose'} dangerouslySetInnerHTML={{__html: item.text}}/> : <i className={'relative top-1/2'}>Không có</i>}
                     </TableCell>
                     <TableCell className={'text-gray-500 whitespace-normal pl-4 text-center'}>
                         {

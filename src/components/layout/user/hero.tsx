@@ -15,8 +15,8 @@ export default function Hero({data}: { data: { title: string, description: strin
             objectFit="cover"
         />
         <div className={'relative z-20 px-4 md:px-0 box-border'}>
-            <h2 className="text-4xl font-bold">{data.title}</h2>
-            <p className="mt-4 text-[14px]">{data.description}</p>
+            <h2 className="text-5xl font-bold">{data.title}</h2>
+            <p className="mt-4 text-lg">{data.description}</p>
         </div>
     </AnimatedSection>
 }
