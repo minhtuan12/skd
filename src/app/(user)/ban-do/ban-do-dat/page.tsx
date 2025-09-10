@@ -9,7 +9,7 @@ async function fetchMaps() {
     );
 
     if (!res.ok) {
-        throw new Error('Failed to fetch config');
+        throw new Error('Failed to fetch map');
     }
     return res.json();
 }

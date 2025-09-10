@@ -75,7 +75,7 @@ export default async function Header() {
                         <div className={'hidden items-center gap-8 max-sm:mt-0 max-[1352px]:flex max-lg:hidden'}>
                             <div className={'w-50 relative h-7 max-[335px]:w-36'}>
                                 <Input placeholder={'Tìm kiếm...'}
-                                       className={'w-full h-full rounded-[30px] !text-[13px] text-black !pr-7 box-border'}/>
+                                       className={'w-full h-full rounded-[30px] !text-md text-black !pr-7 box-border'}/>
                                 <Search color="#8f8f8f" width={16}
                                         className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'}/>
                             </div>
@@ -84,7 +84,7 @@ export default async function Header() {
 
                     {/* Headers */}
                     <div
-                        className="container max-[1024px]:hidden flex items-center justify-between text-gray-600 medium text-[13px]">
+                        className="container max-[1024px]:hidden flex items-center justify-between text-gray-600 medium 2xl:text-base text-sm">
                         <nav
                             className="max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             {
@@ -126,9 +126,9 @@ export default async function Header() {
             </div>
             {/* Search input */}
             <div className={'flex items-center gap-8 max-sm:mt-0 max-[1352px]:hidden max-lg:flex'}>
-                <div className={'w-50 relative h-7 max-[335px]:w-36'}>
+                <div className={'w-50 relative h-8 max-[335px]:w-36'}>
                     <Input placeholder={'Tìm kiếm...'}
-                           className={'w-full h-full rounded-[30px] !text-[13px] text-black !pr-7 box-border'}/>
+                           className={'w-full h-full rounded-[30px] !text-base text-black !pr-7 box-border'}/>
                     <Search color="#8f8f8f" width={16}
                             className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'}/>
                 </div>

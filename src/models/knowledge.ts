@@ -7,7 +7,7 @@ export interface IKnowledge {
         url: string | File,
         media_type: 'video' | 'image'
     },
-    category: string | null | IKnowledgeCategory,
+    category: string[] | IKnowledgeCategory[],
     name: string,
     text: string,
     slide: {
@@ -37,7 +37,7 @@ const KnowledgeSchema = new Schema({
         }
     },
     category: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         ref: 'KnowledgeCategories'
     },
     name: {

@@ -150,6 +150,11 @@ export const sideBarItems = [
                 icon: MapPin,
             },
             {
+                title: "Phòng thí nghiệm",
+                url: routes.LabConfig,
+                icon: MapPin,
+            },
+            {
                 title: "Giới thiệu",
                 url: routes.IntroductionConfig,
                 icon: Newspaper,

@@ -14,7 +14,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
     const {slug} = await params;
     const id: string = getIdFromSlug(slug);
     const item: IKnowledge & { slides: string[] } = await fetchDetailKnowledge(id);
-    const others = await fetchKnowledge((item.category as IKnowledgeCategory)._id as string, 0);
+    const others = await fetchKnowledge((item.category[0] as IKnowledgeCategory)._id as string, 0);
     const diffPosts = others?.filter(
         (i: any) =>
             i._id !== id &&
@@ -35,7 +35,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                         className={'object-contain'}
                     />
                     <div className={'flex flex-col gap-4 -mt-2'}>
-                        {(item.category as IKnowledgeCategory).name.toUpperCase()}
+                        {(item.category as IKnowledgeCategory[]).map(i => i.name.toUpperCase()).join(', ')}
                         <div className={'flex flex-col gap-8'}>
                             {
                                 item.text ? <div

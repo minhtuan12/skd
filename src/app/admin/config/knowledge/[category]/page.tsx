@@ -18,7 +18,7 @@ import {useFetchSubCategory} from "@/app/admin/config/(hooks)/use-sub-category";
 
 const defaultItem: IKnowledge = {
     name: '',
-    category: null,
+    category: [],
     media: {
         url: '',
         media_type: 'image'
@@ -234,6 +234,15 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
         }))
     }
 
+    const handleSelectCategory = (checked: boolean, itemId: string) => {
+        setNewKnowledge((prev: any) => ({
+            ...prev,
+            category: !checked ?
+                prev.category.filter((i: string) => i !== itemId) :
+                [...prev.category, itemId]
+        }))
+    }
+
     return <>
         <div className="flex items-center justify-between space-y-2 flex-wrap">
             <h2 className="text-3xl font-bold tracking-tight">{subCategories?.pages?.name}</h2>
@@ -284,6 +293,7 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
                 handleChangeCheck={handleChangeCheck}
                 otherPosts={data.knowledge}
                 handleSelectRelatedPosts={handleSelectRelatedPosts}
+                handleSelectCategory={handleSelectCategory}
             />
         }
     </>

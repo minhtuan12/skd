@@ -5,7 +5,6 @@ import {generateJSON} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import React, {useEffect} from "react";
 import {IKnowledge} from "@/models/knowledge";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {IKnowledgeCategory} from "@/models/knowledge-category";
 import UploadFile from "@/app/admin/config/(components)/upload-file";
 import {Dot} from "lucide-react";
@@ -25,7 +24,8 @@ export default function KnowledgeForm(
         handleChangeCheck,
         handleDrop,
         otherPosts,
-        handleSelectRelatedPosts
+        handleSelectRelatedPosts,
+        handleSelectCategory
     }: {
         handleChangeFile: any,
         hasSubCategories: boolean,
@@ -38,6 +38,7 @@ export default function KnowledgeForm(
         handleDrop?: any,
         otherPosts: IKnowledge[],
         handleSelectRelatedPosts: any
+        handleSelectCategory: any
     }) {
     const {
         name,
@@ -52,12 +53,12 @@ export default function KnowledgeForm(
 
     useEffect(() => {
         if (!hasSubCategories) {
-            handleChangeData(subCategories?.pages?._id, 'category');
+            handleChangeData([subCategories?.pages?._id], 'category');
         } else {
             if (!category) {
-                handleChangeData(subCategories?.pages?.children?.[0]?._id, 'category');
+                handleChangeData([subCategories?.pages?.children?.[0]?._id], 'category');
             } else {
-                handleChangeData((category as IKnowledgeCategory)._id, 'category')
+                handleChangeData((category as IKnowledgeCategory[]).map(i => i._id), 'category')
             }
         }
     }, [hasSubCategories]);
@@ -71,28 +72,6 @@ export default function KnowledgeForm(
                         id="name" placeholder="Nhập tên" value={name}
                         onChange={e => handleChangeData(e.target.value, 'name')}
                     />
-                </div>
-                <div className="grid gap-2">
-                    <Label required htmlFor="category">Nhóm vấn đề</Label>
-                    <Select
-                        onValueChange={group => handleChangeData(group, 'category')}
-                        value={category as string}
-                    >
-                        <SelectTrigger className="w-full bg-white">
-                            <SelectValue placeholder="Chọn nhóm vấn đề"/>
-                        </SelectTrigger>
-                        <SelectContent>
-                            {
-                                hasSubCategories ? subCategories?.pages?.children?.map((group: IKnowledgeCategory) => (
-                                    <SelectItem value={group._id as string} key={group._id as string}>
-                                        {group.name}
-                                    </SelectItem>
-                                )) : <SelectItem value={subCategories?.pages?._id}>
-                                    {subCategories?.pages?.name}
-                                </SelectItem>
-                            }
-                        </SelectContent>
-                    </Select>
                 </div>
                 <div className="grid gap-2 mt-1">
                     <Label>Hình ảnh</Label>
@@ -188,6 +167,25 @@ export default function KnowledgeForm(
                     </tr>
                     </tbody>
                 </table>
+                {hasSubCategories ?
+                    <div className="grid gap-2">
+                        <Label required htmlFor="category" className={'gap-0'}><Dot/>Nhóm vấn đề</Label>
+                        <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>
+                            {
+                                subCategories?.pages?.children?.map((group: IKnowledgeCategory) => (
+                                    <div className={'flex items-start gap-3'} key={group._id}>
+                                        <Checkbox
+                                            value={group._id}
+                                            checked={category.some(i => (i as string) === group._id)}
+                                            onCheckedChange={(checked) => handleSelectCategory(checked, group._id)}
+                                        />
+                                        <Label className={'font-normal'}>{group.name}</Label>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div> : ''
+                }
                 <div className="grid gap-2">
                     <Label className={'gap-0'}><Dot/> Các bài liên quan</Label>
                     <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>

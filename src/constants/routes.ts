@@ -15,6 +15,7 @@ export const routes = {
     Pages: '/pages',
     // Map
     MapConfig: '/admin/config/map',
+    LabConfig: '/admin/config/lab',
     //Introduction
     IntroductionConfig: '/admin/config/introduction',
     Land: '/land',

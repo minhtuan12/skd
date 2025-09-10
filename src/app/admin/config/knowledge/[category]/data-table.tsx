@@ -26,8 +26,11 @@ export default function DataTable(
             </TableRow>
         </TableHeader>
         <TableBody>
-            {data.map((item: IKnowledge, index: number) => (
-                <TableRow key={item._id}>
+            {data.map((item: IKnowledge, index: number) => {
+                const firstItemCate: IKnowledgeCategory = (item.category as IKnowledgeCategory[])[0];
+                const isChild = !firstItemCate.is_parent;
+
+                return <TableRow key={item._id}>
                     <TableCell className={'text-center'}>{index + 1}</TableCell>
                     <TableCell className={'h-[170px]'}>
                         {item.media?.media_type === 'image' ? <Image
@@ -41,7 +44,11 @@ export default function DataTable(
                     </TableCell>
                     <TableCell className={'font-medium whitespace-normal pl-4'}>{item.name}</TableCell>
                     <TableCell className={'font-medium whitespace-normal pl-4'}>
-                        {(item.category as IKnowledgeCategory)?.name}
+                        {
+                            isChild ?
+                                item.category.map(i => (i as IKnowledgeCategory).name).join(', ') :
+                                firstItemCate.name
+                        }
                     </TableCell>
                     <TableCell className={'text-center'}>{formatDate(item.createdAt as string)}</TableCell>
                     <TableCell className={'text-center space-x-4'}>
@@ -55,7 +62,7 @@ export default function DataTable(
                         {/*</Button>*/}
                     </TableCell>
                 </TableRow>
-            ))}
+            })}
         </TableBody>
     </Table>
 }

@@ -33,6 +33,8 @@ export function DatePicker({date, setDate, disabled = false}: IProps) {
             <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                 <Calendar
                     // disabled={disabled}
+                    startMonth={new Date(1990, 0)}
+                    endMonth={new Date(2050, 11)}
                     mode="single"
                     selected={date}
                     captionLayout="dropdown"

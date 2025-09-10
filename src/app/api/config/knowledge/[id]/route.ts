@@ -15,8 +15,7 @@ async function getDetailKnowledge(request: NextRequest, {params}: { params: Prom
         let doc = await Knowledge.findOne({
             is_deleted: false,
             _id: new ObjectId(id)
-        }).populate('related_posts')
-        doc.category = await KnowledgeCategory.findById(doc.category);
+        }).populate('related_posts').populate('category')
         return NextResponse.json({knowledge: doc || null});
     } catch (error) {
         console.error('Get detail knowledge API error:', error);
