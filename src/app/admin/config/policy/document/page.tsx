@@ -146,7 +146,7 @@ export default function () {
         ]
         uploadFiles = uploadFiles.filter(item => (item.file && typeof item.file !== 'string'));
         if (newDocument.link) {
-            uploadFiles = uploadFiles.filter(item => item.key === 'image');
+            uploadFiles = uploadFiles.filter(item => item.type === 'image');
         }
         if (uploadFiles.length > 0) {
             uploadFiles.forEach(uploadFile => {
