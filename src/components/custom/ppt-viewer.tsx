@@ -38,7 +38,7 @@ export default function PowerpointViewer(
         <div className="flex flex-col items-center gap-4 w-full">
             <div className="w-full max-w-5xl">
                 <div
-                    className="h-auto xl:h-[60vh] bg-white rounded-xl shadow overflow-hidden border border-solid border-gray-200">
+                    className="h-auto bg-white rounded-xl shadow overflow-hidden border border-solid border-gray-200">
                     <img
                         src={slides[current]}
                         alt={`Slide ${current + 1}`}

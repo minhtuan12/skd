@@ -8,6 +8,7 @@ export interface INewsAndEvents {
     date: string | Date;
     title: string;
     description: string;
+    related_posts: string[] | INewsAndEvents[];
     is_deleted?: boolean;
     createdAt?: string;
 }

@@ -42,7 +42,7 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                     </div> :
                     <>
                         <div
-                            className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-10 h-140 justify-center'}>
+                            className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-8 h-100 justify-center'}>
                             {
                                 newsList.map((item: INewsAndEvents) => {
                                     const {day, year, month} = formatDateVN(item.date);
@@ -51,7 +51,7 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                                     return <Link
                                         href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}
                                         key={item._id}
-                                        className={'rounded-md w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
+                                        className={'rounded-sm w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >
                                         <Image
                                             src={item.image_url as string}
@@ -69,24 +69,26 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                                                 <p className={'text-green-700 font-semibold text-xl text-center mt-1 -mb-1'}>{month}</p>
                                                 <p className={'text-green-700 font-semibold text-xl text-center'}>{year}</p>
                                             </div>
-                                            <h3 className="text-2xl leading-8 line-clamp-2 md:text-4xl md:leading-12 md:line-clamp-6 drop-shadow-md md:mt-5">{item.title}</h3>
+                                            <h3 className="text-2xl leading-8 line-clamp-2 md:text-3xl md:leading-12 md:line-clamp-6 drop-shadow-md md:mt-5">{item.title}</h3>
                                         </div>
                                     </Link>
                                 })
                             }
                         </div>
-                        <div className={'w-full justify-between flex mt-4'}>
-                            <Button
-                                onClick={scrollPrev}
-                                className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                <ChevronLeft/>
-                            </Button>
-                            <Button
-                                onClick={scrollNext}
-                                className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                <ChevronRight/>
-                            </Button>
-                        </div>
+                        {
+                            filteredItems.length > 3 ? <div className={'w-full justify-between flex mt-4'}>
+                                <Button
+                                    onClick={scrollPrev}
+                                    className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
+                                    <ChevronLeft/>
+                                </Button>
+                                <Button
+                                    onClick={scrollNext}
+                                    className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
+                                    <ChevronRight/>
+                                </Button>
+                            </div> : ''
+                        }
                     </>
             }
         </>

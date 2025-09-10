@@ -19,6 +19,8 @@ export default function DocumentForm(
         handleChangeData,
         handleImageChange,
         handleChangeCheck,
+        otherPosts,
+        handleSelectRelatedPosts
     }: {
         handleChangeFile: any,
         data: IPolicyDocument,
@@ -26,6 +28,8 @@ export default function DocumentForm(
         imageUrl: string,
         handleImageChange?: any,
         handleChangeCheck: any,
+        otherPosts: IPolicyDocument[],
+        handleSelectRelatedPosts: any
     }) {
     const {
         title,
@@ -34,6 +38,7 @@ export default function DocumentForm(
         pdf,
         link,
         image_url,
+        related_posts
     } = data;
 
     return <div className={'flex gap-8 h-full pb-10'}>
@@ -142,7 +147,24 @@ export default function DocumentForm(
                     </tr>
                     </tbody>
                 </table>
-
+                <div className="grid gap-2">
+                    <Label htmlFor="date" className={'gap-0'}><Dot/> Các văn bản liên quan</Label>
+                    <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>
+                        {otherPosts?.filter((item: IPolicyDocument) => item._id !== data?._id)?.length > 0 ?
+                            otherPosts?.filter((item: IPolicyDocument) => item._id !== data?._id)
+                                .map((item: IPolicyDocument) => (
+                                    <div className={'flex items-start gap-3'} key={item._id}>
+                                        <Checkbox
+                                            value={item._id}
+                                            checked={related_posts.some(i => (i as string) === item._id)}
+                                            onCheckedChange={(checked: boolean) => handleSelectRelatedPosts(checked, item._id as string)}
+                                        />
+                                        <Label htmlFor={item._id} className={'font-normal'}>{item.title}</Label>
+                                    </div>
+                                )) : <i>Chưa có văn bản mới</i>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
         <div className="h-full flex-1 mt-0.5 flex flex-col gap-5">

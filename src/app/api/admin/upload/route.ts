@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {cloudinaryService} from "@/service/cloudinary";
 import {getResourceType} from "@/app/api/helpers";
+import {withAuth} from "@/app/api/middleware";
 
 const uploadFolder = process.env.CLOUDINARY_UPLOAD_FOLDER!;
 
@@ -124,4 +125,4 @@ async function deleteFile(request: NextRequest) {
     }
 }
 
-export const POST = (uploadFile);
+export const POST = withAuth(uploadFile);

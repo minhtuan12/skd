@@ -15,6 +15,10 @@ export const routes = {
     Pages: '/pages',
     // Map
     MapConfig: '/admin/config/map',
+    //Introduction
+    IntroductionConfig: '/admin/config/introduction',
+    Land: '/land',
+    Project: '/project',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

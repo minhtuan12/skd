@@ -23,7 +23,7 @@ export default function PolicyCard(
         href={item.link || `/thong-tin-chinh-sach/chinh-sach/chi-tiet/${detailPath}`}
         className={cn(className, 'flex flex-col gap-2.5')}
     >
-        <div className={cn(imageClassname, `rounded-xl`)}>
+        <div className={cn(imageClassname, `rounded-xl 2xl:h-[265px] xl:h-[200px] md:h-[150px]`)}>
             <Image
                 src={item.image_url as string}
                 alt={item.title}
@@ -35,13 +35,13 @@ export default function PolicyCard(
             />
         </div>
         <div className={'flex flex-col gap-0.5 flex-1 box-border pl-1'}>
-            <p className={'font-medium'}>
+            <p className={'font-medium text-gray-500'}>
                 CHÍNH SÁCH
             </p>
             <h1 className={'text-lg font-medium text-green-700 line-clamp-4'}>{item.title}</h1>
             {
                 item.text ? <div
-                    className={'text-gray-500 text-md line-clamp-2'}
+                    className={'text-gray-500 text-md line-clamp-2 prose'}
                     dangerouslySetInnerHTML={{__html: item.text as string}}
                 /> : ''
             }

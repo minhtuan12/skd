@@ -23,7 +23,9 @@ export default function KnowledgeForm(
         handleChangeData,
         handleImageChange,
         handleChangeCheck,
-        handleDrop
+        handleDrop,
+        otherPosts,
+        handleSelectRelatedPosts
     }: {
         handleChangeFile: any,
         hasSubCategories: boolean,
@@ -33,7 +35,9 @@ export default function KnowledgeForm(
         imageUrl: string,
         handleImageChange?: any,
         handleChangeCheck: any,
-        handleDrop?: any
+        handleDrop?: any,
+        otherPosts: IKnowledge[],
+        handleSelectRelatedPosts: any
     }) {
     const {
         name,
@@ -42,7 +46,8 @@ export default function KnowledgeForm(
         pdf,
         link,
         media,
-        category
+        category,
+        related_posts
     } = data;
 
     useEffect(() => {
@@ -117,7 +122,8 @@ export default function KnowledgeForm(
                                             Chưa có Slide nào
                                         </div>
                                     }
-                                    <div className={'text-[14px] justify-end gap-2 flex items-center mr-1 text-gray-600'}>
+                                    <div
+                                        className={'text-[14px] justify-end gap-2 flex items-center mr-1 text-gray-600'}>
                                         Hiển thị tải xuống
                                         <Checkbox
                                             disabled={!!link}
@@ -151,7 +157,8 @@ export default function KnowledgeForm(
                                             Chưa có PDF nào
                                         </div>
                                     }
-                                    <div className={'text-[14px] justify-end gap-2 flex items-center mr-1 text-gray-600'}>
+                                    <div
+                                        className={'text-[14px] justify-end gap-2 flex items-center mr-1 text-gray-600'}>
                                         Hiển thị tải xuống
                                         <Checkbox
                                             disabled={!!link}
@@ -181,7 +188,25 @@ export default function KnowledgeForm(
                     </tr>
                     </tbody>
                 </table>
-
+                <div className="grid gap-2">
+                    <Label className={'gap-0'}><Dot/> Các bài liên quan</Label>
+                    <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>
+                        {
+                            otherPosts?.filter((item: IKnowledge) => item._id !== data?._id)?.length > 0 ?
+                                otherPosts?.filter((item: IKnowledge) => item._id !== data?._id)
+                                    .map((item: IKnowledge) => (
+                                        <div className={'flex items-start gap-3'} key={item._id}>
+                                            <Checkbox
+                                                value={item._id}
+                                                checked={related_posts.some(i => (i as string) === item._id)}
+                                                onCheckedChange={(checked: boolean) => handleSelectRelatedPosts(checked, item._id as string)}
+                                            />
+                                            <Label htmlFor={item._id} className={'font-normal'}>{item.name}</Label>
+                                        </div>
+                                    )) : <i>Chưa có bài mới</i>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
         <div className="h-full flex-1 mt-0.5 flex flex-col gap-5">

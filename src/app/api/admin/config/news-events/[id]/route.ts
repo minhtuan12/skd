@@ -30,7 +30,8 @@ async function updateNewsEvents(request: NextRequest, {params}: { params: Promis
                     description: sanitizeHtml(data.description),
                     image_url: data.image_url,
                     date: data.date,
-                    type: data.type
+                    type: data.type,
+                    related_posts: data.related_posts
                 }
             } : {
                 $set: {

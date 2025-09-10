@@ -32,7 +32,8 @@ const defaultItem: IKnowledge = {
         url: null,
         downloadable: true
     },
-    link: null
+    link: null,
+    related_posts: []
 }
 
 export default function ({params}: { params: Promise<{ category: string }> }) {
@@ -224,6 +225,15 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
         })
     }
 
+    const handleSelectRelatedPosts = (checked: boolean, itemId: string) => {
+        setNewKnowledge((prev: any) => ({
+            ...prev,
+            related_posts: !checked ?
+                prev.related_posts.filter((i: string) => i !== itemId) :
+                [...prev.related_posts, itemId]
+        }))
+    }
+
     return <>
         <div className="flex items-center justify-between space-y-2 flex-wrap">
             <h2 className="text-3xl font-bold tracking-tight">{subCategories?.pages?.name}</h2>
@@ -272,6 +282,8 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
                 handleChangeData={handleChangeData}
                 handleImageChange={handleChangeImage}
                 handleChangeCheck={handleChangeCheck}
+                otherPosts={data.knowledge}
+                handleSelectRelatedPosts={handleSelectRelatedPosts}
             />
         }
     </>

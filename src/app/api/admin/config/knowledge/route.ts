@@ -75,7 +75,8 @@ async function addKnowledge(request: NextRequest) {
                 url: data.pdf.url || null,
                 downloadable: data.pdf.downloadable
             },
-            link: data.link || ''
+            link: data.link || '',
+            related_posts: data.related_posts
         });
 
         await newKnowledge.save();

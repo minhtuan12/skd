@@ -25,7 +25,8 @@ const defaultItem = {
     description: '',
     title: '',
     type: NEWS_EVENTS_TYPE.NEWS.toString(),
-    image_url: ''
+    image_url: '',
+    related_posts: []
 }
 
 const tabs = ['news', 'event', 'research'];
@@ -157,7 +158,8 @@ export default function NewsConfig() {
     }
 
     const handleChangeTab = (value: string) => {
-        setCurrentTab(value)
+        setOpenModal(false);
+        setCurrentTab(value);
     }
 
     const handleChangeNewsVisibility = (item: INewsAndEvents) => {
@@ -243,6 +245,7 @@ export default function NewsConfig() {
                                         setNewNewsEvents={setNewNewsEvent}
                                         imageUrl={imageUrl}
                                         handleImageChange={handleChangeImage}
+                                        otherPosts={news}
                                     />
                             }
                         </TabsContent>

@@ -27,7 +27,8 @@ const defaultItem: IPolicyDocument = {
         downloadable: true
     },
     link: null,
-    image_url: ''
+    image_url: '',
+    related_posts: []
 }
 
 export default function () {
@@ -91,16 +92,20 @@ export default function () {
         })
     }
 
+    const handleSelectRelatedPosts = (checked: boolean, itemId: string) => {
+        setNewDocument((prev: any) => ({
+            ...prev,
+            related_posts: !checked ?
+                prev.related_posts.filter((i: string) => i !== itemId) :
+                [...prev.related_posts, itemId]
+        }))
+    }
+
     // call api add document
     const handleSubmitDocument = (newDocument: any) => {
         const updatedDocument = {
             ...newDocument,
             title: newDocument.title.trim(),
-            description: {
-                ...newDocument.description,
-                content: newDocument.description.content.trim(),
-            }
-
         }
         if (modalTitle.includes('Thêm')) {
             mutate(updatedDocument, {
@@ -244,12 +249,14 @@ export default function () {
                 handleClickEdit={handleClickEdit}
                 // handleClickDelete={handleChangeNewsVisibility}
             /> : <DocumentForm
+                otherPosts={data.documents}
                 handleChangeFile={handleChangeFile}
                 handleChangeCheck={handleChangeCheck}
                 data={newDocument}
                 handleChangeData={handleChangeData}
                 imageUrl={imageUrl}
                 handleImageChange={handleChangeImage}
+                handleSelectRelatedPosts={handleSelectRelatedPosts}
             />
         }
     </>

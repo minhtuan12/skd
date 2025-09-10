@@ -40,7 +40,6 @@ export default async function ({params, searchParams}: {
                                         className={'cursor-pointer'}
                                         key={item._id}
                                         knowledge={item}
-                                        // imageHeight={265}
                                     />
                                 ))
                             }

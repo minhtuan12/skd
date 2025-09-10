@@ -33,13 +33,18 @@ async function addDocument(request: NextRequest) {
             );
         }
 
-        const isDescriptionText = data.description.type === 'text';
         const newDocument = new PolicyDocument({
             title: data.title,
-            description: {
-                description_type: isDescriptionText ? 'text' : 'link',
-                content: isDescriptionText ? sanitizeHtml(data.description.content) : data.description.content,
+            text: data.text ? sanitizeHtml(data.text) : '',
+            slide: {
+                url: data.slide.url || null,
+                downloadable: data.slide.downloadable
             },
+            pdf: {
+                url: data.pdf.url || null,
+                downloadable: data.pdf.downloadable
+            },
+            link: data.link || '',
             image_url: data.image_url,
         });
         await newDocument.save();

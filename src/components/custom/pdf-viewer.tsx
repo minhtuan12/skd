@@ -11,12 +11,13 @@ export default function PdfViewer({url, downloadable}: any) {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-            <div style={{height: '750px'}}>
+            <div style={{height: '800px'}}>
                 <Viewer
                     fileUrl={url}
                     plugins={[
                         defaultLayoutPluginInstance,
                     ]}
+                    defaultScale={1}
                 />
                 {!downloadable ?
                     <div className="w-full max-w-5xl flex justify-start">

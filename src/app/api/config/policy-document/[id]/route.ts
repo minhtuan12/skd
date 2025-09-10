@@ -14,7 +14,7 @@ async function getDetailDocument(request: NextRequest, {params}: { params: Promi
         const doc = await PolicyDocument.findOne({
             is_deleted: false,
             _id: new ObjectId(id)
-        })
+        }).populate('related_posts');
         return NextResponse.json({document: doc || null});
     } catch (error) {
         console.error('Get detail document API error:', error);

@@ -6,6 +6,7 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Pencil} from "lucide-react";
 import {IPolicyDocument} from "@/models/policy-document";
+import Link from "next/link";
 
 export default function DataTable(
     {data, handleClickEdit, handleClickDelete}:
@@ -15,8 +16,12 @@ export default function DataTable(
         <TableHeader className={'bg-[#f5f5f590]'}>
             <TableRow>
                 <TableHead className={'text-center w-16'}>STT</TableHead>
-                <TableHead className={'text-center w-70'}>Hình ảnh</TableHead>
+                <TableHead className={'text-center w-80'}>Hình ảnh</TableHead>
                 <TableHead className={'pl-4 w-60'}>Chính sách</TableHead>
+                <TableHead className={'pl-4 w-40'}>Nội dung</TableHead>
+                <TableHead className={'pl-4 w-60 text-center'}>Slide</TableHead>
+                <TableHead className={'pl-4 w-60 text-center'}>PDF</TableHead>
+                <TableHead className={'pl-4 w-60 text-center'}>Link nội dung</TableHead>
                 <TableHead className={'text-center w-80'}>Hành động</TableHead>
             </TableRow>
         </TableHeader>
@@ -34,6 +39,36 @@ export default function DataTable(
                         />
                     </TableCell>
                     <TableCell className={'font-medium whitespace-normal pl-4'}>{item.title}</TableCell>
+                    <TableCell className={'text-gray-500 whitespace-normal line-clamp-4 w-70'}>
+                        {item.text ? <div className={'prose'} dangerouslySetInnerHTML={{__html: item.text}}/> : <i>Không có</i>}
+                    </TableCell>
+                    <TableCell className={'text-gray-500 whitespace-normal pl-4 text-center'}>
+                        {
+                            item.slide.url ?
+                                <Link className={'underline text-blue-500'} href={item.slide.url}>
+                                    Tải xuống slide
+                                </Link> :
+                                <i>Không có</i>
+                        }
+                    </TableCell>
+                    <TableCell className={'text-gray-500 whitespace-normal pl-4 text-center'}>
+                        {
+                            item.pdf.url ?
+                                <Link className={'underline text-blue-500'} href={item.pdf.url}>
+                                    Tải xuống PDF
+                                </Link> :
+                                <i>Không có</i>
+                        }
+                    </TableCell>
+                    <TableCell className={'text-gray-500 whitespace-normal pl-4 text-center'}>
+                        {
+                            item.link ?
+                                <Link className={'underline text-blue-500'} href={item.link}>
+                                    Xem link
+                                </Link> :
+                                <i>Không có</i>
+                        }
+                    </TableCell>
                     <TableCell className={'text-center space-x-4'}>
                         <Button onClick={() => handleClickEdit(item)}><Pencil/>Sửa</Button>
                         {/*<Button onClick={() => handleClickDelete(item)}*/}

@@ -34,7 +34,7 @@ export default function CardNews(
         className={cn(className, 'flex flex-col gap-4')}
     >
         {
-            !hideImage ? <div className={cn(imageClassname, `rounded-xl h-[${imageHeight}px]`)}>
+            !hideImage ? <div className={cn(imageClassname, `rounded-xl`)}>
                 {imageHeight ?
                     <Image
                         src={news.image_url as string}
@@ -58,14 +58,14 @@ export default function CardNews(
             </div> : ''
         }
         <div className={'flex flex-col gap-0.5 flex-1'}>
-            <p className={'font-medium'}>{tag[news.type as keyof typeof tag]}</p>
+            <p className={'font-medium text-gray-500'}>{tag[news.type as keyof typeof tag]}</p>
             <Link
                 href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}
                 className={'text-lg font-medium text-green-700 line-clamp-4'}
             >
                 {news.title}
             </Link>
-            <div className={'text-gray-500 text-md line-clamp-2'}
+            <div className={'text-gray-500 text-md line-clamp-2 prose'}
                  dangerouslySetInnerHTML={{__html: news.description}}/>
         </div>
         {!hideDetailBtn ?

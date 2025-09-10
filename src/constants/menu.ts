@@ -149,6 +149,23 @@ export const sideBarItems = [
                 url: routes.MapConfig,
                 icon: MapPin,
             },
+            {
+                title: "Giới thiệu",
+                url: routes.IntroductionConfig,
+                icon: Newspaper,
+                children: [
+                    {
+                        title: "Sức khỏe đất",
+                        url: routes.Land,
+                        icon: TreePalm,
+                    },
+                    {
+                        title: "Dự án",
+                        url: routes.Project,
+                        icon: TreePalm,
+                    },
+                ]
+            },
         ]
     },
 ]

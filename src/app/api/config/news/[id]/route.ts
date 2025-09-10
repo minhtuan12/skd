@@ -14,7 +14,7 @@ async function getDetailNews(request: NextRequest, {params}: { params: Promise<{
         const item = await NewsEvents.findOne({
             is_deleted: false,
             _id: new ObjectId(id)
-        })
+        }).populate('related_posts');
         return NextResponse.json({news: item || null});
     } catch (error) {
         console.error('Get detail news API error:', error);

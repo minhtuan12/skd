@@ -172,7 +172,7 @@ export default async function Home() {
                                     </div>
                                     <div className={'flex flex-col mt-1 flex-1 min-[1400px]:gap-2'}>
                                         <h4 className={'font-semibold text-base'}>{item.title}</h4>
-                                        <div className="text-[12px] text-gray-500 font-medium"
+                                        <div className="text-[12px] text-gray-500 font-medium prose"
                                              dangerouslySetInnerHTML={{__html: item.description}}
                                         />
                                     </div>

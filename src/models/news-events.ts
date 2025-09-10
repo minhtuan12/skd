@@ -21,6 +21,10 @@ const NewsEventsSchema = new Schema({
         type: JSON,
         required: true
     },
+    related_posts: {
+        type: [Schema.Types.ObjectId],
+        ref: "NewsEvent"
+    },
     is_deleted: {
         type: Boolean,
         default: false
@@ -29,5 +33,5 @@ const NewsEventsSchema = new Schema({
     timestamps: true
 });
 
-const NewsEvents = models.NewsEvents || model("NewsEvents", NewsEventsSchema);
+const NewsEvents = models.NewsEvent || model("NewsEvent", NewsEventsSchema);
 export default NewsEvents;

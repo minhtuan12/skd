@@ -1,8 +1,6 @@
 import {model, models, Schema} from "mongoose";
 import {IKnowledgeCategory} from "@/models/knowledge-category";
 
-// export type KnowledgeType = 'training' | 'renovation' | 'farming' | 'model';
-
 export interface IKnowledge {
     _id?: string;
     media?: {
@@ -21,16 +19,10 @@ export interface IKnowledge {
         downloadable: boolean,
     },
     link: string | null,
+    related_posts: string[] | IKnowledge[],
     is_deleted?: boolean,
     createdAt?: string
 }
-//
-// export enum KnowledgeTypes {
-//     training = 'training',
-//     renovation = 'renovation',
-//     farming = 'farming',
-//     model = 'model',
-// }
 
 const KnowledgeSchema = new Schema({
     media: {
@@ -80,6 +72,10 @@ const KnowledgeSchema = new Schema({
         type: String,
         default: null
     },
+    related_posts: {
+        type: [Schema.Types.ObjectId],
+        ref: "Knowledges"
+    },
     is_deleted: {
         type: Boolean,
         default: false
@@ -88,5 +84,5 @@ const KnowledgeSchema = new Schema({
     timestamps: true
 });
 
-const Knowledge = models?.Knowledge || model("Knowledge", KnowledgeSchema);
+const Knowledge = models?.Knowledges || model("Knowledges", KnowledgeSchema);
 export default Knowledge;

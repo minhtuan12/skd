@@ -15,7 +15,7 @@ async function getDetailKnowledge(request: NextRequest, {params}: { params: Prom
         let doc = await Knowledge.findOne({
             is_deleted: false,
             _id: new ObjectId(id)
-        })
+        }).populate('related_posts')
         doc.category = await KnowledgeCategory.findById(doc.category);
         return NextResponse.json({knowledge: doc || null});
     } catch (error) {

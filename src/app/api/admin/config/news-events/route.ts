@@ -42,7 +42,8 @@ async function addNewsEvents(request: NextRequest) {
             description: sanitizeHtml(data.description),
             image_url: data.image_url,
             date: data.date,
-            type: data.type
+            type: data.type,
+            related_posts: data.related_posts
         });
         await newNewsEvents.save();
 

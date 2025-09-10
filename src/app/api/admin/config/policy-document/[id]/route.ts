@@ -22,17 +22,23 @@ async function updatePolicyDocument(request: NextRequest, {params}: { params: Pr
             );
         }
 
-        const isDescriptionText = data.description.description_type === 'text';
         const result = await PolicyDocument.findOneAndUpdate(
             {_id: new ObjectId(id)},
             {
                 $set: {
                     title: data.title,
-                    description: {
-                        description_type: isDescriptionText ? 'text' : 'link',
-                        content: isDescriptionText ? sanitizeHtml(data.description.content) : data.description.content,
+                    text: data.text ? sanitizeHtml(data.text) : '',
+                    slide: {
+                        url: data.slide.url || null,
+                        downloadable: data.slide.downloadable
                     },
+                    pdf: {
+                        url: data.pdf.url || null,
+                        downloadable: data.pdf.downloadable
+                    },
+                    link: data.link || '',
                     image_url: data.image_url,
+                    related_posts: data.related_posts
                 }
             }
         )

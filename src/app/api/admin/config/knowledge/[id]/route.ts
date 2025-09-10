@@ -35,7 +35,8 @@ async function updateKnowledge(request: NextRequest, {params}: { params: Promise
                 url: data.pdf.url || null,
                 downloadable: data.pdf.downloadable
             },
-            link: data.link || ''
+            link: data.link || '',
+            related_posts: data.related_posts
         };
 
         const result = await Knowledge.findOneAndUpdate(

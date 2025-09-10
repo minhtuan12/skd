@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import '../styles/_variables.scss';
 @import '../styles/_keyframe-animations.scss';
+@plugin "@tailwindcss/typography";
 
 @tailwind utilities;
 
@@ -142,6 +143,21 @@ a {
     display: none;
 }
 
+button[aria-label="Download"] {
+    display: none !important;
+}
+
+.prose {
+    font-family: 'Lato', system-ui !important;
+    max-width: unset !important;
+    width: 100% !important;
+    color: unset !important;
+    blockquote {
+        border-color: black !important;
+    }
+    --tw-prose-bullets: black !important;
+}
+
 .prose a {
     color: #2563eb;
     text-decoration: underline;
@@ -149,8 +165,4 @@ a {
 
 .prose a:hover {
     color: #1d4ed8;
-}
-
-button[aria-label="Download"] {
-    display: none !important;
 }

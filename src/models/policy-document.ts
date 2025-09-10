@@ -14,6 +14,7 @@ export interface IPolicyDocument {
         downloadable: boolean,
     },
     link: string | null,
+    related_posts: string[] | IPolicyDocument[],
     createdAt?: Date,
 }
 
@@ -53,6 +54,10 @@ const PolicyDocumentSchema = new Schema({
     link: {
         type: String,
         default: null
+    },
+    related_posts: {
+        type: [Schema.Types.ObjectId],
+        ref: "PolicyDocuments"
     },
     is_deleted: {
         type: Boolean,
