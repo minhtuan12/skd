@@ -34,7 +34,7 @@ export default function CardWithTitle(
             className={cn(`rounded rounded-b-[5px] shadow-lg ${bgTitleColor} flex flex-col ${border ? 'border border-solid h-full' : ''}`, className)}>
             {
                 !bgImageUrl ?
-                    <h3 className={cn('px-3 box-border text-center text-black text-lg w-full font-medium h-14 flex items-center justify-center', titleHeight)}>
+                    <h3 className={cn('px-3 box-border text-center text-black text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}>
                         {title}
                     </h3> : <div className={'w-full h-48 relative'}><Image
                         src={bgImageUrl}

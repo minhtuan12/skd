@@ -53,7 +53,7 @@ const PolicySelection = memo(
                     policy.length > 0 ? (
                         <div className={'grid gap-3 max-h-[480px] overflow-y-auto'}>
                             {policy?.map((item, index) => (
-                                <div key={index} className={'flex items-center gap-1'}><Dot/>{item.title}</div>
+                                <div key={index} className={'flex items-center gap-1'}>• {item.title}</div>
                             ))}
                         </div>
                     ) : <div className={'text-center w-full text-gray-400 italic'}>

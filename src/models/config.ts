@@ -15,10 +15,10 @@ export interface INewsAndEvents {
 
 export interface IHomeConfig {
     banner: {
-        title: string;
-        description: string;
+        title?: string;
+        description?: string;
         image_url: string | File;
-    },
+    }[],
     introduction: {
         image_url: string | File;
         content: string;
@@ -86,20 +86,20 @@ const NewsAndEventsSchema = new Schema({
 
 const ConfigSchema = new Schema({
     home: {
-        banner: {
+        banner: [{
             title: {
                 type: String,
-                required: true
+                default: null
             },
             description: {
                 type: String,
-                required: true
+                default: null
             },
             image_url: {
                 type: String,
                 required: true
             }
-        },
+        }],
         introduction: {
             image_url: {
                 type: String,

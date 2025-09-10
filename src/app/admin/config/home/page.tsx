@@ -7,7 +7,7 @@ import {routes} from "@/constants/routes";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
-import {Loader2, RotateCcw} from "lucide-react";
+import {Loader2, Plus, RotateCcw, Trash} from "lucide-react";
 import {RootState} from "@/redux/store";
 import {IHomeConfig, INewsAndEvents} from "@/models/config";
 import {useConfig} from "@/app/admin/config/(hooks)/use-config";
@@ -20,11 +20,12 @@ import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {Button} from "@/components/ui/button";
 import PolicySelection from "@/app/admin/config/(components)/policy-selection";
 import {IPolicyDocument} from "@/models/policy-document";
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 
 export default function HomeConfig() {
     const homeConfig = useSelector((state: RootState) => state.config.home);
     const [cloneConfig, setCloneConfig] = useState<IHomeConfig>(homeConfig);
-    const [heroImage, setHeroImage] = useState("");
+    const [heroImage, setHeroImage] = useState([""]);
     const [introductionImage, setIntroductionImage] = useState("");
     const dispatch = useDispatch();
     const [newsImageUrls, setNewsImageUrls] = useState<string[]>([]);
@@ -45,9 +46,9 @@ export default function HomeConfig() {
     }, [])
 
     useEffect(() => {
-        setHeroImage(homeConfig.banner.image_url);
+        setHeroImage(homeConfig.banner?.map(i => i.image_url));
         setIntroductionImage(homeConfig.introduction.image_url);
-    }, [homeConfig?.banner.image_url, homeConfig?.introduction.image_url]);
+    }, [homeConfig?.banner?.length, homeConfig?.introduction.image_url]);
 
     useEffect(() => {
         homeConfigRef.current = homeConfig;
@@ -64,8 +65,12 @@ export default function HomeConfig() {
             const reader = new FileReader()
             reader.onloadend = () => {
                 // set new preview image url
-                if (key.includes('banner')) {
-                    setHeroImage(reader.result as string);
+                if (key.includes('banner') && index >= 0) {
+                    setHeroImage([
+                        ...heroImage.slice(0, index),
+                        reader.result as string,
+                        ...heroImage.slice(index + 1)
+                    ]);
                     setFileInputValue(prev => [file.name, ...prev.slice(1)]);
                 } else if (key.includes('introduction')) {
                     setIntroductionImage(reader.result as string);
@@ -74,14 +79,28 @@ export default function HomeConfig() {
 
                 // set new state for config
                 if (key.includes('.')) {
-                    const [parent, child] = key.split('.');
-                    setCloneConfig(prev => ({
-                        ...prev,
-                        [parent]: {
-                            ...prev[parent as keyof typeof cloneConfig] as any,
-                            [child]: file
-                        }
-                    }))
+                    if (index >= 0) {
+                        setCloneConfig(prev => ({
+                            ...prev,
+                            banner: [
+                                ...prev.banner.slice(0, index),
+                                {
+                                    ...prev.banner[index],
+                                    image_url: file
+                                },
+                                ...prev.banner.slice(index + 1)
+                            ]
+                        }))
+                    } else {
+                        const [parent, child] = key.split('.');
+                        setCloneConfig(prev => ({
+                            ...prev,
+                            [parent]: {
+                                ...prev[parent as keyof typeof cloneConfig] as any,
+                                [child]: file
+                            }
+                        }))
+                    }
                 } else {
                     setCloneConfig({
                         ...cloneConfig,
@@ -94,7 +113,20 @@ export default function HomeConfig() {
     }
 
     const handleChangeInput = (value: string, key: string) => {
-        if (key.includes('.')) {
+        if (key.includes('banner')) {
+            const [_, index, field] = key.split('.');
+            setCloneConfig(prev => ({
+                ...prev,
+                banner: [
+                    ...prev.banner.slice(0, Number(index)),
+                    {
+                        ...prev.banner[Number(index)],
+                        [field]: value
+                    },
+                    ...prev.banner.slice(Number(index) + 1)
+                ]
+            } as any))
+        } else if (key.includes('.')) {
             const [parent, child] = key.split('.');
             setCloneConfig(prev => ({
                 ...prev,
@@ -113,7 +145,7 @@ export default function HomeConfig() {
 
     const handleResetValue = () => {
         setCloneConfig(homeConfigRef.current);
-        setHeroImage(homeConfigRef.current.banner.image_url);
+        setHeroImage(homeConfigRef.current.banner.map(i => i.image_url));
         setIntroductionImage(homeConfigRef.current.introduction.image_url);
         setFileInputValue(['', '', '']);
         toast.info('Đã hủy các thay đổi');
@@ -121,7 +153,7 @@ export default function HomeConfig() {
 
     const validate = () => {
         const currentConfig = cloneConfigRef.current;
-        if (!currentConfig.introduction.image_url || !currentConfig.introduction.content || !currentConfig.banner.title || !currentConfig.banner.image_url) {
+        if (!currentConfig.introduction.image_url || !currentConfig.introduction.content || currentConfig.banner.some(i => i.image_url === '')) {
             return false;
         }
         return true;
@@ -133,18 +165,16 @@ export default function HomeConfig() {
         const oldConfig = homeConfigRef.current;
         const formData = new FormData();
         let uploadFiles = [
-            {
-                file: currentConfig.banner.image_url,
-                key: "banner.image_url",
+            ...currentConfig.banner.map((i, index) => ({
+                file: i.image_url,
+                key: `banner.${index}`,
                 type: 'image',
-                oldUrl: oldConfig.banner.image_url
-            },
+            })),
             {
                 file: currentConfig.introduction.image_url,
                 key: "introduction.image_url",
                 type: 'image',
-                oldUrl: oldConfig.introduction.image_url
-            },
+            }
         ]
 
         uploadFiles = uploadFiles.filter(item => typeof item.file !== 'string')
@@ -153,7 +183,6 @@ export default function HomeConfig() {
                 formData.append('file', uploadFile.file);
                 formData.append('key', uploadFile.key);
                 formData.append('type', uploadFile.type);
-                formData.append('oldUrl', uploadFile.oldUrl);
             })
 
             uploadFile(formData, {
@@ -162,13 +191,17 @@ export default function HomeConfig() {
                     const files = res.data;
                     for (let file of files) {
                         if (file.key.includes('banner')) {
-                            const [_, child] = file.key.split('.');
+                            const [_, index] = file.key.split('.');
                             newConfig = {
                                 ...newConfig,
-                                banner: {
-                                    ...newConfig.banner,
-                                    [child]: file.url
-                                }
+                                banner: [
+                                    ...newConfig.banner.slice(0, index),
+                                    {
+                                        ...newConfig.banner[index],
+                                        image_url: file.url
+                                    },
+                                    ...newConfig.banner.slice(index + 1)
+                                ]
                             }
                         } else if (file.key.includes('introduction')) {
                             const [_, child] = file.key.split('.');
@@ -204,11 +237,11 @@ export default function HomeConfig() {
             news_and_events: newConfig.news_and_events.map((item: INewsAndEvents) => item._id),
             knowledge_bank_video_url: newConfig.knowledge_bank_video_url.trim(),
             agricultural_policy: newConfig.agricultural_policy.map((item: IPolicyDocument) => item._id),
-            banner: {
-                title: newConfig.banner.title.trim(),
-                description: newConfig.banner.description.trim(),
-                image_url: (newConfig.banner.image_url as string).trim()
-            }
+            banner: newConfig.banner.map((item: any) => ({
+                title: item.title,
+                description: item.description,
+                image_url: (item.image_url as string).trim()
+            }))
         }
         mutate(updatedConfig, {
             onSuccess: () => {
@@ -261,34 +294,81 @@ export default function HomeConfig() {
                             description={'Cập nhật tiêu đề và mô tả'}
                             className={'sm:col-span-1'}
                         >
-                            <div className="grid gap-4">
-                                <div className="grid gap-2">
-                                    <Label required htmlFor="title">Tiêu đề</Label>
-                                    <Input
-                                        id="title"
-                                        type="text"
-                                        placeholder="Nhập tiêu đề trang web"
-                                        value={cloneConfig?.banner.title}
-                                        onChange={(e) => handleChangeInput(e.target.value, 'banner.title')}
-                                    />
-                                </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="description">Mô tả</Label>
-                                    <Textarea
-                                        id="description"
-                                        placeholder="Nhập mô tả trang web"
-                                        value={cloneConfig?.banner.description}
-                                        onChange={(e) => handleChangeInput(e.target.value, 'banner.description')}
-                                    />
-                                </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="image" required>Hình ảnh</Label>
-                                    <UploadFile
-                                        inputValue={fileInputValue[0]}
-                                        handleChangeFile={e => handleHeroImageChange(e, 'banner.image_url')}
-                                        url={heroImage}
-                                    />
-                                </div>
+                            <Button className={'w-full mb-4'} onClick={() => {
+                                setCloneConfig({
+                                    ...cloneConfig,
+                                    banner: [
+                                        ...cloneConfig.banner,
+                                        {
+                                            title: '',
+                                            description: '',
+                                            image_url: ''
+                                        }
+                                    ]
+                                })
+                            }}><Plus/> Thêm banner</Button>
+                            <div className={'overflow-auto max-h-[650px] flex flex-col gap-3'}>
+                                {
+                                    cloneConfig.banner.map((item, index) => (
+                                        <Accordion type="single" collapsible key={index}
+                                                   className="w-full border rounded-md shadow-sm">
+                                            <AccordionItem value="item-1">
+                                                <AccordionTrigger
+                                                    className="h-[50px] cursor-pointer px-4 flex items-center justify-between text-base font-medium w-full hover:no-underline">
+                                                    <div className={'text-ellipsis w-full overflow-hidden whitespace-nowrap'}>
+                                                        Banner {index + 1}
+                                                    </div>
+                                                    {
+                                                        cloneConfig.banner.length > 1 ? <Trash className={'text-red-400 !transform-none !rotate-0'} onClick={() => {
+                                                            setCloneConfig({
+                                                                ...cloneConfig,
+                                                                banner: [
+                                                                    ...cloneConfig.banner.slice(0, index),
+                                                                    ...cloneConfig.banner.slice(index + 1)
+                                                                ]
+                                                            })
+                                                        }}/> : ''
+                                                    }
+                                                </AccordionTrigger>
+                                                <AccordionContent className="p-4 border-t bg-gray-100/80">
+                                                    <div className="grid gap-4">
+                                                        <div className="grid gap-2">
+                                                            <Label htmlFor="title">Tiêu đề thứ {index + 1}</Label>
+                                                            <Input
+                                                                className={'bg-white'}
+                                                                id="title"
+                                                                type="text"
+                                                                placeholder="Nhập tiêu đề"
+                                                                value={item.title}
+                                                                onChange={(e) => handleChangeInput(e.target.value, `banner.${index}.title`)}
+                                                            />
+                                                        </div>
+                                                        <div className="grid gap-2">
+                                                            <Label htmlFor="description">Mô tả
+                                                                thứ {index + 1}</Label>
+                                                            <Textarea
+                                                                className={'bg-white'}
+                                                                id="description"
+                                                                placeholder="Nhập mô tả"
+                                                                value={item.description}
+                                                                onChange={(e) => handleChangeInput(e.target.value, `banner.${index}.description`)}
+                                                            />
+                                                        </div>
+                                                        <div className="grid gap-2">
+                                                            <Label htmlFor="image" required>Hình ảnh
+                                                                thứ {index + 1}</Label>
+                                                            <UploadFile
+                                                                inputValue={''}
+                                                                handleChangeFile={e => handleHeroImageChange(e, 'banner.image_url', index)}
+                                                                url={heroImage[index]}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    ))
+                                }
                             </div>
                         </CustomCard>
 

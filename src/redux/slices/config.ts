@@ -2,11 +2,11 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     home: {
-        banner: {
+        banner: [{
             title: '',
             description: '',
             image_url: '',
-        },
+        }],
         introduction: {
             image_url: '',
             content: ''

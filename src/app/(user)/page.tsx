@@ -120,9 +120,9 @@ export default async function Home() {
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
                             <ul
-                                className={'flex flex-col gap-2 text-[13px] flex-1 overflow-auto max-h-full text-justify pr-2 list-disc'}>
+                                className={'flex flex-col gap-2 flex-1 overflow-auto max-h-full text-justify pr-2 list-disc'}>
                                 {home.agricultural_policy.map((item: IPolicyDocument) => (
-                                    <li key={item._id} className={'flex items-center'}>• {item.title}</li>
+                                    <li key={item._id} className={'flex items-center text-base'}>• {item.title}</li>
                                 ))}
                             </ul>
                         </div>
@@ -152,7 +152,7 @@ export default async function Home() {
                 viewport={{once: true}}
             >
                 <h2 className="text-2xl font-semibold text-center">Tin tức và Sự kiện mới nhất</h2>
-                <h4 className={'text-sm font-medium mt-1 text-center text-gray-600'}>Cập nhật các hoạt động, nghiên cứu
+                <h4 className={'text-md font-medium mt-1 text-center text-gray-600'}>Cập nhật các hoạt động, nghiên cứu
                     và tin tức nổi bật trong lĩnh vực.</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                     {
@@ -167,12 +167,12 @@ export default async function Home() {
                                     className={'cursor-pointer'}
                                     bgImageUrl={item.image_url as string}
                                 >
-                                    <div className={'text-[12px] text-gray-500'}>
+                                    <div className={'text-[14px] text-gray-500'}>
                                         {NEWS_EVENTS[item.type as keyof typeof NEWS_EVENTS]} | {new Date(item.date).toLocaleDateString('vi-VN', dateOptions as any)}
                                     </div>
                                     <div className={'flex flex-col mt-1 flex-1 min-[1400px]:gap-2'}>
-                                        <h4 className={'font-semibold text-base'}>{item.title}</h4>
-                                        <div className="text-[12px] text-gray-500 font-medium prose"
+                                        <h4 className={'font-semibold text-lg'}>{item.title}</h4>
+                                        <div className="text-[15px] text-gray-500 font-medium prose"
                                              dangerouslySetInnerHTML={{__html: item.description}}
                                         />
                                     </div>
