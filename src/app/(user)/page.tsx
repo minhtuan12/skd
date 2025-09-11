@@ -1,6 +1,6 @@
 import Link from "next/link";
 import AnimatedSection from "@/components/custom/animated-section";
-import {ArrowRight, ChevronRight, Dot} from "lucide-react";
+import {ArrowRight, ChevronRight} from "lucide-react";
 import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
@@ -55,11 +55,13 @@ export default async function Home() {
                         {home.introduction.content}
                     </p>
                     <div className="mt-6">
-                        <button
-                            className="cursor-pointer hover:opacity-90 font-medium bg-blue-600 text-white px-5 py-2.5 rounded-[10px] flex items-center justify-center gap-2">
-                            Tìm hiểu thêm
-                            <ArrowRight width={16} strokeWidth={'3'}/>
-                        </button>
+                        <Link href={'/gioi-thieu/suc-khoe-dat'}>
+                            <button
+                                className="cursor-pointer hover:opacity-90 font-medium bg-blue-600 text-white px-5 py-2.5 rounded-[10px] flex items-center justify-center gap-2">
+                                Tìm hiểu thêm
+                                <ArrowRight width={16} strokeWidth={'3'}/>
+                            </button>
+                        </Link>
                     </div>
                 </div>
                 <Image
