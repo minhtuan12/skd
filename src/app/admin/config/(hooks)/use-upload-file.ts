@@ -7,7 +7,7 @@ type UploadResponse = {
     [key: string]: any;
 };
 
-async function uploadFileApi(formData: FormData): Promise<UploadResponse> {
+export async function uploadFileApi(formData: FormData): Promise<UploadResponse> {
     const response = await fetch('/api/admin/upload', {
         method: 'POST',
         body: formData,

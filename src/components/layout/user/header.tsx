@@ -2,7 +2,7 @@ import Image from "next/image";
 import {Menu, menu} from "@/constants/menu";
 import Link from "next/link";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import {ChevronDown, Search} from "lucide-react";
+import {ChevronDown, House, Search} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
@@ -53,7 +53,7 @@ export default async function Header() {
                         KHỎE ĐẤT</h3>
                 </Link>
                 <div
-                    className={'flex flex-col justify-between min-[1115px]:gap-4 gap-2 flex-1 max-[1024px]:hidden'}>
+                    className={'flex flex-col justify-between min-[1023px]:gap-4 min-[1023px]:max-[1114px]:gap-4 gap-2 flex-1 max-[1024px]:hidden -mb-[3px]'}>
                     {/* Logos */}
                     <div
                         className={'flex items-center min-[1115px]:gap-20 max-[1115px]:justify-between max-lg:justify-center'}>
@@ -84,17 +84,13 @@ export default async function Header() {
 
                     {/* Headers */}
                     <div
-                        className="container max-[1024px]:hidden flex items-center justify-between text-gray-600 medium 2xl:text-base text-sm">
+                        className="container max-[1024px]:hidden flex items-center justify-between text-black 2xl:text-[17px] text-sm">
                         <nav
-                            className="max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
+                            className="items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             {
                                 menuItems.map((item: Menu, index: number) => (
-                                    !item?.children ? <Link key={index} href={item.href} className={'flex w-fit mt-1'}>
-                                            {item.title}
-                                            <ChevronDown
-                                                width={14}
-                                                className={''}
-                                            />
+                                    !item?.children ? <Link key={index} href={item.href} className={'flex w-fit'}>
+                                            <House/>
                                         </Link> :
                                         <DropdownMenu key={index}>
                                             <DropdownMenuTrigger textOnly>
