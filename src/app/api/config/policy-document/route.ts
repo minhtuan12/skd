@@ -26,8 +26,8 @@ async function getPolicyDocument(request: NextRequest) {
             {
                 $facet: {
                     data: [
-                        {$skip: (page - 1) * 9},
-                        {$limit: 9},
+                        {$skip: (page - 1) * 15},
+                        {$limit: 15},
                     ],
                     totalCount: [
                         {$count: "count"}
@@ -45,7 +45,7 @@ async function getPolicyDocument(request: NextRequest) {
                     totalPages: {
                         $cond: [
                             {$gt: ["$total", 0]},
-                            {$ceil: {$divide: ["$total", 9]}},
+                            {$ceil: {$divide: ["$total", 15]}},
                             0
                         ]
                     }

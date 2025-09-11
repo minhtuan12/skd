@@ -41,7 +41,7 @@ export const menu: Menu[] = [
                 href: routes.BanDoDat
             },
             {
-                title: 'Các trung tâm quan trắc đất',
+                title: 'Các trung tâm phân tích',
                 href: routes.CacTrungTamQuanTracDat
             }
         ]

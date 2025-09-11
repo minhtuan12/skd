@@ -77,8 +77,11 @@ export default async function Home() {
             {/* Grid Sections */}
             <section
                 className="h-auto min-[1595px]:h-[1000px] min-[2015px]:h-[1300px] box-border py-16 px-10 lg:px-10 xl:px-40 grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 mb-18 bg-[#FAF9FF]">
-                <CardWithTitle border title={'Bản đồ đất'} bgTitleColor={'bg-[#c7ceea]'}
-                               className={'max-md:h-150 h-full min-[1595px]:!h-full'}>
+                <CardWithTitle
+                    border title={'Bản đồ đất'} bgTitleColor={'bg-[#c7ceea]'}
+                    className={'max-md:h-150 h-full min-[1595px]:!h-full'}
+                    href="/ban-do/ban-do-dat"
+                >
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
                         <div className={'flex-1'}>
@@ -91,8 +94,11 @@ export default async function Home() {
                         đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                 </CardWithTitle>
 
-                <CardWithTitle border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={'bg-[#FFDAC1]'}
-                               className={'max-md:h-150 h-full min-[1595px]:!h-full'}>
+                <CardWithTitle
+                    border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={'bg-[#FFDAC1]'}
+                    className={'max-md:h-150 h-full min-[1595px]:!h-full'}
+                    href="/ban-do/cac-trung-tam-quan-trac-dat"
+                >
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Ngân hàng kiến thức</h5>
                         <div className={'flex-1'}>
@@ -117,14 +123,23 @@ export default async function Home() {
                 </CardWithTitle>
 
                 <div className={'flex flex-col gap-5 max-md:h-auto h-[600px] lg:h-auto'}>
-                    <CardWithTitle border title={'Chính Sách Nông Nghiệp'} bgTitleColor={'bg-[#ff9aa2]'}
-                                   className={'h-auto md:h-1/2'} childrenBg={'justify-between'}>
+                    <CardWithTitle
+                        border title={'Chính Sách Nông Nghiệp'} bgTitleColor={'bg-[#ff9aa2]'}
+                        className={'h-auto md:h-1/2'} childrenBg={'justify-between'}
+                        href={"/thong-tin-chinh-sach/chinh-sach/1"}
+                    >
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
                             <ul
                                 className={'flex flex-col gap-2 flex-1 overflow-auto max-h-full text-justify pr-2 list-disc'}>
                                 {home.agricultural_policy.map((item: IPolicyDocument) => (
-                                    <li key={item._id} className={'flex items-center text-base'}>• {item.title}</li>
+                                    <Link
+                                        href={item.link || `/ngan-hang-kien-thuc/chi-tiet/${buildDetailPath(item.title, item._id as string)}`}
+                                        key={item._id}
+                                        className={'flex items-center text-base underline hover:text-blue-500'}
+                                    >
+                                        • {item.title}
+                                    </Link>
                                 ))}
                             </ul>
                         </div>
@@ -133,8 +148,11 @@ export default async function Home() {
                             Xem chính sách
                             <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                     </CardWithTitle>
-                    <CardWithTitle border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-[#ffffd8]'}
-                                   className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}>
+                    <CardWithTitle
+                        border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-[#ffffd8]'}
+                        className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}
+                        href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
+                    >
                         <VideoPlayer src={home.knowledge_bank_video_url}/>
                         <Link href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem

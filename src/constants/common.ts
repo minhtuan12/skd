@@ -15,3 +15,5 @@ export const dateOptions = {
     month: '2-digit',
     day: '2-digit'
 }
+
+export const mainColors = ['#264a82', '#99ca43', '#f8c92b', '#1cabbf', '#eb949d']

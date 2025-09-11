@@ -102,13 +102,12 @@ export default function ({labs, tilerApiKey, popupHTMLs}: any) {
 
                     <Select>
                         <SelectTrigger className="w-[180px] bg-white">
-                            <SelectValue placeholder="Chọn quận/huyện"/>
+                            <SelectValue placeholder="Chọn chỉ tiêu"/>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={"hanoi1"}>Hà Nội 1</SelectItem>
-                            <SelectItem value={"hanoi2"}>Hà Nội 2</SelectItem>
-                            <SelectItem value={"hanoi3"}>Hà Nội 3</SelectItem>
-                            <SelectItem value={"hanoi4"}>Hà Nội 4</SelectItem>
+                            <SelectItem value={"hanoi1"}>Chỉ tiêu 1</SelectItem>
+                            <SelectItem value={"hanoi2"}>Chỉ tiêu 2</SelectItem>
+                            <SelectItem value={"hanoi3"}>Chỉ tiêu 3</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

@@ -35,7 +35,7 @@ export default async function CacTrungTamQuanTracDat() {
 
     return <div className={'box-border pb-40 flex flex-col gap-6 mt-6 lg:px-30 px-10 max-sm:px-6'}>
         <div className={'flex flex-col gap-6 h-full'}>
-            <h1 className={'font-semibold text-center text-xl'}>CÁC TRUNG TÂM QUAN TRẮC ĐẤT</h1>
+            <h1 className={'font-semibold text-center text-xl'}>CÁC TRUNG TÂM PHÂN TÍCH</h1>
             <Content
                 labs={labs}
                 tilerApiKey={tilerApiKey}

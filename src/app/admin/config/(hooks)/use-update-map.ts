@@ -6,7 +6,7 @@ const updateMap = async (data: any) => {
         const response = await fetch(`/api/admin/config/maps/${data._id}`, {
             credentials: 'include',
             method: 'PATCH',
-            body: JSON.stringify({data: {name: data.name, image_url: data.image_url, data_url: data.data_url}}),
+            body: JSON.stringify({data: {name: data.name, image_url: data.image_url, data_url: data.data_url, source: data.source}}),
         });
 
         if (!response.ok) {

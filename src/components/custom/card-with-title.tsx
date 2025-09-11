@@ -3,6 +3,7 @@
 import React from "react";
 import {cn} from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 
 interface IProps {
     title: string;
@@ -14,6 +15,7 @@ interface IProps {
     border?: boolean;
     bgImageUrl?: string;
     onClick?: () => void;
+    href?: string;
 }
 
 export default function CardWithTitle(
@@ -27,6 +29,7 @@ export default function CardWithTitle(
         border = false,
         bgImageUrl = '',
         onClick,
+        href
     }: IProps) {
     return (
         <div
@@ -34,9 +37,18 @@ export default function CardWithTitle(
             className={cn(`rounded rounded-b-[5px] shadow-lg ${bgTitleColor} flex flex-col ${border ? 'border border-solid h-full' : ''}`, className)}>
             {
                 !bgImageUrl ?
-                    <h3 className={cn('px-3 box-border text-center text-black text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}>
-                        {title}
-                    </h3> : <div className={'w-full h-48 relative'}><Image
+                    (
+                        !href ?
+                            <h3 className={cn('px-3 box-border text-center text-black text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}>
+                                {title}
+                            </h3> :
+                            <Link
+                                className={cn('px-3 box-border text-center text-black text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}
+                                href={href}
+                            >
+                                {title}
+                            </Link>
+                    ) : <div className={'w-full h-48 relative'}><Image
                         src={bgImageUrl}
                         alt={title}
                         layout="fill"

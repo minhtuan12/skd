@@ -51,7 +51,7 @@ export default function Hero({data}: { data: { title: string, description: strin
                 {banners.map((item, i) => (
                     <div
                         key={i}
-                        className="relative w-full py-50 flex-shrink-0 flex items-center justify-center [scroll-snap-align:start]"
+                        className="relative w-full py-40 flex-shrink-0 flex items-center justify-center [scroll-snap-align:start]"
                     >
                         <Image
                             src={item.image_url}
