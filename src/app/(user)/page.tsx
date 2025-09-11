@@ -5,7 +5,7 @@ import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
 import {INewsAndEvents} from "@/models/config";
-import {dateOptions, NEWS_EVENTS} from "@/constants/common";
+import {dateOptions, mainColors, NEWS_EVENTS} from "@/constants/common";
 import Image from "next/image";
 import {IPolicyDocument} from "@/models/policy-document";
 import {buildDetailPath} from "@/lib/utils";
@@ -78,7 +78,7 @@ export default async function Home() {
             <section
                 className="h-auto min-[1595px]:h-[1000px] min-[2015px]:h-[1300px] box-border py-16 px-10 lg:px-10 xl:px-40 grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 mb-18 bg-[#FAF9FF]">
                 <CardWithTitle
-                    border title={'Bản đồ đất'} bgTitleColor={'bg-[#c7ceea]'}
+                    border title={'Bản đồ đất'} bgTitleColor={`bg-[${mainColors[0]}]`}
                     className={'max-md:h-150 h-full min-[1595px]:!h-full'}
                     href="/ban-do/ban-do-dat"
                 >
@@ -95,7 +95,7 @@ export default async function Home() {
                 </CardWithTitle>
 
                 <CardWithTitle
-                    border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={'bg-[#FFDAC1]'}
+                    border title={'Bản đồ các trung tâm phân tích'} bgTitleColor={`bg-[${mainColors[1]}]`}
                     className={'max-md:h-150 h-full min-[1595px]:!h-full'}
                     href="/ban-do/cac-trung-tam-quan-trac-dat"
                 >
@@ -124,7 +124,7 @@ export default async function Home() {
 
                 <div className={'flex flex-col gap-5 max-md:h-auto h-[600px] lg:h-auto'}>
                     <CardWithTitle
-                        border title={'Chính Sách Nông Nghiệp'} bgTitleColor={'bg-[#ff9aa2]'}
+                        border title={'Chính Sách Nông Nghiệp'} bgTitleColor={`bg-[${mainColors[2]}]`}
                         className={'h-auto md:h-1/2'} childrenBg={'justify-between'}
                         href={"/thong-tin-chinh-sach/chinh-sach/1"}
                     >
@@ -149,7 +149,7 @@ export default async function Home() {
                             <ChevronRight width={13} className={'mt-[3px]'}/></Link>
                     </CardWithTitle>
                     <CardWithTitle
-                        border title={'Ngân hàng kiến thức'} bgTitleColor={'bg-[#ffffd8]'}
+                        border title={'Ngân hàng kiến thức'} bgTitleColor={`bg-[${mainColors[3]}]`}
                         className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}
                         href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
                     >

@@ -79,4 +79,41 @@ async function updateKnowledgeCategory(request: NextRequest, {params}: { params:
     }
 }
 
+async function changeVisibility(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+    try {
+        await connectDb();
+
+        const {id} = await params;
+        const cate = await KnowledgeCategory.findById(id);
+
+        if (!cate) {
+            return NextResponse.json(
+                {error: 'Không tồn tại', message: 'Không tồn tại'},
+                {status: 404}
+            );
+        }
+
+        const isDeleted = cate.is_deleted;
+        // TODO: khi lấy các bài ra thì check để bỏ những bài thuộc trang bị ẩn
+        await KnowledgeCategory.findOneAndUpdate({
+            _id: new ObjectId(id)
+        }, {
+            $set: {
+                is_deleted: !isDeleted
+            }
+        })
+        return NextResponse.json(
+            JSON.stringify({message: "Cập nhật thành công"}),
+            {status: 200}
+        );
+    } catch (error) {
+        console.error('Update knowledge category API error:', error);
+        return NextResponse.json(
+            {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
+            {status: 500}
+        );
+    }
+}
+
 export const PATCH = withAuthWithContext(updateKnowledgeCategory);
+export const DELETE = withAuthWithContext(changeVisibility);

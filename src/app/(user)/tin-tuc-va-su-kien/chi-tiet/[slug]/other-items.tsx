@@ -42,7 +42,7 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                     </div> :
                     <>
                         <div
-                            className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-8 h-100 justify-center'}>
+                            className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-8 h-150 md:h-100 justify-center'}>
                             {
                                 newsList.map((item: INewsAndEvents) => {
                                     const {day, year, month} = formatDateVN(item.date);
@@ -61,15 +61,15 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                                         />
                                         <div className={`absolute inset-0 bg-[#00000080]`}/>
                                         <div
-                                            className="absolute inset-0 p-7 text-white box-border flex flex-row gap-8 md:gap-5 md:flex-col max-md:items-center">
-                                            <div className={'bg-white box-border py-3 px-5 w-fit rounded-lg'}>
-                                                <p className={'text-orange-300 font-bold text-3xl text-center'}>
+                                            className="absolute inset-0 p-7 text-white box-border flex flex-row gap-8 md:gap-5 md:flex-col max-md:items-center max-sm:flex-col max-sm:gap-4">
+                                            <div className={'bg-white box-border py-3 px-5 w-fit rounded-lg max-sm:w-full max-sm:flex max-sm:gap-3 max-sm:items-center max-sm:py-1 max-sm:px-1 max-sm:justify-center'}>
+                                                <p className={'text-orange-300 font-bold text-3xl text-center max-sm:text-xl'}>
                                                     {day}
                                                 </p>
-                                                <p className={'text-green-700 font-semibold text-xl text-center mt-1 -mb-1'}>{month}</p>
-                                                <p className={'text-green-700 font-semibold text-xl text-center'}>{year}</p>
+                                                <p className={'text-green-700 font-semibold text-xl text-center mt-1 -mb-1 max-sm:mb-0 max-sm:-mt-1 max-sm:text-xl'}>{month}</p>
+                                                <p className={'text-green-700 font-semibold text-xl text-center max-sm:text-xl max-sm:-mt-0.5'}>{year}</p>
                                             </div>
-                                            <h3 className="text-2xl leading-8 line-clamp-2 md:text-3xl md:leading-12 md:line-clamp-6 drop-shadow-md md:mt-5">{item.title}</h3>
+                                            <h3 className="text-2xl leading-8 line-clamp-2 md:text-3xl md:leading-12 md:line-clamp-6 drop-shadow-md md:mt-5 max-sm:text-lg max-sm:leading-5">{item.title}</h3>
                                         </div>
                                     </Link>
                                 })

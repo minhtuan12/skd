@@ -1,5 +1,4 @@
 import {buildDetailPath, getIdFromSlug} from "@/lib/utils";
-import Image from "next/image";
 import React from "react";
 import {IKnowledge} from "@/models/knowledge";
 import {fetchDetailKnowledge} from "@/app/(user)/ngan-hang-kien-thuc/(fetch-data)/fetch-detail-knowledge";
@@ -20,22 +19,14 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
             i._id !== id &&
             !item?.related_posts?.some(it => (it as IKnowledge)._id === i._id)
     )?.slice(0, 5) || [];
-
     return (
         !item ? <div className={'text-gray-500 italic text-center'}>Không có thông tin</div> :
             <div className={'box-border flex flex-col gap-18 mt-10 lg:px-40 md:px-20 px-10 max-sm:px-6 pb-30'}>
                 {/* Detail */}
                 <div className={'flex flex-col gap-8 2xl:px-50 xl:px-30 px-8'}>
                     <h1 className={'font-medium text-center text-3xl text-green-700'}>{item.name}</h1>
-                    <Image
-                        src={item.media?.url as string}
-                        alt={item.name} sizes={'100vw'}
-                        width={0} height={0}
-                        style={{width: '100%', height: '100%'}}
-                        className={'object-contain'}
-                    />
-                    <div className={'flex flex-col gap-4 -mt-2'}>
-                        {(item.category as IKnowledgeCategory[]).map(i => i.name.toUpperCase()).join(', ')}
+                    <div className={'text-center -mt-5'}>{(item.category as IKnowledgeCategory[]).map(i => i.name.toUpperCase()).join(', ')}</div>
+                    <div className={'flex flex-col gap-4'}>
                         <div className={'flex flex-col gap-8'}>
                             {
                                 item.text ? <div
@@ -70,7 +61,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                     {
                         item?.related_posts?.length > 0 ? <div className={'w-full 2xl:px-60 xl:px-30 lg:px-4'}>
                             <Others documents={item?.related_posts || []} exceptId={id}/>
-                        </div> : <i className={'text-gray-500'}>Chưa có các thông tin liên quan</i>
+                        </div> : <i className={'text-gray-500 text-center'}>Chưa có các thông tin liên quan</i>
                     }
                 </div>
 

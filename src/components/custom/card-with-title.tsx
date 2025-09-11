@@ -39,11 +39,11 @@ export default function CardWithTitle(
                 !bgImageUrl ?
                     (
                         !href ?
-                            <h3 className={cn('px-3 box-border text-center text-black text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}>
+                            <h3 className={cn('px-3 box-border text-center text-white text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}>
                                 {title}
                             </h3> :
                             <Link
-                                className={cn('px-3 box-border text-center text-black text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}
+                                className={cn('px-3 box-border text-center text-white text-lg w-full font-semibold h-14 flex items-center justify-center', titleHeight)}
                                 href={href}
                             >
                                 {title}

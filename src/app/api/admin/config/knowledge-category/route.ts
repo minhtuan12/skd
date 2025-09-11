@@ -13,7 +13,6 @@ async function getKnowledgeCategories(request: NextRequest) {
         // const queryCondition = q ? {name: {$regex: q, $options: 'i'}} : {};
 
         const knowledgeCategories = await KnowledgeCategory.find({
-            is_deleted: false,
             is_parent: true
         }).sort('-createdAt').populate('children');
 

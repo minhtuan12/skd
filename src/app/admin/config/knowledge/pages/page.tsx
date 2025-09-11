@@ -7,18 +7,20 @@ import {Loader2, Pencil} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {formatDate} from "@/lib/utils";
-import {useFetchKnowledgeCategory} from "@/app/admin/config/(hooks)/use-knowledge-category";
 import {useAddCategory} from "@/app/admin/config/(hooks)/use-add-knowledge-category";
 import {useUpdateCategory} from "@/app/admin/config/(hooks)/use-update-knowledge-category";
 import {IKnowledgeCategory} from "@/models/knowledge-category";
 import CategoryForm from "@/app/admin/config/knowledge/pages/category-form";
+import {Checkbox} from "@/components/ui/checkbox";
+import {useChangeCategoryVisibility} from "@/app/admin/config/(hooks)/use-hide-knowledge-category";
+import {useFetchKnowledgeCategoryAdmin} from "@/app/admin/config/(hooks)/use-knowledge-category-admin";
 
 export default function Category() {
     const dispatch = useDispatch();
-    const {data, loading: loadingFetch} = useFetchKnowledgeCategory();
+    const {data, loading: loadingFetch} = useFetchKnowledgeCategoryAdmin();
     const {mutate: addCategory, loading, isSuccess} = useAddCategory();
     const {mutate: updateCategory, loading: loadingUpdate, isSuccess: isSuccessUpdate} = useUpdateCategory();
-
+    const {mutate: changeVisibility, loading: loadingHide} = useChangeCategoryVisibility();
     const [category, setCategory] = useState<IKnowledgeCategory>({name: '', children: []});
     const [modalTitle, setModalTitle] = useState<string>('Thêm trang mới');
     const [openModal, setOpenModal] = useState(false);
@@ -95,22 +97,32 @@ export default function Category() {
             </div>
         </div>
         {
-            loadingFetch ? <Loader2 className={'animate-spin w-8 h-8'}/> :
+            (loadingFetch || loadingHide) ? <Loader2 className={'animate-spin w-8 h-8'}/> :
                 <>
                     {
-                        (!openModal && data?.pages) ? <Table className={'text-base'}>
+                        (!openModal && data?.knowledge_categories) ? <Table className={'text-base'}>
                             <TableHeader className={'bg-[#f5f5f590]'}>
                                 <TableRow>
                                     <TableHead>Tên trang</TableHead>
                                     <TableHead>Ngày tạo</TableHead>
+                                    <TableHead className={'text-center'}>Hiển thị</TableHead>
                                     <TableHead className={'text-center w-100'}>Hành động</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data?.pages.map((type: IKnowledgeCategory) => (
+                                {data?.knowledge_categories.map((type: IKnowledgeCategory) => (
                                     <TableRow key={type._id}>
                                         <TableCell className="font-medium">{type.name}</TableCell>
                                         <TableCell>{formatDate(type.createdAt as string)}</TableCell>
+                                        <TableCell className={'text-center'}>
+                                            <Checkbox
+                                                value={type._id}
+                                                checked={!type.is_deleted}
+                                                onCheckedChange={() => {
+                                                    changeVisibility(type._id);
+                                                }}
+                                            />
+                                        </TableCell>
                                         <TableCell className={'flex items-center justify-center text-center gap-4'}>
                                             <Button onClick={() => handleClickUpdate(type)}><Pencil/>Sửa</Button>
                                             {/*<Button*/}

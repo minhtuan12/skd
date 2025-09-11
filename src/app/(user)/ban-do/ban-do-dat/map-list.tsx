@@ -49,43 +49,65 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                     scrollSnapType: "x mandatory",
                 }}
             >
-                {maps.map((item: IMap, index: number) => (
-                    <CardWithTitle
-                        onClick={() => {
-                            setChosenMap(item.data_url ? {
-                                url: item.data_url,
-                                type: 'map',
-                                source: item.source
-                            } : {
-                                url: item.image_url,
-                                type: 'image',
-                                source: item.source
-                            })
-                        }}
-                        key={index} title={item.name}
-                        bgTitleColor={bgColors[index % 5]}
-                        className={'cursor-pointer flex-shrink-0 w-full md:w-[calc((100%-32px)/3)] xl:w-[calc((100%-64px)/5)] [scroll-snap-align:start]'}
-                        titleHeight={'line-clamp-1 truncate pt-3'}
-                    >
-                        <div className={'flex flex-col gap-3 h-full'}>
-                            <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
-                            <div className={'flex-1'}>
-                                <Image
-                                    src={item.image_url as string} alt={item.name}
-                                    width={0}
-                                    height={0}
-                                    sizes={'100vw'}
-                                    style={{width: 'auto', height: 'auto'}}
-                                    className={'object-cover'}
-                                />
+                {maps.map((item: IMap, index: number) => {
+                    const idx = index % 5;
+                    let bgColor = '';
+                    switch (idx) {
+                        case 0:
+                            bgColor = 'bg-[#264a82]'
+                            break;
+                        case 1:
+                            bgColor = 'bg-[#99ca43]'
+                            break;
+                        case 2:
+                            bgColor = 'bg-[#f8c92b]'
+                            break;
+                        case 3:
+                            bgColor = 'bg-[#1cabbf]'
+                            break;
+                        case 4:
+                            bgColor = 'bg-[#eb949d]'
+                            break;
+
+                    }
+                    return (
+                        <CardWithTitle
+                            onClick={() => {
+                                setChosenMap(item.data_url ? {
+                                    url: item.data_url,
+                                    type: 'map',
+                                    source: item.source
+                                } : {
+                                    url: item.image_url,
+                                    type: 'image',
+                                    source: item.source
+                                })
+                            }}
+                            key={index} title={item.name}
+                            bgTitleColor={bgColor}
+                            className={'cursor-pointer flex-shrink-0 w-full md:w-[calc((100%-32px)/3)] xl:w-[calc((100%-64px)/5)] [scroll-snap-align:start]'}
+                            titleHeight={'line-clamp-1 truncate pt-3'}
+                        >
+                            <div className={'flex flex-col gap-3 h-full'}>
+                                <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
+                                <div className={'flex-1'}>
+                                    <Image
+                                        src={item.image_url as string} alt={item.name}
+                                        width={0}
+                                        height={0}
+                                        sizes={'100vw'}
+                                        style={{width: 'auto', height: 'auto'}}
+                                        className={'object-cover'}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <Link href="#"
-                              className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
-                            bản
-                            đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
-                    </CardWithTitle>
-                ))}
+                            <Link href="#"
+                                  className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                                bản
+                                đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
+                        </CardWithTitle>
+                    )
+                })}
             </div>
 
             <Button

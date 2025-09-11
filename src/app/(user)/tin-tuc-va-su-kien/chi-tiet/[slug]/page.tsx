@@ -5,7 +5,6 @@ import {INewsAndEvents} from "@/models/config";
 import {fetchDetailNews} from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-detail";
 import {fetchNewsEvents} from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-news-events";
 import OtherItems from "@/app/(user)/tin-tuc-va-su-kien/chi-tiet/[slug]/other-items";
-import {IKnowledge} from "@/models/knowledge";
 import Link from "next/link";
 
 export default async function ({params}: { params: Promise<{ slug: string }> }) {
@@ -61,16 +60,16 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                     </div>
                     <div className={'grid grid-cols-1 2xl:px-60 xl:px-30 lg:px-4'}>
                         {
-                            diffPosts?.length > 0 ? diffPosts.map((i: IKnowledge, index: number) => (
+                            diffPosts?.length > 0 ? diffPosts.map((i: INewsAndEvents, index: number) => (
                                 <div
                                     key={i._id}
                                     className={'border-t items-center border-gray-200 box-border pt-3 pb-5 pl-1 pr-4'}
                                 >
                                     <Link
                                         className={'hover:text-green-500 text-lg'}
-                                        href={`/tin-tuc-va-su-kien/chi-tiet/${buildDetailPath(i.name, i._id as string)}`}
+                                        href={`/tin-tuc-va-su-kien/chi-tiet/${buildDetailPath(i.title, i._id as string)}`}
                                     >
-                                        {i.name}
+                                        {i.title}
                                     </Link>
                                 </div>
                             )) : <i className={'text-gray-500'}>Chưa có thông tin mới</i>

@@ -30,7 +30,7 @@ export const useUpdateCategory = () => {
     } = useMutation({
         mutationFn: (payload: any) => updateCategory(payload),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['knowledge-category']});
+            queryClient.invalidateQueries({queryKey: ['knowledge-category-admin']});
             toast.success('Cập nhật thành công')
         },
         onError: (error) => {

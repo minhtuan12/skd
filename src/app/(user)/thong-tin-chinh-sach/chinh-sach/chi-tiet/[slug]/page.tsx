@@ -8,6 +8,7 @@ import {fetchPolicyDocument} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data
 import PptViewer from "@/components/custom/ppt-viewer";
 import PdfViewer from "@/components/custom/pdf-viewer";
 import Link from "next/link";
+import {IKnowledgeCategory} from "@/models/knowledge-category";
 
 export default async function ({params}: { params: Promise<{ slug: string }> }) {
     const {slug} = await params;
@@ -24,15 +25,9 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
         !doc ? <div className={'text-gray-500 italic text-center'}>Không có thông tin</div> :
             <div className={'box-border flex flex-col gap-18 mt-10 lg:px-40 md:px-20 px-10 max-sm:px-6 pb-30'}>
                 {/* Detail */}
-                <div className={'flex flex-col gap-8 2xl:px-50 xl:px-30 px-8'}>
+                <div className={'flex flex-col gap-5 2xl:px-50 xl:px-30 px-8'}>
                     <h1 className={'font-medium text-center text-3xl text-green-700'}>{doc.title}</h1>
-                    <Image
-                        src={doc.image_url as string}
-                        alt={doc.title} sizes={'100vw'}
-                        width={0} height={0}
-                        style={{width: '100%', height: '100%'}}
-                    />
-                    <div className={'flex flex-col gap-8 -mt-2'}>
+                    <div className={'flex flex-col gap-8'}>
                         {
                             doc.text ? <div
                                 dangerouslySetInnerHTML={{__html: doc.text}}

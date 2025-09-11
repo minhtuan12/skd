@@ -137,7 +137,7 @@ export default async function Header() {
             {/* Mobile menu */}
             <div className={'max-[1024px]:flex hidden'}>
                 <MobileMenuWrapper>
-                    <MobileMenu/>
+                    <MobileMenu menuItems={menuItems}/>
                 </MobileMenuWrapper>
             </div>
         </div>
