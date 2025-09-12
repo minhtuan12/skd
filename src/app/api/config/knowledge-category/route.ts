@@ -9,7 +9,7 @@ async function getKnowledgeCategory(request: NextRequest) {
         const pages = await KnowledgeCategory.find({
             is_deleted: false,
             is_parent: true
-        }).sort('-createdAt').populate('children');
+        }).sort('position').populate('children');
         return NextResponse.json({pages});
     } catch (error) {
         console.error('Get knowledge API error:', error);

@@ -14,7 +14,7 @@ async function getKnowledgeCategories(request: NextRequest) {
 
         const knowledgeCategories = await KnowledgeCategory.find({
             is_parent: true
-        }).sort('-createdAt').populate('children');
+        }).sort('position').populate('children');
 
         return NextResponse.json({knowledge_categories: knowledgeCategories});
     } catch (error) {
@@ -63,9 +63,11 @@ async function addKnowledgeCategory(request: NextRequest) {
             childrenIds = childrenDocs.map((doc) => doc._id.toString());
         }
 
+        const lastParent = await KnowledgeCategory.findOne({is_parent: true}).sort({position: -1});
         const newKnowledgeCategory = new KnowledgeCategory({
             name: data.name,
-            children: childrenIds
+            children: childrenIds,
+            position: lastParent ? lastParent.position + 1 : 0
         })
 
         await newKnowledgeCategory.save();

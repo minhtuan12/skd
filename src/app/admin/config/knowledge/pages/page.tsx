@@ -14,6 +14,10 @@ import CategoryForm from "@/app/admin/config/knowledge/pages/category-form";
 import {Checkbox} from "@/components/ui/checkbox";
 import {useChangeCategoryVisibility} from "@/app/admin/config/(hooks)/use-hide-knowledge-category";
 import {useFetchKnowledgeCategoryAdmin} from "@/app/admin/config/(hooks)/use-knowledge-category-admin";
+import {closestCenter, DndContext, DragOverlay, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {arrayMove, SortableContext, verticalListSortingStrategy} from "@dnd-kit/sortable";
+import SortableRow from "@/components/custom/sortable-table-row";
+import {useUpdateCategoryPos} from "@/app/admin/config/(hooks)/use-update-category-position";
 
 export default function Category() {
     const dispatch = useDispatch();
@@ -21,9 +25,26 @@ export default function Category() {
     const {mutate: addCategory, loading, isSuccess} = useAddCategory();
     const {mutate: updateCategory, loading: loadingUpdate, isSuccess: isSuccessUpdate} = useUpdateCategory();
     const {mutate: changeVisibility, loading: loadingHide} = useChangeCategoryVisibility();
+    const {mutate: updatePos, loading: loadingPos} = useUpdateCategoryPos();
+
     const [category, setCategory] = useState<IKnowledgeCategory>({name: '', children: []});
     const [modalTitle, setModalTitle] = useState<string>('Thêm trang mới');
     const [openModal, setOpenModal] = useState(false);
+    const sensors = useSensors(useSensor(PointerSensor));
+    const [activeId, setActiveId] = useState<string | null>(null);
+
+    function handleDragStart(event: any) {
+        setActiveId(event.active.id);
+    }
+
+    function handleDragEnd(event: any) {
+        const {active, over} = event;
+        const indexes = data?.knowledge_categories.map((i: any) => i._id) || [];
+        if (active.id !== over.id) {
+            updatePos(arrayMove(indexes, indexes.indexOf(active.id), indexes.indexOf(over.id)));
+        }
+        setActiveId(null);
+    }
 
     function handleOpenCreateModal() {
         setModalTitle('Thêm trang mới');
@@ -33,17 +54,19 @@ export default function Category() {
 
     function handleSubmit() {
         if (modalTitle.includes('Thêm')) {
-            addCategory({name: category.name, children: category.children});
-            if (isSuccess) {
-                setCategory({name: '', children: []});
-                setOpenModal(false);
-            }
+            addCategory({name: category.name, children: category.children}, {
+                onSuccess: () => {
+                    setCategory({name: '', children: []});
+                    setOpenModal(false);
+                }
+            });
         } else if (category._id) {
-            updateCategory(category);
-            if (isSuccessUpdate) {
-                setCategory({name: '', children: []});
-                setOpenModal(false);
-            }
+            updateCategory(category, {
+                onSuccess: () => {
+                    setCategory({name: '', children: []});
+                    setOpenModal(false);
+                }
+            });
         }
     }
 
@@ -97,41 +120,69 @@ export default function Category() {
             </div>
         </div>
         {
-            (loadingFetch || loadingHide) ? <Loader2 className={'animate-spin w-8 h-8'}/> :
+            (loadingFetch || loadingHide || loadingPos) ? <Loader2 className={'animate-spin w-8 h-8'}/> :
                 <>
                     {
-                        (!openModal && data?.knowledge_categories) ? <Table className={'text-base'}>
-                            <TableHeader className={'bg-[#f5f5f590]'}>
-                                <TableRow>
-                                    <TableHead>Tên trang</TableHead>
-                                    <TableHead>Ngày tạo</TableHead>
-                                    <TableHead className={'text-center'}>Hiển thị</TableHead>
-                                    <TableHead className={'text-center w-100'}>Hành động</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {data?.knowledge_categories.map((type: IKnowledgeCategory) => (
-                                    <TableRow key={type._id}>
-                                        <TableCell className="font-medium">{type.name}</TableCell>
-                                        <TableCell>{formatDate(type.createdAt as string)}</TableCell>
-                                        <TableCell className={'text-center'}>
-                                            <Checkbox
-                                                value={type._id}
-                                                checked={!type.is_deleted}
-                                                onCheckedChange={() => {
-                                                    changeVisibility(type._id);
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell className={'flex items-center justify-center text-center gap-4'}>
-                                            <Button onClick={() => handleClickUpdate(type)}><Pencil/>Sửa</Button>
-                                            {/*<Button*/}
-                                            {/*    className={'bg-red-500 text-white hover:bg-red-600'}><Trash/>Xóa</Button>*/}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table> : <CategoryForm data={category} handleChangeData={handleChangeInput}/>
+                        (!openModal && data?.knowledge_categories) ?
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragStart={handleDragStart}
+                                onDragEnd={handleDragEnd}
+                            >
+                                <Table className={'text-base'}>
+                                    <TableHeader className={'bg-[#f5f5f590]'}>
+                                        <TableRow>
+                                            <TableHead className={'text-center w-10'}></TableHead>
+                                            <TableHead className={'text-center'}>STT</TableHead>
+                                            <TableHead>Tên trang</TableHead>
+                                            <TableHead>Ngày tạo</TableHead>
+                                            <TableHead className={'text-center'}>Hiển thị</TableHead>
+                                            <TableHead className={'text-center w-100'}>Hành động</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <SortableContext
+                                            items={data?.knowledge_categories}
+                                            strategy={verticalListSortingStrategy}
+                                        >
+                                            {data?.knowledge_categories.map((type: IKnowledgeCategory, index: number) => (
+                                                <SortableRow id={type._id as string} key={type._id}>
+                                                    <TableCell
+                                                        className="font-medium text-center">{index + 1}</TableCell>
+                                                    <TableCell className="font-medium">{type.name}</TableCell>
+                                                    <TableCell>{formatDate(type.createdAt as string)}</TableCell>
+                                                    <TableCell className={'text-center'}>
+                                                        <Checkbox
+                                                            value={type._id}
+                                                            checked={!type.is_deleted}
+                                                            onCheckedChange={(e) => {
+                                                                changeVisibility(type._id);
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell
+                                                        className={'flex items-center justify-center text-center gap-4'}>
+                                                        <Button
+                                                            onClick={() => handleClickUpdate(type)}><Pencil/>Sửa</Button>
+                                                        {/*<Button*/}
+                                                        {/*    className={'bg-red-500 text-white hover:bg-red-600'}><Trash/>Xóa</Button>*/}
+                                                    </TableCell>
+                                                </SortableRow>
+                                            ))}
+                                        </SortableContext>
+                                        <DragOverlay>
+                                            {activeId ? (
+                                                <TableRow className="bg-white shadow-lg">
+                                                    <TableCell colSpan={5}>
+                                                        {data?.knowledge_categories.find((c: any) => c._id === activeId)?.name}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ) : null}
+                                        </DragOverlay>
+                                    </TableBody>
+                                </Table>
+                            </DndContext> : <CategoryForm data={category} handleChangeData={handleChangeInput}/>
                     }
                 </>
         }

@@ -3,7 +3,6 @@ import connectDb from "@/lib/db";
 import Knowledge from "@/models/knowledge";
 import KnowledgeCategory from "@/models/knowledge-category";
 import {Types} from "mongoose";
-import PolicyDocument from "@/models/policy-document";
 
 const {ObjectId} = Types;
 

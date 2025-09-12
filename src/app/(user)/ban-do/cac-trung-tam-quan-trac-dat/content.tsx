@@ -7,6 +7,8 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import MapWrapper from "@/components/custom/map-wrapper";
 import React from "react";
 import {toast} from "sonner";
+import * as turf from "@turf/turf";
+import {formatDate} from "@/lib/utils";
 
 function haversineDistance([lng1, lat1]: [number, number], [lng2, lat2]: [number, number]) {
     const toRad = (x: number) => (x * Math.PI) / 180;
@@ -38,13 +40,60 @@ function filterNearby(
     });
 }
 
-export default function ({labs, tilerApiKey, popupHTMLs}: any) {
+function isPointInProvince(point: any, provinceFeature: any) {
+    const pt = turf.point([point[0], point[1]]);
+    return turf.booleanPointInPolygon(pt, provinceFeature);
+}
+
+export default function ({labs, tilerApiKey}: any) {
     const [selectedLoc, setSelectedLoc] = React.useState<number[]>([]);
     const [nearLabs, setNearLabs] = React.useState<any>([]);
+    const [features, setFeatures] = React.useState<any>(null);
+    const [selectedProvince, setSelectedProvince] = React.useState<any>(null);
+    const [filteredLabs, setFilteredLabs] = React.useState(labs);
+
+    function handleSelect(name: any) {
+        const provinceFeature = features.find(
+            (f: any) => f.properties.GID_1 === name
+        );
+
+        setSelectedProvince(provinceFeature);
+        if (provinceFeature) {
+            const result = labs.filter((item: ILab) => {
+                return isPointInProvince(
+                    item.location.coordinates,
+                    provinceFeature
+                );
+            });
+            setFilteredLabs(result);
+        } else {
+            setFilteredLabs(labs);
+        }
+    }
+
+    const popupHTMLs = React.useMemo(() => {
+        return filteredLabs.map((lab: ILab) => ({
+            location: lab.location.coordinates,
+            popup: `<div class="p-3 max-w-xs text-sm">
+      <h3 class="font-semibold text-base text-gray-800 mb-2">${lab.name}</h3>
+      <div class="space-y-1 text-gray-700 flex flex-col">
+        <div class="'flex"><span class="font-semibold">• Lĩnh vực chỉ định:</span> ${lab.category}</div>
+        <div class="'flex"><span class="font-semibold">• Địa chỉ:</span> ${lab.address}</div>
+        <div class="'flex"><span class="font-semibold">• Thời gian cấp lần đầu:</span> ${formatDate(lab.first_license_date as string)}</div>
+        <div class="'flex"><span class="font-semibold">• Hiệu lực:</span> ${formatDate(lab.validity_time as string)}</div>
+        <div class="'flex"><span class="font-semibold">• Quyết định:</span> ${lab.decision}</div>
+      </div>
+    </div>`
+        }))
+    }, [filteredLabs]);
+
+    React.useEffect(() => {
+        setFilteredLabs(labs);
+    }, [labs]);
 
     React.useEffect(() => {
         if (typeof navigator !== "undefined" && "geolocation" in navigator) {
-            const marks = labs.map((item: ILab) => item.location.coordinates);
+            const marks = filteredLabs.map((item: ILab) => item.location.coordinates);
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
                     const {latitude, longitude} = pos.coords;
@@ -55,15 +104,27 @@ export default function ({labs, tilerApiKey, popupHTMLs}: any) {
                 }
             );
         }
-    }, [labs]);
+    }, [filteredLabs])
+
+    React.useEffect(() => {
+        async function fetchProvinces() {
+            const res = await fetch(process.env.NEXT_PUBLIC_VN_GEOJSON_URL!);
+            const geojson = await res.json();
+            setFeatures(geojson.features);
+        }
+
+        fetchProvinces();
+    }, []);
 
     return <>
         <div
-            className={'max-md:h-[1000px] h-[650px] pt-6 px-3 pb-3 bg-[#f6f4f4] rounded-lg flex gap-2 flex-col md:flex-row max-md:gap-4'}>
-            <div className={'gap-3 flex flex-col w-full max-md:h-1/3 md:w-1/3'}>
-                <div className={'h-8'}>
-                    <Input placeholder={'Nhập vị trí để tìm trung tâm gần nhất'}
-                           className={'h-full bg-white !py-4'}/>
+            className={'max-md:h-[1000px] h-[650px] pt-4 px-3 pb-3 bg-[#f6f4f4] rounded-lg flex gap-2 flex-col md:flex-row max-md:gap-4'}>
+            <div className={'gap-3 flex flex-col w-full max-md:h-1/3 md:w-1/4'}>
+                <div className={'h-9'}>
+                    <Input
+                        placeholder={'Nhập vị trí để tìm trung tâm gần nhất'}
+                        className={'h-full bg-white !py-4 !text-base'}
+                    />
                 </div>
                 <div className={'flex flex-col flex-1 min-h-0'}>
                     <div className={'bg-gray-500 font-medium p-1 text-center text-white'}>
@@ -71,7 +132,7 @@ export default function ({labs, tilerApiKey, popupHTMLs}: any) {
                     </div>
                     <div className={'flex-1 min-h-0 overflow-y-auto'}>
                         {
-                            labs?.map((lab: ILab, i: number) => (
+                            filteredLabs?.map((lab: ILab, i: number) => (
                                 <div key={i}
                                      onClick={() => setSelectedLoc(lab.location.coordinates)}
                                      className={'py-2 px-4 border-b border-gray-100 bg-white box-border flex flex-col gap-0.5 cursor-pointer hover:bg-gray-100'}>
@@ -88,26 +149,32 @@ export default function ({labs, tilerApiKey, popupHTMLs}: any) {
                     </div>
                 </div>
             </div>
-            <div className={'flex flex-col gap-3 w-full max-md:h-2/3 md:w-2/3'}>
+            <div className={'flex flex-col gap-3 w-full max-md:h-2/3 md:w-3/4'}>
                 <div
-                    className={'flex gap-10 w-full justify-center items-center h-8 max-sm:flex-col max-sm:gap-2 max-sm:my-6'}>
-                    <Select>
-                        <SelectTrigger className="w-[180px] bg-white">
+                    className={'flex gap-10 w-full justify-center items-center h-9 max-sm:flex-col max-sm:gap-2 max-sm:my-6'}>
+                    <Select value={selectedProvince?.properties?.GID_1 || ''} onValueChange={handleSelect}>
+                        <SelectTrigger className="w-[200px] bg-white !text-base">
                             <SelectValue placeholder="Chọn tỉnh/thành phố"/>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={"hanoi"}>Hà Nội</SelectItem>
+                            {
+                                features?.map((item: any, index: number) => <SelectItem
+                                    className={'!text-base'}
+                                    key={index}
+                                    value={item?.properties?.GID_1 || ''}
+                                >
+                                    {item?.properties?.NAME_1 || ''}
+                                </SelectItem>)
+                            }
                         </SelectContent>
                     </Select>
 
                     <Select>
-                        <SelectTrigger className="w-[180px] bg-white">
+                        <SelectTrigger className="w-[200px] bg-white !text-base">
                             <SelectValue placeholder="Chọn chỉ tiêu"/>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={"hanoi1"}>Chỉ tiêu 1</SelectItem>
-                            <SelectItem value={"hanoi2"}>Chỉ tiêu 2</SelectItem>
-                            <SelectItem value={"hanoi3"}>Chỉ tiêu 3</SelectItem>
+                            <SelectItem value={"hanoi1"} className={'!text-base'}>Chỉ tiêu 1</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

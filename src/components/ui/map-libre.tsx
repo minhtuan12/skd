@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, memo} from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {cn} from "@/lib/utils";
@@ -71,4 +71,4 @@ const MapLibre = (
     );
 };
 
-export default MapLibre;
+export default memo(MapLibre);

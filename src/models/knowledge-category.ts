@@ -2,14 +2,19 @@ import {model, models, Schema} from "mongoose";
 
 export interface IKnowledgeCategory {
     _id?: string;
+    position?: number;
     name: string;
     children?: string[] | IKnowledgeCategory[];
     is_parent?: boolean;
     is_deleted?: boolean,
-    createdAt?: string
+    createdAt?: string;
 }
 
 const KnowledgeCategorySchema = new Schema({
+    position: {
+        type: Number,
+        default: 0
+    },
     name: {
         type: String,
         default: null

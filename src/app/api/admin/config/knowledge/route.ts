@@ -28,7 +28,6 @@ async function getKnowledge(request: NextRequest) {
         }
 
         const knowledge = await Knowledge.find({
-            is_deleted: false,
             ...queryCondition
         }).populate({
             path: 'category',
