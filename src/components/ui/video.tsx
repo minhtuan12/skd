@@ -3,7 +3,9 @@
 import {cn, isDirectVideoLink} from "@/lib/utils";
 
 function VideoPlayer({className, src}: { className?: string, src: string }) {
-    const videoId = !isDirectVideoLink(src) ? src.split("v=")[1].split("&")[0] : src;
+    const videoId = !isDirectVideoLink(src) ? (
+        src.includes('?v=') ? src.split("v=")[1].split("&")[0] : src.split('/')[src.split('/').length - 1]
+    ) : src;
     return (
         <div className={cn("w-full mx-auto h-full", className)}>
             {
