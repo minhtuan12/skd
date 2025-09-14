@@ -159,3 +159,35 @@ export function getResourceType(extension: string) {
 export function capitalizeFirstWord(str: string) {
     return str[0].toUpperCase() + str.slice(1).toLowerCase();
 }
+
+export async function changePostOrder(model: any, id: string, newOrder: number, oldOrder: number) {
+    try {
+        let bulkOps = [];
+
+        if (newOrder < oldOrder) {
+            bulkOps.push({
+                updateMany: {
+                    filter: {order: {$gte: newOrder, $lt: oldOrder}},
+                    update: {$inc: {order: 1}},
+                }
+            });
+        } else {
+            bulkOps.push({
+                updateMany: {
+                    filter: {order: {$gt: oldOrder, $lte: newOrder}},
+                    update: {$inc: {order: -1}},
+                }
+            });
+        }
+        bulkOps.push({
+            updateOne: {
+                filter: {_id: id},
+                update: {$set: {order: newOrder}},
+            }
+        });
+
+        await model.bulkWrite(bulkOps);
+    } catch (e) {
+        throw e;
+    }
+}

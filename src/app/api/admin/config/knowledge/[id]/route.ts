@@ -37,6 +37,7 @@ async function updateKnowledge(request: NextRequest, {params}: { params: Promise
                 downloadable: data.pdf.downloadable
             },
             link: data.link || '',
+            video_url: data.video_url || null,
             related_posts: data.related_posts
         };
 

@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 
-const fetchPolicyDocument = async () => {
-    const response = await fetch(`/api/admin/config/policy-document`, {
+const fetchPolicyDocument = async (page: number) => {
+    const response = await fetch(`/api/admin/config/policy-document?page=${page}`, {
         credentials: 'include',
     });
 
@@ -13,7 +13,7 @@ const fetchPolicyDocument = async () => {
     return response.json();
 };
 
-export const useFetchPolicyDocument = () => {
+export const useFetchPolicyDocument = (page: number) => {
     const {
         data,
         isPending: loading,
@@ -22,8 +22,8 @@ export const useFetchPolicyDocument = () => {
         error,
         refetch
     } = useQuery({
-        queryKey: ['policy-document'],
-        queryFn: fetchPolicyDocument,
+        queryKey: [`policy-document`, page],
+        queryFn: () => fetchPolicyDocument(page),
     });
 
     return {

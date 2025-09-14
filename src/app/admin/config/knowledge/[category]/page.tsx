@@ -33,7 +33,8 @@ const defaultItem: IKnowledge = {
         downloadable: true
     },
     link: null,
-    related_posts: []
+    related_posts: [],
+    video_url: ''
 }
 
 export default function ({params}: { params: Promise<{ category: string }> }) {

@@ -19,6 +19,7 @@ export interface IKnowledge {
         downloadable: boolean,
     },
     link: string | null,
+    video_url: string | null;
     related_posts: string[] | IKnowledge[],
     is_deleted?: boolean,
     createdAt?: string
@@ -69,6 +70,10 @@ const KnowledgeSchema = new Schema({
         }
     },
     link: {
+        type: String,
+        default: null
+    },
+    video_url: {
         type: String,
         default: null
     },

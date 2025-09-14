@@ -8,6 +8,7 @@ import {IKnowledgeCategory} from "@/models/knowledge-category";
 import PptViewer from "@/components/custom/ppt-viewer";
 import PdfViewer from "@/components/custom/pdf-viewer";
 import Link from "next/link";
+import {VideoPlayer} from "@/components/ui/video";
 
 export default async function ({params}: { params: Promise<{ slug: string }> }) {
     const {slug} = await params;
@@ -47,6 +48,11 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                                         <PdfViewer url={item.pdf.url} downloadable={item.pdf.downloadable}/>
                                     </div> : ''
                                 }
+                                {
+                                    item.video_url ? <div className={'mt-3'}>
+                                        <VideoPlayer src={item.video_url}/>
+                                    </div> : ''
+                                }
                             </div>
                         </div>
                     </div>
@@ -61,7 +67,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                     {
                         item?.related_posts?.length > 0 ? <div className={'w-full 2xl:px-60 xl:px-30 lg:px-4'}>
                             <Others documents={item?.related_posts || []} exceptId={id}/>
-                        </div> : <i className={'text-gray-500 text-center'}>Chưa có các thông tin liên quan</i>
+                        </div> : <i className={'text-gray-500 text-center text-lg'}>Chưa có các thông tin liên quan</i>
                     }
                 </div>
 

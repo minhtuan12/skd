@@ -8,8 +8,24 @@ async function getPolicyDocuments(request: NextRequest) {
     try {
         await connectDb();
 
-        const documents = await PolicyDocument.find({}).sort('-createdAt');
-        return NextResponse.json({documents});
+        const {searchParams} = new URL(request.url);
+        const page = parseInt(searchParams.get('page') || '1', 10);
+        const skip = (page - 1) * 15;
+
+        const [documents, total] = await Promise.all([
+            PolicyDocument.find({})
+                .sort('order')
+                .skip(skip)
+                .limit(15),
+            PolicyDocument.countDocuments({})
+        ]);
+
+        return NextResponse.json({
+            documents,
+            total,
+            page,
+            totalPages: Math.ceil(total / 15),
+        });
     } catch (error) {
         console.error('Policy document API error:', error);
         return NextResponse.json(
@@ -46,7 +62,10 @@ async function addDocument(request: NextRequest) {
             },
             link: data.link || '',
             image_url: data.image_url,
+            order: 0
         });
+
+        await PolicyDocument.updateMany({}, {$inc: {order: 1}});
         await newDocument.save();
 
         return NextResponse.json(

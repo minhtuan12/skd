@@ -22,7 +22,6 @@ export default function KnowledgeForm(
         handleChangeData,
         handleImageChange,
         handleChangeCheck,
-        handleDrop,
         otherPosts,
         handleSelectRelatedPosts,
         handleSelectCategory
@@ -35,7 +34,6 @@ export default function KnowledgeForm(
         imageUrl: string,
         handleImageChange?: any,
         handleChangeCheck: any,
-        handleDrop?: any,
         otherPosts: IKnowledge[],
         handleSelectRelatedPosts: any
         handleSelectCategory: any
@@ -48,7 +46,8 @@ export default function KnowledgeForm(
         link,
         media,
         category,
-        related_posts
+        related_posts,
+        video_url
     } = data;
 
     useEffect(() => {
@@ -154,6 +153,15 @@ export default function KnowledgeForm(
                                     className={'border px-3 rounded-sm border-gray-500 cursor-pointer'}
                                 />
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="border border-black p-2 w-1/4">Link video</td>
+                        <td className="border border-black p-2">
+                            <Input
+                                placeholder={'Nhập link video'} value={video_url || ''}
+                                onChange={e => handleChangeData(e.target.value, 'video_url')}
+                            />
                         </td>
                     </tr>
                     <tr>

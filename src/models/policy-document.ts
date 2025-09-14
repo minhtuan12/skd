@@ -15,6 +15,7 @@ export interface IPolicyDocument {
     },
     link: string | null,
     related_posts: string[] | IPolicyDocument[],
+    order?: number,
     createdAt?: Date,
 }
 
@@ -59,6 +60,10 @@ const PolicyDocumentSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: "PolicyDocuments"
     },
+    order: {
+        type: Number,
+        default: 0
+    },
     is_deleted: {
         type: Boolean,
         default: false
@@ -66,6 +71,8 @@ const PolicyDocumentSchema = new Schema({
 }, {
     timestamps: true
 });
+
+PolicyDocumentSchema.index({order: 1});
 
 const PolicyDocument = models.PolicyDocuments || model("PolicyDocuments", PolicyDocumentSchema);
 export default PolicyDocument;

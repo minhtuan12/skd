@@ -14,6 +14,7 @@ import DataTable from "@/app/admin/config/policy/document/data-table";
 import {Button} from "@/components/ui/button";
 import {setBreadcrumb} from "@/redux/slices/admin";
 import {routes} from "@/constants/routes";
+import {useUpdateDocumentOrder} from "@/app/admin/config/(hooks)/use-update-document-order";
 
 const defaultItem: IPolicyDocument = {
     title: '',
@@ -34,8 +35,9 @@ const defaultItem: IPolicyDocument = {
 export default function () {
     const [openModal, setOpenModal] = useState(false);
     const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
 
-    const {error, refetch, loading, data} = useFetchPolicyDocument();
+    const {error, refetch, loading, data} = useFetchPolicyDocument(page);
     const {
         mutate,
         loading: loadingAdd,
@@ -44,6 +46,7 @@ export default function () {
         error: errorUpdate
     } = useAddDocument();
     const {mutate: updateDocument, loading: loadingUpdate} = useUpdateDocument();
+    const {mutate: updateDocumentOrder, loading: loadingUpdateOrder} = useUpdateDocumentOrder();
     const {uploadFile, loading: loadingUpload} = useUploadFile();
 
     const [newDocument, setNewDocument] = useState<IPolicyDocument>(defaultItem);
@@ -201,6 +204,17 @@ export default function () {
         setModalTitle(`Cập nhật`);
     }
 
+    const handleChangeOrder = (id: string, oldOrder: number, newOrder: number) => {
+        if (oldOrder === newOrder) {
+            return;
+        }
+        updateDocumentOrder({docId: id, oldOrder, newOrder}, {
+            onSuccess: () => {
+                toast.success('Cập nhật thành công');
+            }
+        });
+    }
+
     useEffect(() => {
         dispatch(setBreadcrumb([
             {title: 'Cấu hình', href: routes.HomeConfig},
@@ -243,11 +257,16 @@ export default function () {
                 }
             </div>
         </div>
-        {loading ? <Loader2 className={'animate-spin'}/> :
+        {(loading || loadingUpdateOrder) ? <Loader2 className={'animate-spin'}/> :
             !openModal ? <DataTable
                 data={data.documents}
                 handleClickEdit={handleClickEdit}
+                handleChangeOrder={handleChangeOrder}
                 // handleClickDelete={handleChangeNewsVisibility}
+                setPage={setPage}
+                totalPages={data.totalPages}
+                page={page}
+                total={data.total}
             /> : <DocumentForm
                 otherPosts={data.documents}
                 handleChangeFile={handleChangeFile}

@@ -12,7 +12,7 @@ async function getPolicyDocument(request: NextRequest) {
 
         // const queryCondition = q ? {name: {$regex: q, $options: 'i'}} : {};
         if (page === 0) {
-            const documents = await PolicyDocument.find({is_deleted: false}).sort('-createdAt');
+            const documents = await PolicyDocument.find({is_deleted: false}).sort('order');
             return NextResponse.json({documents});
         }
 
@@ -22,7 +22,7 @@ async function getPolicyDocument(request: NextRequest) {
                     is_deleted: false,
                 }
             },
-            {$sort: {createdAt: -1}},
+            {$sort: {order: 1}},
             {
                 $facet: {
                     data: [
