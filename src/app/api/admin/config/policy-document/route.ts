@@ -9,8 +9,22 @@ async function getPolicyDocuments(request: NextRequest) {
         await connectDb();
 
         const {searchParams} = new URL(request.url);
-        const page = parseInt(searchParams.get('page') || '1', 10);
+        const page = parseInt(searchParams.get('page') || '1');
         const skip = (page - 1) * 15;
+
+        if (page === 0) {
+            const [documents, total] = await Promise.all([
+                PolicyDocument.find({}).sort('order'),
+                PolicyDocument.countDocuments({})
+            ]);
+
+            return NextResponse.json({
+                documents,
+                total,
+                page,
+                totalPages: Math.ceil(total / 15),
+            });
+        }
 
         const [documents, total] = await Promise.all([
             PolicyDocument.find({})

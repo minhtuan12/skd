@@ -62,13 +62,13 @@ const PolicySelection = memo(
                 }
             </CustomCard>
             <Dialog open={openList} onOpenChange={setOpenList}>
-                <DialogContent>
+                <DialogContent className={'h-[80vh]'}>
                     <DialogHeader>
                         <DialogTitle>Chọn chính sách</DialogTitle>
                     </DialogHeader>
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> :
-                        <div className={'mt-2'}>
-                            <div className={'space-y-3'}>
+                        <div className={'mt-2 relative'}>
+                            <div className={'-mt-10 space-y-3 overflow-y-auto max-h-[65vh]'}>
                                 {data.documents.map((item: IPolicyDocument) => (
                                     <div className={'flex items-start gap-3'} key={item._id}>
                                         <Checkbox
@@ -81,7 +81,7 @@ const PolicySelection = memo(
                                     </div>
                                 ))}
                             </div>
-                            <div className={'text-center text-gray-500 italic text-sm font-bold mt-6'}>Vui lòng nhấn nút
+                            <div className={'text-center text-gray-500 italic text-sm font-bold absolute bottom-0 w-full'}>Vui lòng nhấn nút
                                 Cập nhật sau khi lựa chọn xong
                             </div>
                         </div>

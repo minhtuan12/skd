@@ -13,7 +13,7 @@ const fetchPolicyDocument = async (page: number) => {
     return response.json();
 };
 
-export const useFetchPolicyDocument = (page: number) => {
+export const useFetchPolicyDocument = (page: number = 0) => {
     const {
         data,
         isPending: loading,
