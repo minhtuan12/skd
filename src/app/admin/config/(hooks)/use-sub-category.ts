@@ -22,7 +22,8 @@ export const useFetchSubCategory = (categoryId: string) => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['sub-category'],
+        queryKey: ['sub-category', categoryId],
+        enabled: !!categoryId,
         queryFn: () => {
             return fetchSubCategory(categoryId);
         }

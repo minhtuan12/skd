@@ -2,19 +2,19 @@
 
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setBreadcrumb} from "@/redux/slices/admin";
 import {Loader2} from "lucide-react";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {Button} from "@/components/ui/button";
 import {IKnowledge} from "@/models/knowledge";
 import {useFetchKnowledge} from "@/app/admin/config/(hooks)/use-knowledge";
-import DataTable from "@/app/admin/config/knowledge/[category]/data-table";
+import {useAddKnowledge} from "@/app/admin/config/(hooks)/use-add-knowledge";
 import KnowledgeForm from "@/app/admin/config/knowledge/form";
 import {toast} from "sonner";
-import {useUpdateKnowledge} from "@/app/admin/config/(hooks)/use-update-knowledge";
 import {RootState} from "@/redux/store";
-import {useFetchSubCategory} from "@/app/admin/config/(hooks)/use-sub-category";
-import {useUpdateKnowledgeOrder} from "@/app/admin/config/(hooks)/use-update-knowledge-order";
+import {setBreadcrumb} from "@/redux/slices/admin";
+import DataTable from "@/app/admin/config/knowledge/post/data-table";
+import {useFetchKnowledgeCategoryAdmin} from "@/app/admin/config/(hooks)/use-knowledge-category-admin";
+import {useAddCategoryToKnowledge} from "@/app/admin/config/(hooks)/use-add-category-to-knowledge";
 
 const defaultItem: IKnowledge = {
     name: '',
@@ -37,28 +37,31 @@ const defaultItem: IKnowledge = {
     video_url: ''
 }
 
-export default function ({params}: { params: Promise<{ category: string }> }) {
-    const {category: categoryId} = React.use(params);
+export default function () {
     const [openModal, setOpenModal] = useState(false);
     const pageTitle = useSelector((state: RootState) => state.admin.knowledgePageTitle);
     const dispatch = useDispatch();
 
-    const {error, refetch, loading, data} = useFetchKnowledge(categoryId);
-    const {mutate: updateKnowledge, loading: loadingUpdate} = useUpdateKnowledge(categoryId);
-    const {mutate: changeOrder, loading: loadingOrder} = useUpdateKnowledgeOrder(categoryId);
+    const {data: categories, loading: loadingFetch} = useFetchKnowledgeCategoryAdmin();
+    const {error, refetch, loading, data} = useFetchKnowledge();
+    const {
+        mutate,
+        loading: loadingAdd,
+        isSuccess,
+        isError,
+        error: errorUpdate
+    } = useAddKnowledge();
+    const {mutate: addCategoryToKnowledge, loading: loadingSubmitAddCategory} = useAddCategoryToKnowledge();
+    // const {mutate: updateKnowledge, loading: loadingUpdate} = useUpdateKnowledge(categoryId);
     const {uploadFile, loading: loadingUpload} = useUploadFile();
-    const {data: subCategories} = useFetchSubCategory(categoryId);
+    // const {data: subCategories} = useFetchSubCategory(categoryId);
+    // const hasSubCategories = useMemo(() => {
+    //     return subCategories?.pages?.children?.length > 0;
+    // }, [subCategories])
 
     const [newKnowledge, setNewKnowledge] = useState<IKnowledge>(defaultItem);
     const [mediaUrl, setMediaUrl] = useState('');
     const [modalTitle, setModalTitle] = useState(`Thêm mới`)
-
-    useEffect(() => {
-        dispatch(setBreadcrumb([
-            {title: 'Cấu hình', href: ''},
-            {title: 'Ngân hàng kiến thức', href: ''},
-        ]))
-    }, [])
 
     const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>, key: string, index = -1) => {
         if (e.target.files && e.target.files[0]) {
@@ -110,13 +113,20 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
                 url: newKnowledge.link ? null : newKnowledge.pdf.url
             }
         }
-        if (modalTitle.includes('Cập nhật')) {
-            updateKnowledge(updatedKnowledge, {
+        if (modalTitle.includes('Thêm')) {
+            mutate(updatedKnowledge, {
                 onSuccess: () => {
-                    toast.success('Cập nhật thành công');
+                    toast.success('Thêm mới thành công');
                     setOpenModal(false);
                 },
             });
+        } else if (modalTitle.includes('Cập nhật')) {
+            // updateKnowledge(updatedKnowledge, {
+            //     onSuccess: () => {
+            //         toast.success('Cập nhật thành công');
+            //         setOpenModal(false);
+            //     },
+            // });
         }
     }
 
@@ -173,6 +183,13 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
         }
     }
 
+    const handleAddKnowledge = () => {
+        setModalTitle(`Thêm mới`)
+        setNewKnowledge(defaultItem)
+        setMediaUrl('')
+        setOpenModal(true);
+    }
+
     const handleSubmit = () => {
         handleUploadFiles();
     }
@@ -212,20 +229,25 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
         }))
     }
 
-    function handleChangeOrder(knowledgeId: string, categoryIds: string[], oldOrder: number, newOrder: number) {
-        if (oldOrder === newOrder) {
-            return;
-        }
-        changeOrder({knowledgeId, categoryIds, oldOrder, newOrder, categories: subCategories?.pages}, {
-            onSuccess: () => {
-                toast.success('Cập nhật thành công');
-            }
-        })
+    const handleSelectCategory = (checked: boolean, itemId: string) => {
+        setNewKnowledge((prev: any) => ({
+            ...prev,
+            category: !checked ?
+                prev.category.filter((i: string) => i !== itemId) :
+                [...prev.category, itemId]
+        }))
     }
+
+    useEffect(() => {
+        dispatch(setBreadcrumb([
+            {title: 'Cấu hình', href: ''},
+            {title: 'Ngân hàng kiến thức', href: ''},
+        ]))
+    }, [])
 
     return <>
         <div className="flex items-center justify-between space-y-2 flex-wrap">
-            <h2 className="text-3xl font-bold tracking-tight">{subCategories?.pages?.name}</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Quản lý bài đăng</h2>
             <div
                 className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
                 {openModal ? <div className={'flex gap-4'}>
@@ -234,7 +256,7 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
                                 setNewKnowledge(defaultItem);
                                 setOpenModal(false);
                             }} size={'lg'}
-                            disabled={loadingUpload || loadingUpdate}
+                            disabled={loadingAdd || loadingUpload}
                         >
                             Quay lại
                         </Button>
@@ -242,23 +264,27 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
                             onClick={handleSubmit} size={'lg'}
                             disabled={
                                 !newKnowledge.name || !newKnowledge.media?.url
-                                || loadingUpload || loadingUpdate
+                                || loadingAdd || loadingUpload
                             }
                         >
-                            {(loadingUpload || loadingUpdate) &&
+                            {(loadingAdd || loadingUpload) &&
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            Cập nhật
+                            Lưu
                         </Button>
                     </div>
-                    : ''
+                    : <Button onClick={handleAddKnowledge} size={'lg'}>
+                        Đăng bài
+                    </Button>
                 }
             </div>
         </div>
-        {(loading || loadingOrder) ? <Loader2 className={'animate-spin'}/> :
+        {(loading || loadingSubmitAddCategory) ? <Loader2 className={'animate-spin'}/> :
             !openModal ? <DataTable
-                data={data?.knowledge || []}
+                loadingSubmit={loadingSubmitAddCategory}
+                addCategoryToKnowledge={addCategoryToKnowledge}
+                categories={categories?.knowledge_categories?.filter((i: any) => !i.is_deleted) || []}
+                data={data.knowledge}
                 handleClickEdit={handleClickEdit}
-                handleChangeOrder={handleChangeOrder}
                 // handleClickDelete={handleChangeNewsVisibility}
             /> : <KnowledgeForm
                 handleChangeFile={handleChangeFile}

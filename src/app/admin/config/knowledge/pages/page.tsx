@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import {setBreadcrumb} from "@/redux/slices/admin";
 import {useDispatch} from "react-redux";
-import {Loader2, Pencil} from "lucide-react";
+import {Loader2, Pencil, Trash} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {formatDate} from "@/lib/utils";
@@ -18,12 +18,15 @@ import {closestCenter, DndContext, DragOverlay, PointerSensor, useSensor, useSen
 import {arrayMove, SortableContext, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import SortableRow from "@/components/custom/sortable-table-row";
 import {useUpdateCategoryPos} from "@/app/admin/config/(hooks)/use-update-category-position";
+import {useDeleteCategory} from "@/app/admin/config/(hooks)/use-delete-knowledge-category";
+import {toast} from "sonner";
 
 export default function Category() {
     const dispatch = useDispatch();
     const {data, loading: loadingFetch} = useFetchKnowledgeCategoryAdmin();
     const {mutate: addCategory, loading, isSuccess} = useAddCategory();
     const {mutate: updateCategory, loading: loadingUpdate, isSuccess: isSuccessUpdate} = useUpdateCategory();
+    const {mutate: deleteCategory, loading: loadingDelete} = useDeleteCategory();
     const {mutate: changeVisibility, loading: loadingHide} = useChangeCategoryVisibility();
     const {mutate: updatePos, loading: loadingPos} = useUpdateCategoryPos();
 
@@ -32,6 +35,7 @@ export default function Category() {
     const [openModal, setOpenModal] = useState(false);
     const sensors = useSensors(useSensor(PointerSensor));
     const [activeId, setActiveId] = useState<string | null>(null);
+    const [deletedId, setDeletedId] = useState<string | null>(null);
 
     function handleDragStart(event: any) {
         setActiveId(event.active.id);
@@ -78,6 +82,18 @@ export default function Category() {
         setCategory(item);
         setModalTitle(`Cập nhật ${item.name}`);
         setOpenModal(true);
+    }
+
+    function handleDelete(id: string) {
+        setDeletedId(id);
+        deleteCategory(id, {
+            onSuccess: () => {
+                toast.success('Xóa thành công');
+            },
+            onSettled: () => {
+                setDeletedId(null);
+            }
+        })
     }
 
     useEffect(() => {
@@ -165,8 +181,15 @@ export default function Category() {
                                                         className={'flex items-center justify-center text-center gap-4'}>
                                                         <Button
                                                             onClick={() => handleClickUpdate(type)}><Pencil/>Sửa</Button>
-                                                        {/*<Button*/}
-                                                        {/*    className={'bg-red-500 text-white hover:bg-red-600'}><Trash/>Xóa</Button>*/}
+                                                        <Button
+                                                            onClick={() => handleDelete(type._id as string)}
+                                                            className={'bg-red-500 text-white hover:bg-red-600'}
+                                                            disabled={loadingDelete && deletedId === type._id as string}
+                                                        >
+                                                            {(loadingDelete && deletedId === type._id as string) ?
+                                                                <Loader2 className={'w-4 h-4 animate-spin'}/> : ''}
+                                                            <Trash/>Xóa
+                                                        </Button>
                                                     </TableCell>
                                                 </SortableRow>
                                             ))}

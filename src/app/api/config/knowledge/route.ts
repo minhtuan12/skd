@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import Knowledge from "@/models/knowledge";
 import KnowledgeCategory from "@/models/knowledge-category";
 import {Types} from "mongoose";
+import KnowledgeOrder from "@/models/knowledge-order";
 
 const {ObjectId} = Types;
 
@@ -25,53 +26,51 @@ async function getKnowledge(request: NextRequest) {
         const category = await KnowledgeCategory.findById(categoryId).populate("children");
         if (category?.children && category.children.length > 0) {
             const childrenIds = category.children.map((c: any) => c._id);
-            queryCondition.category = {$in: childrenIds};
+            queryCondition.category_id = {$in: childrenIds};
         } else {
-            queryCondition.category = new ObjectId(categoryId);
+            queryCondition.category_id = new ObjectId(categoryId);
         }
-        const result = await Knowledge.aggregate([
-            {
-                $match: {
-                    is_deleted: false,
-                    ...queryCondition
-                }
-            },
-            {$sort: {createdAt: -1}},
-            {
-                $facet: {
-                    data: [
-                        {$skip: (page - 1) * 9},
-                        {$limit: 9},
-                    ],
-                    totalCount: [
-                        {$count: "count"}
-                    ]
-                }
-            },
-            {
-                $project: {
-                    data: 1,
-                    total: {$arrayElemAt: ["$totalCount.count", 0]}
-                }
-            },
-            {
-                $addFields: {
-                    totalPages: {
-                        $cond: [
-                            {$gt: ["$total", 0]},
-                            {$ceil: {$divide: ["$total", 9]}},
-                            0
-                        ]
-                    }
-                }
-            }
+        const [knowledgeOrders, total] = await Promise.all([
+            KnowledgeOrder.find({...queryCondition})
+                .populate({
+                    path: 'category_id',
+                    populate: {
+                        path: 'children',
+                        model: 'KnowledgeCategories',
+                    },
+                })
+                .populate({
+                    path: 'knowledge_id',
+                    match: {is_deleted: false},
+                })
+                .sort('order')
+                .skip((page - 1) * 9)
+                .limit(9),
+            KnowledgeOrder.countDocuments({...queryCondition}),
         ]);
+
+        const grouped: any = [];
+        const map = new Map();
+        knowledgeOrders.forEach(item => {
+            const key = `${item.order}_${item.knowledge_id._id.toString()}`;
+            if (!map.has(key)) {
+                map.set(key, {
+                    order: item.order,
+                    knowledge: item.knowledge_id,
+                    categories: [item.category_id]
+                });
+            } else {
+                map.get(key).categories.push(item.category_id);
+            }
+        });
+        map.forEach(value => grouped.push(value));
 
         return NextResponse.json({
             knowledge: {
-                ...result?.[0],
-                data: result?.[0]?.data?.map((i: any) => ({
-                    ...i,
+                total,
+                totalPages: Math.ceil(total / 9),
+                data: grouped?.map((i: any) => ({
+                    ...i.knowledge?.toObject(),
                     category_name: category.name
                 }))
             }

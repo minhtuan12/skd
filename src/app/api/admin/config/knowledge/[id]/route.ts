@@ -26,7 +26,7 @@ async function updateKnowledge(request: NextRequest, {params}: { params: Promise
         const newKnowledge = {
             name: data.name,
             media: data.media,
-            category: data.category,
+            // category: data.category,
             text: data.text ? sanitizeHtml(data.text) : '',
             slide: {
                 url: data.slide.url || null,

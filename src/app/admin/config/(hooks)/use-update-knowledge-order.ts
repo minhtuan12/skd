@@ -1,8 +1,8 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {toast} from "sonner";
 
-const addKnowledge = async (data: any) => {
-    const response = await fetch(`/api/admin/config/knowledge`, {
+const updateKnowledgeOrder = async (data: any) => {
+    const response = await fetch(`/api/admin/config/knowledge/order`, {
         credentials: 'include',
         method: 'POST',
         body: JSON.stringify({data}),
@@ -16,7 +16,7 @@ const addKnowledge = async (data: any) => {
     return response.json();
 };
 
-export const useAddKnowledge = () => {
+export const useUpdateKnowledgeOrder = (categoryId: string) => {
     const queryClient = useQueryClient();
 
     const {
@@ -26,9 +26,9 @@ export const useAddKnowledge = () => {
         isError,
         error,
     } = useMutation({
-        mutationFn: (payload: any) => addKnowledge(payload),
+        mutationFn: (payload: any) => updateKnowledgeOrder(payload),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['knowledge-', '']});
+            queryClient.invalidateQueries({queryKey: [`knowledge-${categoryId}`, categoryId]});
         },
         onError: (error) => {
             toast.error(error?.message || 'Đã có lỗi xảy ra');

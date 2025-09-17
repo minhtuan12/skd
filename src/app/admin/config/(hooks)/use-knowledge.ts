@@ -1,7 +1,8 @@
 import {useQuery} from '@tanstack/react-query';
 
 const fetchKnowledge = async (categoryId: string) => {
-    const response = await fetch(`/api/admin/config/knowledge?category=${categoryId}`, {
+    const url = categoryId ? `/api/admin/config/knowledge?category=${categoryId}` : '/api/admin/config/knowledge';
+    const response = await fetch(url, {
         credentials: 'include',
     });
 
@@ -13,7 +14,7 @@ const fetchKnowledge = async (categoryId: string) => {
     return response.json();
 };
 
-export const useFetchKnowledge = (categoryId: string) => {
+export const useFetchKnowledge = (categoryId: string = '') => {
     const {
         data,
         isPending: loading,

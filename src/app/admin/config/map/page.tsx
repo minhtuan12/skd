@@ -151,7 +151,7 @@ export default function Map() {
                             <TableHeader className={'bg-[#f5f5f590]'}>
                                 <TableRow>
                                     <TableHead className={'text-center w-20'}>STT</TableHead>
-                                    <TableHead className={'text-center w-60'}>Bản đồ</TableHead>
+                                    <TableHead className={'text-center w-20'}>Bản đồ</TableHead>
                                     <TableHead className={'pl-5'}>Tên bản đồ</TableHead>
                                     <TableHead className={'pl-5'}>Nguồn</TableHead>
                                     <TableHead className={'text-center w-100'}>Hành động</TableHead>
@@ -161,7 +161,7 @@ export default function Map() {
                                 {(data?.maps || []).map((item: IMap, i: number) => (
                                     <TableRow key={item._id}>
                                         <TableCell className={'text-center'}>{i + 1}</TableCell>
-                                        <TableCell className="font-medium">
+                                        <TableCell className="font-medium w-20 h-20">
                                             <Image
                                                 src={item.image_url as string}
                                                 alt={item.name} width={0} height={0}

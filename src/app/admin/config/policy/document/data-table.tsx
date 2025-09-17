@@ -33,8 +33,8 @@ export default function DataTable(
         <Table className={'text-base'}>
             <TableHeader className={'bg-[#f5f5f590]'}>
                 <TableRow>
-                    <TableHead className={'text-center'}>Ưu tiên</TableHead>
-                    <TableHead className={'text-center w-80'}>Hình ảnh</TableHead>
+                    <TableHead className={'text-center w-10'}>Ưu tiên</TableHead>
+                    <TableHead className={'text-center w-20'}>Hình ảnh</TableHead>
                     <TableHead className={'pl-4 w-145'}>Chính sách</TableHead>
                     <TableHead className={'w-40 text-center'}>Slide</TableHead>
                     <TableHead className={'w-40 text-center'}>PDF</TableHead>
@@ -48,7 +48,7 @@ export default function DataTable(
                 <TableBody>
                     {data.map((item: IPolicyDocument, index: number) => (
                         <TableRow key={item._id}>
-                            <TableCell className={'text-center'}>
+                            <TableCell className={'text-center w-10'}>
                                 <Select
                                     value={(item.order as number).toString()}
                                     onValueChange={value => {
@@ -63,7 +63,7 @@ export default function DataTable(
                                     </SelectContent>
                                 </Select>
                             </TableCell>
-                            <TableCell className={'h-[170px] w-80'}>
+                            <TableCell className={'w-20 h-20'}>
                                 <Image
                                     src={item.image_url as string}
                                     alt={item.title} width={0} height={0}

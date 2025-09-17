@@ -142,6 +142,11 @@ export const sideBarItems = [
                         url: routes.Pages,
                         icon: TreePalm,
                     },
+                    {
+                        title: "Quản lý bài đăng",
+                        url: routes.Post,
+                        icon: TreePalm,
+                    },
                 ]
             },
             {

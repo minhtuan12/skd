@@ -3,40 +3,32 @@ import {Textarea} from "@/components/ui/textarea";
 import {SimpleEditor} from "@/components/tiptap-templates/simple/simple-editor";
 import {generateJSON} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
-import React, {useEffect} from "react";
+import React, {useMemo} from "react";
 import {IKnowledge} from "@/models/knowledge";
-import {IKnowledgeCategory} from "@/models/knowledge-category";
 import UploadFile from "@/app/admin/config/(components)/upload-file";
-import {Dot} from "lucide-react";
+import {Dot, Loader2} from "lucide-react";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Separator} from "@/components/ui/separator";
 import {Input} from "@/components/ui/input";
+import {useFetchKnowledge} from "@/app/admin/config/(hooks)/use-knowledge";
 
 export default function KnowledgeForm(
     {
         handleChangeFile,
-        hasSubCategories,
-        subCategories,
         data,
         imageUrl,
         handleChangeData,
         handleImageChange,
         handleChangeCheck,
-        otherPosts,
         handleSelectRelatedPosts,
-        handleSelectCategory
     }: {
         handleChangeFile: any,
-        hasSubCategories: boolean,
-        subCategories: any,
         data: IKnowledge,
         handleChangeData: any,
         imageUrl: string,
         handleImageChange?: any,
         handleChangeCheck: any,
-        otherPosts: IKnowledge[],
         handleSelectRelatedPosts: any
-        handleSelectCategory: any
     }) {
     const {
         name,
@@ -49,18 +41,11 @@ export default function KnowledgeForm(
         related_posts,
         video_url
     } = data;
-
-    useEffect(() => {
-        if (!hasSubCategories) {
-            handleChangeData([subCategories?.pages?._id], 'category');
-        } else {
-            if (!category) {
-                handleChangeData([subCategories?.pages?.children?.[0]?._id], 'category');
-            } else {
-                handleChangeData((category as IKnowledgeCategory[]).map(i => i._id), 'category')
-            }
-        }
-    }, [hasSubCategories]);
+    const {loading, data: otherPosts} = useFetchKnowledge();
+    const postSelection = useMemo(() =>
+            otherPosts?.knowledge?.filter((item: IKnowledge) => item._id !== data?._id),
+        [otherPosts]
+    );
 
     return <div className={'flex gap-8 h-full pb-10'}>
         <div className="space-y-5 w-1/3">
@@ -175,32 +160,13 @@ export default function KnowledgeForm(
                     </tr>
                     </tbody>
                 </table>
-                {hasSubCategories ?
-                    <div className="grid gap-2">
-                        <Label required htmlFor="category" className={'gap-0'}><Dot/>Nhóm vấn đề</Label>
-                        <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>
-                            {
-                                subCategories?.pages?.children?.map((group: IKnowledgeCategory) => (
-                                    <div className={'flex items-start gap-3'} key={group._id}>
-                                        <Checkbox
-                                            value={group._id}
-                                            checked={category.some(i => (i as string) === group._id)}
-                                            onCheckedChange={(checked) => handleSelectCategory(checked, group._id)}
-                                        />
-                                        <Label className={'font-normal'}>{group.name}</Label>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div> : ''
-                }
                 <div className="grid gap-2">
                     <Label className={'gap-0'}><Dot/> Các bài liên quan</Label>
-                    <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>
-                        {
-                            otherPosts?.filter((item: IKnowledge) => item._id !== data?._id)?.length > 0 ?
-                                otherPosts?.filter((item: IKnowledge) => item._id !== data?._id)
-                                    .map((item: IKnowledge) => (
+                    {loading ? <Loader2 className={'animate-spin w-5 h-5'}/> :
+                        <div className={'overflow-auto max-h-[400px] gap-3 flex flex-col border rounded-md p-3'}>
+                            {
+                                postSelection?.length > 0 ?
+                                    postSelection.map((item: IKnowledge) => (
                                         <div className={'flex items-start gap-3'} key={item._id}>
                                             <Checkbox
                                                 value={item._id}
@@ -210,8 +176,9 @@ export default function KnowledgeForm(
                                             <Label htmlFor={item._id} className={'font-normal'}>{item.name}</Label>
                                         </div>
                                     )) : <i>Chưa có bài mới</i>
-                        }
-                    </div>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </div>

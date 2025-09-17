@@ -3,6 +3,8 @@ import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import {withAuthWithContext} from "@/app/api/middleware";
 import KnowledgeCategory from "@/models/knowledge-category";
+import Knowledge from "@/models/knowledge";
+import KnowledgeOrder from "@/models/knowledge-order";
 
 const {ObjectId} = Types
 
@@ -21,11 +23,28 @@ async function deleteCategory(request: NextRequest, {params}: { params: Promise<
         }
 
         if (cate.children && cate.children.length > 0) {
-            await KnowledgeCategory.deleteMany({
-                _id: {$in: cate.children}
-            });
+            const idsToRemove = cate.children;
+            await Promise.all([
+                KnowledgeCategory.deleteMany({
+                    _id: {$in: idsToRemove}
+                }),
+                Knowledge.updateMany(
+                    {category: {$in: idsToRemove}},
+                    {$pull: {category: {$in: idsToRemove}}}
+                ),
+                KnowledgeOrder.deleteMany({category_id: {$in: idsToRemove}})
+            ]);
+        } else {
+            await Promise.all([
+                // remove categories from knowledge
+                await Knowledge.updateMany(
+                    {category: new ObjectId(id)},
+                    {$pull: {category: id}}
+                ),
+                await KnowledgeOrder.deleteMany({category_id: id})
+            ]);
         }
-        await KnowledgeCategory.deleteOne({_id: new ObjectId(id)});
+        await KnowledgeCategory.deleteOne({_id: new ObjectId(id)})
 
         return NextResponse.json(
             JSON.stringify({message: "Xóa thành công"}),

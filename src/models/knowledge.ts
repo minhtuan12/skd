@@ -22,7 +22,12 @@ export interface IKnowledge {
     video_url: string | null;
     related_posts: string[] | IKnowledge[],
     is_deleted?: boolean,
-    createdAt?: string
+    createdAt?: string,
+    category_id?: string | IKnowledgeCategory,
+    knowledge_id?: string | IKnowledge,
+    categories?: IKnowledgeCategory[],
+    knowledge?: IKnowledge,
+    order?: number;
 }
 
 const KnowledgeSchema = new Schema({

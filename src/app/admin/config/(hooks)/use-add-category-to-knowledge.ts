@@ -1,11 +1,12 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {toast} from "sonner";
 
-const deleteCategory = async (id: string) => {
-    if (id) {
-        const response = await fetch(`/api/admin/config/knowledge-category/delete/${id}`, {
+const addCategoryToKnowledge = async (data: any) => {
+    if (data.knowledgeId) {
+        const response = await fetch(`/api/admin/config/knowledge/page`, {
             credentials: 'include',
-            method: 'DELETE',
+            method: 'POST',
+            body: JSON.stringify({data}),
         });
 
         if (!response.ok) {
@@ -17,7 +18,7 @@ const deleteCategory = async (id: string) => {
     }
 };
 
-export const useDeleteCategory = () => {
+export const useAddCategoryToKnowledge = (categoryId: string = '') => {
     const queryClient = useQueryClient();
 
     const {
@@ -27,9 +28,9 @@ export const useDeleteCategory = () => {
         isError,
         error,
     } = useMutation({
-        mutationFn: (payload: any) => deleteCategory(payload),
+        mutationFn: (payload: any) => addCategoryToKnowledge(payload),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['knowledge-category-admin']});
+            queryClient.invalidateQueries({queryKey: [`knowledge-${categoryId}`, categoryId]});
         },
         onError: (error) => {
             toast.error(error?.message || 'Đã có lỗi xảy ra');

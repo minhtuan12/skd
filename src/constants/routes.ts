@@ -13,6 +13,7 @@ export const routes = {
     // Knowledge
     KnowledgeConfig: '/admin/config/knowledge',
     Pages: '/pages',
+    Post: '/post',
     // Map
     MapConfig: '/admin/config/map',
     LabConfig: '/admin/config/lab',

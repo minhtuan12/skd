@@ -3,6 +3,8 @@ import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import {withAuthWithContext} from "@/app/api/middleware";
 import KnowledgeCategory from "@/models/knowledge-category";
+import Knowledge from "@/models/knowledge";
+import KnowledgeOrder from "@/models/knowledge-order";
 
 const {ObjectId} = Types
 
@@ -65,6 +67,30 @@ async function updateKnowledgeCategory(request: NextRequest, {params}: { params:
         parent.name = data.name;
         parent.children = childrenIds;
         await parent.save();
+        await Promise.all([
+            Knowledge.updateMany(
+                {category: {$in: toDelete}},
+                {$pull: {category: {$in: toDelete}}}
+            ),
+            KnowledgeOrder.deleteMany({category_id: {$in: toDelete}})
+        ]);
+        if (oldChildren.length === 0 && data.children.length > 0) {
+            await Promise.all([
+                Knowledge.updateOne(
+                    {category: id},
+                    {$set: {category: []}}
+                ),
+                KnowledgeOrder.deleteMany({category_id: id})
+            ]);
+        } else if (oldChildren.length > 0 && data.children.length === 0) {
+            await Promise.all([
+                Knowledge.updateMany(
+                    {category: {$in: oldChildren}},
+                    {$set: {category: []}}
+                ),
+                KnowledgeOrder.deleteMany({category_id: {$in: oldChildren}})
+            ]);
+        }
 
         return NextResponse.json(
             JSON.stringify({message: "Cập nhật thành công"}),
@@ -94,7 +120,6 @@ async function changeVisibility(request: NextRequest, {params}: { params: Promis
         }
 
         const isDeleted = cate.is_deleted;
-        // TODO: khi lấy các bài ra thì check để bỏ những bài thuộc trang bị ẩn
         await KnowledgeCategory.findOneAndUpdate({
             _id: new ObjectId(id)
         }, {
