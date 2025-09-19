@@ -140,6 +140,26 @@ class CloudinaryService {
         }
     }
 
+    async listImages(folder: string = '', maxResults: number = 30): Promise<any> {
+        try {
+            const result = await cloudinary.api.resources({
+                type: 'upload',
+                resource_type: "image",
+                prefix: folder,
+                max_results: maxResults
+            });
+            return {
+                ...result,
+                resources: result.resources.filter((r: any) =>
+                    ["jpg", "jpeg", "png", "webp", "gif"].includes(r.format)
+                )
+            };
+        } catch (error: any) {
+            console.error('List files error:', error);
+            throw error;
+        }
+    }
+
     // Generate optimized URL
     generateOptimizedUrl(
         publicId: string,

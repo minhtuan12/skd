@@ -13,7 +13,8 @@ const initialState = {
         },
         agricultural_policy: [],
         knowledge_bank_video_url: '',
-        news_and_events: []
+        news_and_events: [],
+        ads: []
     },
     global: {},
     news: [],

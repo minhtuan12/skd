@@ -1,4 +1,4 @@
-import {model, models, Schema, Types} from "mongoose";
+import {model, models, Schema} from "mongoose";
 import {IPolicyDocument} from "@/models/policy-document";
 
 export interface INewsAndEvents {
@@ -13,6 +13,11 @@ export interface INewsAndEvents {
     createdAt?: string;
 }
 
+export interface IAds {
+    image_url: string | File;
+    link: string;
+}
+
 export interface IHomeConfig {
     banner: {
         title?: string;
@@ -25,64 +30,9 @@ export interface IHomeConfig {
     };
     agricultural_policy: string[] | IPolicyDocument[];
     knowledge_bank_video_url: string;
-    news_and_events: INewsAndEvents[]
+    news_and_events: INewsAndEvents[];
+    ads: IAds[]
 }
-
-export interface IPolicyConfig {
-    strategy: {
-        draft_ppt_link: string;
-        download_notification: string;
-    },
-    plan: {
-        draft_ppt_link: string;
-        download_notification: string;
-    },
-    document: {}
-}
-
-export interface IFooterConfig {
-    social: {
-        facebook_url: string;
-        youtube_url: string;
-        email: string;
-    },
-    contact: {
-        address: string,
-        phone: string,
-        email: string,
-    },
-    partners_and_sponsors: string[]
-}
-
-export interface IConfig {
-    _id?: string;
-    home: IHomeConfig;
-    footer: IFooterConfig;
-    news_events: INewsAndEvents[]
-}
-
-const NewsAndEventsSchema = new Schema({
-    image_url: {
-        type: String,
-        required: true
-    },
-    type: {
-        type: String,
-        required: true
-    },
-    date: {
-        type: String,
-        required: true
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    }
-}, {_id: true});
 
 const ConfigSchema = new Schema({
     home: {
@@ -121,7 +71,17 @@ const ConfigSchema = new Schema({
         news_and_events: {
             type: [Schema.Types.ObjectId],
             ref: "NewsEvents",
-        }
+        },
+        ads: [{
+            image_url: {
+                type: String,
+                required: true
+            },
+            link: {
+                type: String,
+                required: true
+            }
+        }]
     },
     policy: {
         strategy: {
@@ -129,60 +89,51 @@ const ConfigSchema = new Schema({
                 type: String,
                 required: true
             },
+            downloadable: {
+                type: Boolean,
+                default: true
+            },
             download_notification: {
                 type: String,
                 default: ''
-            }
+            },
+            downloads: [{
+                name: {
+                    type: String,
+                    required: true
+                },
+                file_url: {
+                    type: String,
+                    required: true
+                }
+            }]
         },
         plan: {
             draft_ppt_link: {
                 type: String,
                 required: true
             },
+            downloadable: {
+                type: Boolean,
+                default: true
+            },
             download_notification: {
                 type: String,
                 default: ''
-            }
+            },
+            downloads: [{
+                name: {
+                    type: String,
+                    required: true
+                },
+                file_url: {
+                    type: String,
+                    required: true
+                }
+            }]
         },
         document: {}
     },
-    footer: {
-        social: {
-            facebook_url: {
-                type: String,
-                required: false,
-                default: ''
-            },
-            youtube_url: {
-                type: String,
-                required: false,
-                default: ''
-            },
-            email: {
-                type: String,
-                required: false,
-                default: ''
-            }
-        },
-        contact: {
-            address: {
-                type: String,
-                required: true
-            },
-            phone: {
-                type: String,
-                required: true
-            },
-            email: {
-                type: String,
-                required: true
-            }
-        },
-        partners_and_sponsors: [{
-            type: String,
-            required: true
-        }]
-    }
 }, {
     timestamps: true
 });

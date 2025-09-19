@@ -60,21 +60,32 @@ export default function ({params}: { params: Promise<{ category: string }> }) {
         ]))
     }, [])
 
-    const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>, key: string, index = -1) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0]
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setNewKnowledge((prev: any) => ({
-                    ...prev,
-                    media: {
-                        media_type: 'image',
-                        url: file
-                    }
-                }))
-                setMediaUrl(reader.result as string);
+    const handleChangeImage = (e: any, key: string, index = -1) => {
+        if (typeof e !== 'string') {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0]
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setNewKnowledge((prev: any) => ({
+                        ...prev,
+                        media: {
+                            media_type: 'image',
+                            url: file
+                        }
+                    }))
+                    setMediaUrl(reader.result as string);
+                }
+                reader.readAsDataURL(file)
             }
-            reader.readAsDataURL(file)
+        } else {
+            setNewKnowledge((prev: any) => ({
+                ...prev,
+                media: {
+                    media_type: 'image',
+                    url: e
+                }
+            }))
+            setMediaUrl(e as string);
         }
     }
 

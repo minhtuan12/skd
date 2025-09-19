@@ -4,7 +4,7 @@ import {ArrowRight, ChevronRight} from "lucide-react";
 import CardWithTitle from "@/components/custom/card-with-title";
 import {VideoPlayer} from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
-import {INewsAndEvents} from "@/models/config";
+import {IAds, INewsAndEvents} from "@/models/config";
 import {dateOptions, mainColors, NEWS_EVENTS} from "@/constants/common";
 import Image from "next/image";
 import {IPolicyDocument} from "@/models/policy-document";
@@ -91,7 +91,7 @@ export default async function Home() {
                     <Link href="/ban-do/ban-do-dat"
                           className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                         bản
-                        đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
+                        đồ <ChevronRight width={13}/></Link>
                 </CardWithTitle>
 
                 <CardWithTitle
@@ -119,7 +119,7 @@ export default async function Home() {
                     <Link href="/ban-do/cac-trung-tam-quan-trac-dat"
                           className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                         tài liệu
-                        <ChevronRight width={13} className={'mt-[3px]'}/></Link>
+                        <ChevronRight width={13}/></Link>
                 </CardWithTitle>
 
                 <div className={'flex flex-col gap-5 max-md:h-auto h-[600px] lg:h-auto'}>
@@ -146,7 +146,7 @@ export default async function Home() {
                         <Link href="/thong-tin-chinh-sach/chinh-sach/1"
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">
                             Xem chính sách
-                            <ChevronRight width={13} className={'mt-[3px]'}/></Link>
+                            <ChevronRight width={13}/></Link>
                     </CardWithTitle>
                     <CardWithTitle
                         border title={'Ngân hàng kiến thức'} bgTitleColor={`bg-[${mainColors[3]}]`}
@@ -157,7 +157,7 @@ export default async function Home() {
                         <Link href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                             tài liệu
-                            <ChevronRight width={13} className={'mt-[3px]'}/></Link>
+                            <ChevronRight width={13}/></Link>
                     </CardWithTitle>
                 </div>
             </section>
@@ -205,6 +205,38 @@ export default async function Home() {
                       className={'text-blue-600 font-medium flex items-center justify-end mt-5'}>Xem thêm <ChevronRight
                     className={'w-4 h-4 text-blue-600 mt-0.5'}/></Link>
             </AnimatedSection>
+
+            {/* Ads */}
+            {home?.ads?.length > 0 ?
+                <div className={'bg-[#FAF9FF] box-border h-auto pt-10'}>
+                    <AnimatedSection
+                        asTag={'section'}
+                        className="mx-auto px-10 lg:px-10 xl:px-40 pb-30"
+                        initial={{opacity: 0}}
+                        whileInView={{opacity: 1}}
+                        transition={{duration: 0.5}}
+                        viewport={{once: true}}
+                    >
+                        <h2 className="text-2xl font-semibold text-center">Quảng cáo</h2>
+                        <div
+                            className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 mt-12 place-items-center">
+                            {
+                                home.ads.map((item: IAds, i: number) => {
+                                    return <Link
+                                        href={item.link} key={i} target={'_blank'}
+                                        className={'relative w-full border-gray-300 border rounded rounded-b-[5px] shadow-lg aspect-[16/9]'}
+                                    >
+                                        <Image
+                                            src={item.image_url as string} alt={item.link} fill
+                                            className={'object-fit w-full h-full rounded rounded-b-[5px]'}
+                                        />
+                                    </Link>
+                                })
+                            }
+                        </div>
+                    </AnimatedSection>
+                </div> : ''
+            }
         </>
     );
 }

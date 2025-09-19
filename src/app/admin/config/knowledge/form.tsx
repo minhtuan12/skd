@@ -62,7 +62,7 @@ export default function KnowledgeForm(
                     <UploadFile
                         inputValue={''}
                         url={(imageUrl && imageUrl !== '/') ? imageUrl : media?.url as string}
-                        handleChangeFile={e => handleImageChange(e, 'media')}
+                        handleChangeFile={(e: any) => handleImageChange(e, 'media')}
                     />
                 </div>
                 <Separator/>

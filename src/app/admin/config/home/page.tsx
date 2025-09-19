@@ -26,6 +26,7 @@ export default function HomeConfig() {
     const homeConfig = useSelector((state: RootState) => state.config.home);
     const [cloneConfig, setCloneConfig] = useState<IHomeConfig>(homeConfig);
     const [heroImage, setHeroImage] = useState([""]);
+    const [adsImage, setAdsImage] = useState([""]);
     const [introductionImage, setIntroductionImage] = useState("");
     const dispatch = useDispatch();
     const [newsImageUrls, setNewsImageUrls] = useState<string[]>([]);
@@ -59,71 +60,145 @@ export default function HomeConfig() {
         cloneConfigRef.current = cloneConfig;
     }, [cloneConfig]);
 
-    const handleHeroImageChange = (e: React.ChangeEvent<HTMLInputElement>, key: string, index = -1) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0]
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                // set new preview image url
-                if (key.includes('banner') && index >= 0) {
+    const handleHeroImageChange = (e: any, key: string, index = -1) => {
+        if (typeof e !== 'string') {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0]
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    // set new preview image url
+                    if ((key.includes('banner') || key.includes('ads')) && index >= 0) {
+                        if (key.includes('banner')) {
+                            setHeroImage([
+                                ...heroImage.slice(0, index),
+                                reader.result as string,
+                                ...heroImage.slice(index + 1)
+                            ]);
+                        } else if (key.includes('ads')) {
+                            setAdsImage([
+                                ...adsImage.slice(0, index),
+                                reader.result as string,
+                                ...adsImage.slice(index + 1)
+                            ]);
+                        }
+                        setFileInputValue(prev => [file.name, ...prev.slice(1)]);
+                    } else if (key.includes('introduction')) {
+                        setIntroductionImage(reader.result as string);
+                        setFileInputValue(prev => [...prev.slice(0, 1), file.name, ...prev.slice(2)]);
+                    }
+
+                    // set new state for config
+                    if (key.includes('.')) {
+                        if (index >= 0) {
+                            const [parent, child] = key.split('.');
+                            setCloneConfig(prev => ({
+                                ...prev,
+                                [parent]: [
+                                    ...(prev[parent as keyof typeof prev] as any).slice(0, index),
+                                    {
+                                        ...(prev[parent as keyof typeof prev] as any)[index],
+                                        image_url: file
+                                    },
+                                    ...(prev[parent as keyof typeof prev] as any).slice(index + 1)
+                                ]
+                            }))
+                        } else {
+                            const [parent, child] = key.split('.');
+                            setCloneConfig(prev => ({
+                                ...prev,
+                                [parent]: {
+                                    ...prev[parent as keyof typeof cloneConfig] as any,
+                                    [child]: file
+                                }
+                            }))
+                        }
+                    } else {
+                        setCloneConfig({
+                            ...cloneConfig,
+                            [key]: file
+                        })
+                    }
+                }
+                reader.readAsDataURL(file)
+            }
+        } else {
+            if ((key.includes('banner') || key.includes('ads')) && index >= 0) {
+                if (key.includes('banner')) {
                     setHeroImage([
                         ...heroImage.slice(0, index),
-                        reader.result as string,
+                        e as string,
                         ...heroImage.slice(index + 1)
                     ]);
-                    setFileInputValue(prev => [file.name, ...prev.slice(1)]);
-                } else if (key.includes('introduction')) {
-                    setIntroductionImage(reader.result as string);
-                    setFileInputValue(prev => [...prev.slice(0, 1), file.name, ...prev.slice(2)]);
+                } else if (key.includes('ads')) {
+                    setAdsImage([
+                        ...adsImage.slice(0, index),
+                        e as string,
+                        ...adsImage.slice(index + 1)
+                    ]);
                 }
+            } else if (key.includes('introduction')) {
+                setIntroductionImage(e as string);
+            }
 
-                // set new state for config
-                if (key.includes('.')) {
-                    if (index >= 0) {
+            // set new state for config
+            if (key.includes('.')) {
+                if (index >= 0) {
+                    if (key.includes('banner')) {
                         setCloneConfig(prev => ({
                             ...prev,
                             banner: [
                                 ...prev.banner.slice(0, index),
                                 {
                                     ...prev.banner[index],
-                                    image_url: file
+                                    image_url: e
                                 },
                                 ...prev.banner.slice(index + 1)
                             ]
                         }))
-                    } else {
-                        const [parent, child] = key.split('.');
+                    } else if (key.includes('ads')) {
                         setCloneConfig(prev => ({
                             ...prev,
-                            [parent]: {
-                                ...prev[parent as keyof typeof cloneConfig] as any,
-                                [child]: file
-                            }
+                            ads: [
+                                ...prev.ads.slice(0, index),
+                                {
+                                    ...prev.ads[index],
+                                    image_url: e
+                                },
+                                ...prev.ads.slice(index + 1)
+                            ]
                         }))
                     }
                 } else {
-                    setCloneConfig({
-                        ...cloneConfig,
-                        [key]: file
-                    })
+                    const [parent, child] = key.split('.');
+                    setCloneConfig(prev => ({
+                        ...prev,
+                        [parent]: {
+                            ...prev[parent as keyof typeof cloneConfig] as any,
+                            [child]: e
+                        }
+                    }))
                 }
+            } else {
+                setCloneConfig({
+                    ...cloneConfig,
+                    [key]: e
+                })
             }
-            reader.readAsDataURL(file)
         }
     }
 
     const handleChangeInput = (value: string, key: string) => {
-        if (key.includes('banner')) {
-            const [_, index, field] = key.split('.');
+        if (key.includes('banner') || key.includes('ads')) {
+            const [parent, index, field] = key.split('.');
             setCloneConfig(prev => ({
                 ...prev,
-                banner: [
-                    ...prev.banner.slice(0, Number(index)),
+                [parent]: [
+                    ...(prev[parent as keyof typeof prev] as any).slice(0, Number(index)),
                     {
-                        ...prev.banner[Number(index)],
+                        ...(prev[parent as keyof typeof prev] as any)[Number(index)],
                         [field]: value
                     },
-                    ...prev.banner.slice(Number(index) + 1)
+                    ...(prev[parent as keyof typeof prev] as any).slice(Number(index) + 1)
                 ]
             } as any))
         } else if (key.includes('.')) {
@@ -146,6 +221,7 @@ export default function HomeConfig() {
     const handleResetValue = () => {
         setCloneConfig(homeConfigRef.current);
         setHeroImage(homeConfigRef.current.banner.map(i => i.image_url));
+        setAdsImage(homeConfigRef.current.ads.map((i: any) => i.image_url));
         setIntroductionImage(homeConfigRef.current.introduction.image_url);
         setFileInputValue(['', '', '']);
         toast.info('Đã hủy các thay đổi');
@@ -153,7 +229,10 @@ export default function HomeConfig() {
 
     const validate = () => {
         const currentConfig = cloneConfigRef.current;
-        if (!currentConfig.introduction.image_url || !currentConfig.introduction.content || currentConfig.banner.some(i => i.image_url === '')) {
+        if (!currentConfig.introduction.image_url || !currentConfig.introduction.content ||
+            currentConfig.banner.some(i => i.image_url === '') ||
+            currentConfig.ads.some(i => i.image_url === '' || i.link === '')
+        ) {
             return false;
         }
         return true;
@@ -162,12 +241,16 @@ export default function HomeConfig() {
     // call api upload files
     const handleUploadFiles = () => {
         const currentConfig = cloneConfigRef.current;
-        const oldConfig = homeConfigRef.current;
         const formData = new FormData();
         let uploadFiles = [
             ...currentConfig.banner.map((i, index) => ({
                 file: i.image_url,
                 key: `banner.${index}`,
+                type: 'image',
+            })),
+            ...currentConfig.ads.map((i, index) => ({
+                file: i.image_url,
+                key: `ads.${index}`,
                 type: 'image',
             })),
             {
@@ -190,17 +273,17 @@ export default function HomeConfig() {
                     let newConfig = cloneConfigRef.current;
                     const files = res.data;
                     for (let file of files) {
-                        if (file.key.includes('banner')) {
-                            const [_, index] = file.key.split('.');
+                        if (file.key.includes('banner') || file.key.includes('ads')) {
+                            const [parent, index] = file.key.split('.');
                             newConfig = {
                                 ...newConfig,
-                                banner: [
-                                    ...newConfig.banner.slice(0, index),
+                                [parent]: [
+                                    ...(newConfig[parent as keyof typeof newConfig] as any).slice(0, index),
                                     {
-                                        ...newConfig.banner[index],
+                                        ...(newConfig[parent as keyof typeof newConfig] as any)[index],
                                         image_url: file.url
                                     },
-                                    ...newConfig.banner.slice(index + 1)
+                                    ...(newConfig[parent as keyof typeof newConfig] as any).slice(index + 1)
                                 ]
                             }
                         } else if (file.key.includes('introduction')) {
@@ -241,6 +324,10 @@ export default function HomeConfig() {
                 title: item.title,
                 description: item.description,
                 image_url: (item.image_url as string).trim()
+            })),
+            ads: newConfig.ads.map((i: any) => ({
+                image_url: (i.image_url as string).trim(),
+                link: i.link.trim()
             }))
         }
         mutate(updatedConfig, {
@@ -289,88 +376,101 @@ export default function HomeConfig() {
                 <div className={'grid gap-4 grid-rows-[auto_auto]'}>
                     <div className={'grid gap-4 grid-cols-1 xl:grid-cols-2 row-span-1'}>
                         {/* Banner */}
-                        <CustomCard
-                            title={'Banner'}
-                            description={'Cập nhật tiêu đề và mô tả'}
-                            className={'sm:col-span-1'}
-                        >
-                            <Button className={'w-full mb-4'} onClick={() => {
-                                setCloneConfig({
-                                    ...cloneConfig,
-                                    banner: [
-                                        ...cloneConfig.banner,
-                                        {
-                                            title: '',
-                                            description: '',
-                                            image_url: ''
-                                        }
-                                    ]
-                                })
-                            }}><Plus/> Thêm banner</Button>
-                            <div className={'overflow-auto max-h-[650px] flex flex-col gap-3'}>
-                                {
-                                    cloneConfig.banner.map((item, index) => (
-                                        <Accordion type="single" collapsible key={index}
-                                                   className="w-full border rounded-md shadow-sm">
-                                            <AccordionItem value="item-1">
-                                                <AccordionTrigger
-                                                    className="h-[50px] cursor-pointer px-4 flex items-center justify-between text-base font-medium w-full hover:no-underline">
-                                                    <div className={'text-ellipsis w-full overflow-hidden whitespace-nowrap'}>
-                                                        Banner {index + 1}
-                                                    </div>
-                                                    {
-                                                        cloneConfig.banner.length > 1 ? <Trash className={'text-red-400 !transform-none !rotate-0'} onClick={() => {
-                                                            setCloneConfig({
-                                                                ...cloneConfig,
-                                                                banner: [
-                                                                    ...cloneConfig.banner.slice(0, index),
-                                                                    ...cloneConfig.banner.slice(index + 1)
-                                                                ]
-                                                            })
-                                                        }}/> : ''
-                                                    }
-                                                </AccordionTrigger>
-                                                <AccordionContent className="p-4 border-t bg-gray-100/80">
-                                                    <div className="grid gap-4">
-                                                        <div className="grid gap-2">
-                                                            <Label htmlFor="title">Tiêu đề thứ {index + 1}</Label>
-                                                            <Input
-                                                                className={'bg-white'}
-                                                                id="title"
-                                                                type="text"
-                                                                placeholder="Nhập tiêu đề"
-                                                                value={item.title}
-                                                                onChange={(e) => handleChangeInput(e.target.value, `banner.${index}.title`)}
-                                                            />
+                        <div className={'grid grid-rows-1 gap-4'}>
+                            <CustomCard
+                                title={'Banner'}
+                                description={'Cập nhật tiêu đề và mô tả'}
+                                className={'sm:col-span-1'}
+                            >
+                                <Button className={'w-full mb-4'} onClick={() => {
+                                    setCloneConfig({
+                                        ...cloneConfig,
+                                        banner: [
+                                            ...cloneConfig.banner,
+                                            {
+                                                title: '',
+                                                description: '',
+                                                image_url: ''
+                                            }
+                                        ]
+                                    })
+                                }}><Plus/> Thêm banner</Button>
+                                <div className={'overflow-auto max-h-[650px] flex flex-col gap-3'}>
+                                    {
+                                        cloneConfig.banner.map((item, index) => (
+                                            <Accordion type="single" collapsible key={index}
+                                                       className="w-full border rounded-md shadow-sm">
+                                                <AccordionItem value="item-1">
+                                                    <AccordionTrigger
+                                                        className="h-[50px] cursor-pointer px-4 flex items-center justify-between text-base font-medium w-full hover:no-underline">
+                                                        <div
+                                                            className={'text-ellipsis w-full overflow-hidden whitespace-nowrap'}>
+                                                            Banner {index + 1}
                                                         </div>
-                                                        <div className="grid gap-2">
-                                                            <Label htmlFor="description">Mô tả
-                                                                thứ {index + 1}</Label>
-                                                            <Textarea
-                                                                className={'bg-white'}
-                                                                id="description"
-                                                                placeholder="Nhập mô tả"
-                                                                value={item.description}
-                                                                onChange={(e) => handleChangeInput(e.target.value, `banner.${index}.description`)}
-                                                            />
+                                                        {
+                                                            cloneConfig.banner.length > 1 ? <Trash
+                                                                className={'text-red-400 !transform-none !rotate-0'}
+                                                                onClick={() => {
+                                                                    setCloneConfig({
+                                                                        ...cloneConfig,
+                                                                        banner: [
+                                                                            ...cloneConfig.banner.slice(0, index),
+                                                                            ...cloneConfig.banner.slice(index + 1)
+                                                                        ]
+                                                                    })
+                                                                }}/> : ''
+                                                        }
+                                                    </AccordionTrigger>
+                                                    <AccordionContent className="p-4 border-t bg-gray-100/80">
+                                                        <div className="grid gap-4">
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor="title">Tiêu đề thứ {index + 1}</Label>
+                                                                <Input
+                                                                    className={'bg-white'}
+                                                                    id="title"
+                                                                    type="text"
+                                                                    placeholder="Nhập tiêu đề"
+                                                                    value={item.title}
+                                                                    onChange={(e) => handleChangeInput(e.target.value, `banner.${index}.title`)}
+                                                                />
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor="description">Mô tả
+                                                                    thứ {index + 1}</Label>
+                                                                <Textarea
+                                                                    className={'bg-white'}
+                                                                    id="description"
+                                                                    placeholder="Nhập mô tả"
+                                                                    value={item.description}
+                                                                    onChange={(e) => handleChangeInput(e.target.value, `banner.${index}.description`)}
+                                                                />
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor="image" required>Hình ảnh
+                                                                    thứ {index + 1}</Label>
+                                                                <UploadFile
+                                                                    inputValue={''}
+                                                                    handleChangeFile={(e: any) => handleHeroImageChange(e, 'banner.image_url', index)}
+                                                                    url={heroImage[index]}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        <div className="grid gap-2">
-                                                            <Label htmlFor="image" required>Hình ảnh
-                                                                thứ {index + 1}</Label>
-                                                            <UploadFile
-                                                                inputValue={''}
-                                                                handleChangeFile={e => handleHeroImageChange(e, 'banner.image_url', index)}
-                                                                url={heroImage[index]}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        </Accordion>
-                                    ))
-                                }
-                            </div>
-                        </CustomCard>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        ))
+                                    }
+                                </div>
+                            </CustomCard>
+
+                            {/* News and events */}
+                            <NewsAndEvents
+                                readonly
+                                newsAndEvents={cloneConfig.news_and_events}
+                                handleChangeImage={handleHeroImageChange} imageUrls={newsImageUrls}
+                                setCloneConfig={setCloneConfig}
+                            />
+                        </div>
 
                         <div className={'grid grid-rows-1 gap-4'}>
                             {/* Introduction */}
@@ -392,7 +492,7 @@ export default function HomeConfig() {
                                     <UploadFile
                                         inputValue={fileInputValue[1]}
                                         url={introductionImage}
-                                        handleChangeFile={e => handleHeroImageChange(e, 'introduction.image_url')}/>
+                                        handleChangeFile={(e: any) => handleHeroImageChange(e, 'introduction.image_url')}/>
                                 </div>
                             </CustomCard>
 
@@ -404,13 +504,82 @@ export default function HomeConfig() {
                         </div>
                     </div>
                     <div className={'grid gap-4 grid-cols-1 xl:grid-cols-2 h-fit'}>
-                        {/* News and events */}
-                        <NewsAndEvents
-                            readonly
-                            newsAndEvents={cloneConfig.news_and_events}
-                            handleChangeImage={handleHeroImageChange} imageUrls={newsImageUrls}
-                            setCloneConfig={setCloneConfig}
-                        />
+                        {/* Ads */}
+                        <CustomCard
+                            title={'Quảng cáo'}
+                            description={'Cập nhật quảng cáo'}
+                            className={'sm:col-span-1'}
+                        >
+                            <Button className={'w-full mb-4'} onClick={() => {
+                                setCloneConfig({
+                                    ...cloneConfig,
+                                    ads: [
+                                        ...cloneConfig.ads,
+                                        {
+                                            link: '',
+                                            image_url: ''
+                                        }
+                                    ]
+                                })
+                            }}><Plus/> Thêm quảng cáo</Button>
+                            <div className={'overflow-auto max-h-[650px] flex flex-col gap-3'}>
+                                {
+                                    cloneConfig.ads.map((item, index) => (
+                                        <Accordion
+                                            type="single" collapsible key={index}
+                                            className="w-full border rounded-md shadow-sm"
+                                        >
+                                            <AccordionItem value="item-1">
+                                                <AccordionTrigger
+                                                    className="h-[50px] cursor-pointer px-4 flex items-center justify-between text-base font-medium w-full hover:no-underline">
+                                                    <div
+                                                        className={'text-ellipsis w-full overflow-hidden whitespace-nowrap'}>
+                                                        Quảng cáo {index + 1}
+                                                    </div>
+                                                    {
+                                                        cloneConfig.ads.length > 1 ?
+                                                            <Trash className={'text-red-400 !transform-none !rotate-0'}
+                                                                   onClick={() => {
+                                                                       setCloneConfig({
+                                                                           ...cloneConfig,
+                                                                           ads: [
+                                                                               ...cloneConfig.ads.slice(0, index),
+                                                                               ...cloneConfig.ads.slice(index + 1)
+                                                                           ]
+                                                                       })
+                                                                   }}/> : ''
+                                                    }
+                                                </AccordionTrigger>
+                                                <AccordionContent className="p-4 border-t bg-gray-100/80">
+                                                    <div className="grid gap-4">
+                                                        <div className="grid gap-2">
+                                                            <Label required htmlFor="link">Link thứ {index + 1}</Label>
+                                                            <Input
+                                                                className={'bg-white'}
+                                                                id="link"
+                                                                type="text"
+                                                                placeholder="Nhập link"
+                                                                value={item.link}
+                                                                onChange={(e) => handleChangeInput(e.target.value, `ads.${index}.link`)}
+                                                            />
+                                                        </div>
+                                                        <div className="grid gap-2">
+                                                            <Label htmlFor="image" required>Hình ảnh
+                                                                thứ {index + 1}</Label>
+                                                            <UploadFile
+                                                                inputValue={''}
+                                                                handleChangeFile={(e: any) => handleHeroImageChange(e, 'ads.image_url', index)}
+                                                                url={adsImage[index]}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    ))
+                                }
+                            </div>
+                        </CustomCard>
 
                         {/* Knowledge bank video */}
                         <CustomCard

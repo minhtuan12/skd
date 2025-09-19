@@ -61,26 +61,34 @@ export default function NewsConfig() {
         activeTabRef.current = currentTab;
     }, [currentTab]);
 
-    const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>, key: string, index = -1) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0]
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setFiles((prev: string[]) => {
-                    const copy = [...prev];
-                    while (copy.length <= index) {
-                        copy.push("");
-                    }
-                    copy[index as any] = file.name;
-                    return copy;
-                })
-                setNewNewsEvent((prev: any) => ({
-                    ...prev,
-                    image_url: file
-                }))
-                setImageUrl(reader.result as string);
+    const handleChangeImage = (e: any, key: string, index = -1) => {
+        if (typeof e !== 'string') {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0]
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setFiles((prev: string[]) => {
+                        const copy = [...prev];
+                        while (copy.length <= index) {
+                            copy.push("");
+                        }
+                        copy[index as any] = file.name;
+                        return copy;
+                    })
+                    setNewNewsEvent((prev: any) => ({
+                        ...prev,
+                        image_url: file
+                    }))
+                    setImageUrl(reader.result as string);
+                }
+                reader.readAsDataURL(file)
             }
-            reader.readAsDataURL(file)
+        } else {
+            setNewNewsEvent((prev: any) => ({
+                ...prev,
+                image_url: e
+            }))
+            setImageUrl(e as string);
         }
     }
 

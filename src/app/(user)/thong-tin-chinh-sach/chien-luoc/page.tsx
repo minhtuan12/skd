@@ -11,7 +11,8 @@ async function fetchStrategyConfig() {
         return {
             draft_ppt_link: '#',
             download_notification: '',
-            slides: []
+            slides: [],
+            downloadable: false,
         };
     }
 }
@@ -32,6 +33,8 @@ export default async function ChienLuoc() {
                             </div> : <PptViewer
                                 slides={policy.slides} pptUrl={''}
                                 downloadNotification={policy.download_notification}
+                                downloadable={policy.downloadable}
+                                downloads={policy.downloads}
                             />
                     )
                 }

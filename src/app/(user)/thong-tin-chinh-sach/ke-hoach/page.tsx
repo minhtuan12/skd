@@ -10,7 +10,9 @@ async function fetchPlanConfig() {
         console.error(error);
         return {
             draft_ppt_link: '#',
-            slides: []
+            slides: [],
+            downloadable: false,
+            download_notification: ''
         };
     }
 }
@@ -31,6 +33,8 @@ export default async function ChienLuoc() {
                             </div> : <PptViewer
                                 slides={policy.slides} pptUrl={''}
                                 downloadNotification={policy.download_notification}
+                                downloadable={policy.downloadable}
+                                downloads={policy.downloads}
                             />
                     )
                 }

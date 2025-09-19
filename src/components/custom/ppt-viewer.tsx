@@ -10,7 +10,8 @@ interface PowerpointViewerProps {
     slides: string[];
     pptUrl: string;
     downloadNotification?: string,
-    downloadable?: boolean
+    downloadable?: boolean,
+    downloads?: { name: string, file_url: string }[]
 }
 
 export default function PowerpointViewer(
@@ -18,7 +19,8 @@ export default function PowerpointViewer(
         slides,
         pptUrl,
         downloadNotification = 'Trang web đang thử nghiệm, chưa hỗ trợ download, xin liên hệ admin',
-        downloadable = true
+        downloadable = true,
+        downloads
     }: PowerpointViewerProps) {
     const [current, setCurrent] = useState(0);
     const thumbnailsRef = useRef<HTMLDivElement>(null);
@@ -81,18 +83,30 @@ export default function PowerpointViewer(
                     </Button>
                 </div>
             </div>
-            {downloadable ?
-                <div className="w-full max-w-5xl flex justify-start">
-                    <a className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'} href={pptUrl} onClick={(e) => {
+            <div className="w-full max-w-5xl flex flex-col gap-1 justify-start">
+                {downloadable ?
+                    <a className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
+                       href={pptUrl} onClick={(e) => {
                         e.preventDefault();
                         if (downloadNotification) {
                             toast.info(downloadNotification)
                         }
                     }}>
-                        Tải xuống
-                    </a>
-                </div> : ''
-            }
+                        Tải xuống bản trình chiếu
+                    </a> : ''
+                }
+                {
+                    (downloads && downloads?.length > 0) ? downloads.map((item: any, index: number) => (
+                        <a
+                            key={index}
+                            className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
+                            href={item.file_url}
+                        >
+                            Tải xuống {item.name}
+                        </a>
+                    )) : ''
+                }
+            </div>
         </div>
     );
 }

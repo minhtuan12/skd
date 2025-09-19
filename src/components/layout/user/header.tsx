@@ -1,13 +1,20 @@
 import Image from "next/image";
 import {Menu, menu} from "@/constants/menu";
 import Link from "next/link";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import {ChevronDown, House, Search} from "lucide-react";
+import {House, Search} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
 import {buildDetailPath} from "@/lib/utils";
 import {routes} from "@/constants/routes";
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -64,9 +71,9 @@ export default async function Header() {
                             <div className={'w-[114px] h-8 relative'}>
                                 <Image src={'/logos/fao_logo.png'} alt={''} fill/>
                             </div>
-                            <div className={'w-[137px] h-8 relative'}>
+                            <Link target={'_blank'} href={'https://sfri.org.vn/'} className={'w-[137px] h-8 relative'}>
                                 <Image src={'/logos/institute_logo.png'} alt={''} fill/>
-                            </div>
+                            </Link>
                             <div className={'w-[73px] h-8 relative'}>
                                 <Image src={'/logos/aei_logo.png'} alt={''} fill/>
                             </div>
@@ -87,35 +94,35 @@ export default async function Header() {
                         className="container max-[1024px]:hidden flex items-center justify-between text-black 2xl:text-[17px] text-sm">
                         <nav
                             className="items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
-                            {
-                                menuItems.map((item: Menu, index: number) => (
-                                    !item?.children ? <Link key={index} href={item.href} className={'flex w-fit'}>
-                                            <House/>
-                                        </Link> :
-                                        <DropdownMenu key={index}>
-                                            <DropdownMenuTrigger textOnly>
-                                                <div className={'flex items-center'}>
-                                                    <div className={'hover:opacity-80'}>{item.title}</div>
-                                                    <ChevronDown
-                                                        width={14}
-                                                        className={'mt-[2px]'}
-                                                    />
-                                                </div>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                {item.children.map((child: Menu, i: number) =>
-                                                    <DropdownMenuLabel key={i}>
-                                                        <Link
-                                                            href={item.href + child.href + (child.hasPages ? '/1' : '')}
-                                                            className={'w-full block'}
-                                                        >
-                                                            {child.title}
-                                                        </Link>
-                                                    </DropdownMenuLabel>)}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                ))
-                            }
+                            <NavigationMenu viewport={false}>
+                                <NavigationMenuList>
+                                    {
+                                        menuItems.map((item: Menu, index: number) => (
+                                            !item?.children ?
+                                                <Link key={index} href={item.href} className={'flex w-fit -mt-0.5'}>
+                                                    <House/>
+                                                </Link> :
+                                                <NavigationMenuItem key={index}>
+                                                    <NavigationMenuTrigger>
+                                                        {item.title}
+                                                    </NavigationMenuTrigger>
+                                                    <NavigationMenuContent className={'w-auto space-y-3'}>
+                                                        {item.children.map((child: Menu, i: number) =>
+                                                            <NavigationMenuLink key={i} asChild>
+                                                                <Link
+                                                                    href={item.href + child.href + (child.hasPages ? '/1' : '')}
+                                                                    className={'w-full block'}
+                                                                >
+                                                                    {child.title}
+                                                                </Link>
+                                                            </NavigationMenuLink>
+                                                        )}
+                                                    </NavigationMenuContent>
+                                                </NavigationMenuItem>
+                                        ))
+                                    }
+                                </NavigationMenuList>
+                            </NavigationMenu>
                         </nav>
                     </div>
                 </div>

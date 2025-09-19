@@ -77,7 +77,7 @@ const NewsEventsItem = memo((
                     inputValue={fileName}
                     disabled={readonly}
                     url={(imageUrl && imageUrl !== '/') ? imageUrl : image_url as string}
-                    handleChangeFile={e => handleImageChange(e, 'image_url', index as number)}
+                    handleChangeFile={(e: any) => handleImageChange(e, 'image_url', index as number)}
                 />
             </div>
             :
@@ -101,7 +101,7 @@ const NewsEventsItem = memo((
                     <UploadFile
                         inputValue={fileName}
                         url={(imageUrl && imageUrl !== '/') ? imageUrl : image_url as string}
-                        handleChangeFile={e => handleImageChange(e, 'image_url', index as number)}
+                        handleChangeFile={(e: any) => handleImageChange(e, 'image_url', index as number)}
                     />
                     <div className="grid gap-2">
                         <Label htmlFor="date" className={'gap-0'}><Dot/> Các tin liên quan</Label>
