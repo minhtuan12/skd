@@ -96,6 +96,8 @@ export default async function Header() {
         }
     })
 
+    console.log(menuItems)
+
     return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
         <div
             className="pb-1 mx-auto max-lg:px-8 max-[335px]:!px-2 max-[1024px]:justify-between max-sm:pb-1.5 px-4 md:px-10 lg:px-22 min-[1280px]:max-[1300px]:px-24 flex max-[1115px]:!px-12 min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full min-[1024px]:pb-2.5 max-[1115px]:gap-5 max-sm:flex-row max-sm:!px-4 min-[1024px]:max-[1115px]:pt-4">
