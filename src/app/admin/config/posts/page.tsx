@@ -80,7 +80,8 @@ export default function () {
             pdf: {
                 ...post.pdf,
                 url: post.link ? null : post.pdf.url
-            }
+            },
+            downloads: post.downloads.filter((i: any) => i.file_url)
         }
         if (updatedPost?._id) {
             updatePost({...updatedPost}, {
