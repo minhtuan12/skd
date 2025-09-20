@@ -9,7 +9,7 @@ import {useEffect, useMemo, useRef} from "react"
 import {SectionType} from "@/models/section";
 
 interface ClientMenuItemProps {
-    item: Menu
+    item: any
     parentHref?: string
     level?: number
 }
@@ -17,6 +17,9 @@ interface ClientMenuItemProps {
 function generateUrl(item: any) {
     if (item.type === SectionType.section) {
         return `/muc-luc/${item.header_key}?sub=${item._id}`;
+    }
+    if (item.href.includes('/muc-luc')) {
+        return `/muc-luc/${item.key}`;
     }
     if (item.type === SectionType.post) {
         return item.post_id ? `/bai-viet/${item.post_id}` : '/';
@@ -41,7 +44,7 @@ function generateUrl(item: any) {
 
 export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps) {
     const pathname = usePathname()
-    const hasChildren = item.children && item.children.length > 0
+    const hasChildren = item.children && item.children.length > 0 && !item.is_parent;
 
     const detailsRef = useRef<HTMLDetailsElement>(null)
     const currentItemHref = level === 0 ? item.href : `${parentHref}${item.href}`
@@ -49,7 +52,7 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
 
     const isAnyChildActive = useMemo(() => {
         if (!hasChildren) return false
-        return item.children?.some((child) => {
+        return item.children?.some((child: any) => {
             const childHref = `${currentItemHref}${child.href}`
             return pathname.startsWith(childHref)
         })
@@ -64,7 +67,7 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
             }
         }
     }, [isAnyChildActive, isActiveRoute, pathname])
-
+    console.log(item)
     if (hasChildren) {
         return (
             <details
@@ -82,13 +85,13 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
                 >
                     <div className="flex items-center gap-2">
             <span className={cn("truncate font-normal", isActiveRoute && "font-semibold text-black")}>
-              {item.title}
+                <Link href={generateUrl(item)}>{item.title}</Link>
             </span>
                     </div>
                     <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-open:rotate-90"/>
                 </summary>
                 <div className="mt-1 space-y-1">
-                    {item.children?.map((child, index) => (
+                    {item.children?.map((child: any, index: number) => (
                         <MenuItem key={index} item={child} level={level + 1} parentHref={currentItemHref}/>
                     ))}
                 </div>

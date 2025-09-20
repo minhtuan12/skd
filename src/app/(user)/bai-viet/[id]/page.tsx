@@ -58,9 +58,9 @@ export default async function ({params}: {
                                 post.slide.url ? <div className={'mt-3'}>
                                     <PptViewer
                                         slides={post.slides} pptUrl={post.slide.url}
-                                        downloadNotification={post.download_notification}
-                                        downloadable={post.downloadable}
-                                        downloads={post.downloads}
+                                        downloadNotification={''}
+                                        downloadable={post.slide.downloadable}
+                                        downloads={[]}
                                     />
                                 </div> : ''
                             }
@@ -74,6 +74,19 @@ export default async function ({params}: {
                                     <VideoPlayer src={post.video_url}/>
                                 </div> : ''
                             }
+                            <div className={'flex flex-col gap-1 justify-start'}>
+                                {
+                                    (post.downloads && post.downloads?.length > 0) ? post.downloads.map((item: any, index: number) => (
+                                        <a
+                                            key={index}
+                                            className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
+                                            href={item.file_url}
+                                        >
+                                            Tải xuống {item.name}
+                                        </a>
+                                    )) : ''
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
