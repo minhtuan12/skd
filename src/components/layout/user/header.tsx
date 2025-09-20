@@ -96,8 +96,6 @@ export default async function Header() {
         }
     })
 
-    console.log(menuItems)
-
     return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
         <div
             className="pb-1 mx-auto max-lg:px-8 max-[335px]:!px-2 max-[1024px]:justify-between max-sm:pb-1.5 px-4 md:px-10 lg:px-22 min-[1280px]:max-[1300px]:px-24 flex max-[1115px]:!px-12 min-[1115px]:items-end items-center justify-center min-[1115px]:justify-between h-full min-[1024px]:pb-2.5 max-[1115px]:gap-5 max-sm:flex-row max-sm:!px-4 min-[1024px]:max-[1115px]:pt-4">
@@ -147,7 +145,7 @@ export default async function Header() {
                         className="container max-[1024px]:hidden flex items-center justify-between text-black 2xl:text-[17px] text-sm">
                         <nav
                             className="items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
-                            <NavigationMenu viewport={false}>
+                            <NavigationMenu viewport={false} defaultValue={'Thông tin chính sách'}>
                                 <NavigationMenuList>
                                     {
                                         menuItems.map((item: Menu, index: number) => (
@@ -155,23 +153,20 @@ export default async function Header() {
                                                 <Link key={index} href={item.href} className={'flex w-fit -mt-0.5'}>
                                                     <House/>
                                                 </Link> :
-                                                <NavigationMenuItem key={index}>
+                                                <NavigationMenuItem key={index} value={item.title}>
                                                     <NavigationMenuTrigger>
                                                         <Link href={item.href + '/' + item.key}>{item.title}</Link>
                                                     </NavigationMenuTrigger>
                                                     <NavigationMenuContent className={'w-auto space-y-3'}>
                                                         {item.children.map((child: Menu, i: number) =>
-                                                            {
-                                                                console.log(i, child.title)
-                                                                return <NavigationMenuLink key={i} asChild>
-                                                                    <Link
-                                                                        href={child.key === 'knowledge' ? child.href : generateUrl(child)}
-                                                                        className={'w-full block'}
-                                                                    >
-                                                                        {child.title}
-                                                                    </Link>
-                                                                </NavigationMenuLink>
-                                                            }
+                                                            <NavigationMenuLink key={i} asChild>
+                                                                <Link
+                                                                    href={child.key === 'knowledge' ? child.href : generateUrl(child)}
+                                                                    className={'w-full block'}
+                                                                >
+                                                                    {child.title}
+                                                                </Link>
+                                                            </NavigationMenuLink>
                                                         )}
                                                     </NavigationMenuContent>
                                                 </NavigationMenuItem>
