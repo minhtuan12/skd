@@ -17,15 +17,17 @@ async function fetchPost(id: string) {
             throw new Error('Failed to fetch post');
         }
         const data = await res.json();
-        const parts = data?.post?.post_id?.slide.url?.split('/');
-        const publicId = parts[parts.length - 2] + '/' + parts[parts.length - 1];
-        const pages = await cloudinaryService.convertPptxToImages(publicId);
-        let slides = [];
-        for (let i = 1; i <= pages; i++) {
-            slides.push(cloudinary.url(
-                publicId,
-                {resource_type: "image", format: "jpg", page: i,})
-            )
+        let slides: any = [];
+        if (data?.post?.post_id?.slide.url) {
+            const parts = data?.post?.post_id?.slide.url?.split('/');
+            const publicId = parts[parts.length - 2] + '/' + parts[parts.length - 1];
+            const pages = await cloudinaryService.convertPptxToImages(publicId);
+            for (let i = 1; i <= pages; i++) {
+                slides.push(cloudinary.url(
+                    publicId,
+                    {resource_type: "image", format: "jpg", page: i,})
+                )
+            }
         }
 
         return {...data, post: {...data.post, post_id: {...data.post.post_id, slides}}}

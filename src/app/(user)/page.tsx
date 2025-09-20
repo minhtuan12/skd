@@ -217,7 +217,6 @@ export default async function Home() {
                         transition={{duration: 0.5}}
                         viewport={{once: true}}
                     >
-                        <h2 className="text-2xl font-semibold text-center">Quảng cáo</h2>
                         <div
                             className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 mt-12 place-items-center">
                             {
