@@ -1,11 +1,14 @@
 import Config from "@/models/config";
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
+import SectionModel from "@/models/section";
 
 export async function GET(request: NextRequest) {
     try {
         await connectDb();
-        const globalConfig: any = await Config.findOne().select('home').lean();
+        await Config.updateOne({}, {$inc: {traffic: 1}});
+        const globalConfig: any = await Config.findOne().select('home traffic').lean();
+        const menu = await SectionModel.find({is_deleted: false});
         if (!globalConfig) {
             return NextResponse.json(
                 {error: 'Không tồn tại thông tin cấu hình'},
@@ -13,7 +16,7 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        return NextResponse.json({config: {...globalConfig.home.banner}});
+        return NextResponse.json({config: {...globalConfig.home.banner}, traffic: globalConfig.traffic, menu});
     } catch (error) {
         console.error('Global config API error:', error);
         return NextResponse.json(

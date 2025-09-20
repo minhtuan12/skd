@@ -134,6 +134,10 @@ const ConfigSchema = new Schema({
         },
         document: {}
     },
+    traffic: {
+        type: Number,
+        default: 0
+    }
 }, {
     timestamps: true
 });

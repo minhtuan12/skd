@@ -1,5 +1,6 @@
 export const routes = {
     TrangChu: '/',
+    MucLuc: '/muc-luc',
 
     DangNhapAdmin: '/admin/login',
     HomeConfig: '/admin/config/home',

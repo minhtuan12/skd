@@ -3,14 +3,40 @@
 import Link from "next/link"
 import {usePathname} from "next/navigation"
 import {ChevronRight} from "lucide-react"
-import {cn} from "@/lib/utils"
+import {buildDetailPath, cn} from "@/lib/utils"
 import type {Menu} from "@/constants/menu"
 import {useEffect, useMemo, useRef} from "react"
+import {SectionType} from "@/models/section";
 
 interface ClientMenuItemProps {
     item: Menu
     parentHref?: string
     level?: number
+}
+
+function generateUrl(item: any) {
+    if (item.type === SectionType.section) {
+        return `/muc-luc/${item.header_key}?sub=${item._id}`;
+    }
+    if (item.type === SectionType.post) {
+        return item.post_id ? `/bai-viet/${item.post_id}` : '/';
+    }
+    switch (item.header_key) {
+        case 'policy':
+            return '/thong-tin-chinh-sach/chinh-sach/1'
+        case 'map':
+            if (item.name === 'Bản đồ đất') {
+                return '/ban-do/ban-do-dat';
+            }
+            return '/ban-do/cac-trung-tam-quan-trac-dat';
+        case 'knowledge':
+            return `/ngan-hang-kien-thuc/${buildDetailPath(item.name, item._id as string)}/1`;
+        case 'news':
+            if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
+            return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
+        default:
+            return '/';
+    }
 }
 
 export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps) {
@@ -72,7 +98,7 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
 
     return (
         <Link
-            href={item.hasPages ? (currentItemHref + '/1') : currentItemHref}
+            href={generateUrl(item)}
             className={cn(
                 "flex items-center gap-2 w-full py-2 px-3 rounded-md",
                 "hover:bg-accent hover:text-accent-foreground transition-colors",

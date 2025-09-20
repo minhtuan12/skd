@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {routes} from "@/constants/routes";
 
-export default function Footer() {
+export default function Footer({traffic}: {traffic: number}) {
     const social = [
         {
             href: '#',
@@ -135,7 +135,10 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
-            <div className="h-[2px] bg-gray-100 opacity-10 w-full mt-4 lg:mt-10"></div>
+            <div className={'text-end mt-2 text-[14px] text-gray-400 max-md:text-start max-md:mt-6'}>
+                <span className={'text-green-400 mr-1'}>•</span> Lượng truy cập: {traffic}
+            </div>
+            <div className="h-[2px] bg-gray-100 opacity-10 w-full mt-2"></div>
             <div
                 className="mt-2 lg:mt-6 text-xs text-gray-400 flex w-full justify-between max-sm:flex max-sm:flex-col-reverse max-sm:gap-4">
                 <p className={'max-sm:text-center'}>© 2025 Bản quyền thuộc về Cổng thông tin Sức khỏe đất.</p>

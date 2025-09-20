@@ -6,7 +6,6 @@ import {Input} from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
 import {buildDetailPath} from "@/lib/utils";
-import {routes} from "@/constants/routes";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -15,6 +14,7 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
+import {ISection, SectionType} from "@/models/section";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -29,20 +29,71 @@ async function fetchKnowledgeCategory() {
     return res.json();
 }
 
+async function fetchMenu() {
+    const res = await fetch(`${baseUrl}/api/config/global`,
+        {cache: 'no-store', credentials: 'include'}
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch menu');
+    }
+    return res.json();
+}
+
+function generateUrl(item: any) {
+    if (item.type === SectionType.section) {
+        return `/muc-luc/${item.header_key}?sub=${item._id}`;
+    }
+    if (item.type === SectionType.post) {
+        return item.post_id ? `/bai-viet/${item.post_id}` : '/';
+    }
+    switch (item.header_key) {
+        case 'policy':
+            return '/thong-tin-chinh-sach/chinh-sach/1'
+        case 'map':
+            if (item.name === 'Bản đồ đất') {
+                return '/ban-do/ban-do-dat';
+            }
+            return '/ban-do/cac-trung-tam-quan-trac-dat';
+        case 'knowledge':
+            return `/ngan-hang-kien-thuc/${buildDetailPath(item.name, item._id as string)}/1`;
+        case 'news':
+            if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
+            return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
+        default:
+            return '/';
+    }
+}
+
 export default async function Header() {
     const categories = await fetchKnowledgeCategory();
+    const sections = await fetchMenu();
     const menuItems = menu.map(item => {
-        if (item.href === routes.NganHangKienThuc) {
+        if (item.key === 'knowledge') {
             return {
                 ...item,
                 children: categories?.pages?.map((i: any) => ({
+                    ...i,
                     title: i.name,
                     href: `/${buildDetailPath(i.name, i._id)}`,
-                    hasPages: true
+                    hasPages: true,
+                    header_key: 'knowledge'
                 }))
             };
         }
-        return item;
+        if (item.key === 'home') return item;
+        return {
+            ...item,
+            children: sections.menu
+                .filter((i: ISection) => !i.parent_id && i.header_key === item.key)
+                .map((i: ISection) => ({
+                        ...i,
+                        title: i.name,
+                        href: `/${buildDetailPath(i.name, i._id as string)}`,
+                        hasPages: i.type === SectionType.list
+                    })
+                )
+        }
     })
 
     return <header className="bg-white text-white pt-1 h-auto min-[1115px]:h-27 top-0 sticky z-9999 shadow-lg">
@@ -104,13 +155,13 @@ export default async function Header() {
                                                 </Link> :
                                                 <NavigationMenuItem key={index}>
                                                     <NavigationMenuTrigger>
-                                                        {item.title}
+                                                        <Link href={item.href + '/' + item.key}>{item.title}</Link>
                                                     </NavigationMenuTrigger>
                                                     <NavigationMenuContent className={'w-auto space-y-3'}>
                                                         {item.children.map((child: Menu, i: number) =>
                                                             <NavigationMenuLink key={i} asChild>
                                                                 <Link
-                                                                    href={item.href + child.href + (child.hasPages ? '/1' : '')}
+                                                                    href={child.key === 'knowledge' ? child.href : generateUrl(child)}
                                                                     className={'w-full block'}
                                                                 >
                                                                     {child.title}

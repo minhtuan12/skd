@@ -91,7 +91,7 @@ export default async function RootLayout(
             <Header/>
             <Hero data={heroData.config}/>
             {children}
-            <Footer/>
+            <Footer traffic={heroData.traffic}/>
             <GoToTopButton/>
             <Toaster position="top-center" richColors/>
         </main>
