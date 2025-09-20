@@ -161,14 +161,17 @@ export default async function Header() {
                                                     </NavigationMenuTrigger>
                                                     <NavigationMenuContent className={'w-auto space-y-3'}>
                                                         {item.children.map((child: Menu, i: number) =>
-                                                            <NavigationMenuLink key={i} asChild>
-                                                                <Link
-                                                                    href={child.key === 'knowledge' ? child.href : generateUrl(child)}
-                                                                    className={'w-full block'}
-                                                                >
-                                                                    {child.title}
-                                                                </Link>
-                                                            </NavigationMenuLink>
+                                                            {
+                                                                console.log(i, child.title)
+                                                                return <NavigationMenuLink key={i} asChild>
+                                                                    <Link
+                                                                        href={child.key === 'knowledge' ? child.href : generateUrl(child)}
+                                                                        className={'w-full block'}
+                                                                    >
+                                                                        {child.title}
+                                                                    </Link>
+                                                                </NavigationMenuLink>
+                                                            }
                                                         )}
                                                     </NavigationMenuContent>
                                                 </NavigationMenuItem>
