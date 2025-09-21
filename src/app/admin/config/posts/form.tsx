@@ -54,11 +54,17 @@ export default function (
                                         />
                                     </div>
                                 </div>
-                                <input accept={'.pptx'}
-                                       disabled={!!post.link}
-                                       onChange={(e) => handleChangeFile((e.target.files?.[0] || null) as any, 'slide')}
-                                       type={'file'}
-                                       className={'border px-3 rounded-sm border-gray-500 cursor-pointer'}/>
+                                <div className={'flex items-end justify-between w-full'}>
+                                    <input
+                                        accept={'.pptx'}
+                                        disabled={!!post.link}
+                                        onChange={(e) => handleChangeFile((e.target.files?.[0] || null) as any, 'slide')}
+                                        type={'file'}
+                                        className={'border px-3 rounded-sm border-gray-500 cursor-pointer'}
+                                    />
+                                    <div className={'text-red-400 cursor-pointer'} onClick={() => handleChangeFile('', 'slide')}>Xóa
+                                    </div>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -89,13 +95,17 @@ export default function (
                                         />
                                     </div>
                                 </div>
-                                <input
-                                    accept={'.pdf'}
-                                    disabled={!!post.link}
-                                    onChange={(e) => handleChangeFile((e.target.files?.[0] || null) as any, 'pdf')}
-                                    type={'file'}
-                                    className={'border px-3 rounded-sm border-gray-500 cursor-pointer'}
-                                />
+                                <div className={'flex items-end justify-between w-full'}>
+                                    <input
+                                        accept={'.pdf'}
+                                        disabled={!!post.link}
+                                        onChange={(e) => handleChangeFile((e.target.files?.[0] || null) as any, 'pdf')}
+                                        type={'file'}
+                                        className={'border px-3 rounded-sm border-gray-500 cursor-pointer'}
+                                    />
+                                    <div className={'text-red-400 cursor-pointer'} onClick={() => handleChangeFile('', 'pdf')}>Xóa
+                                    </div>
+                                </div>
                             </div>
                         </td>
                     </tr>

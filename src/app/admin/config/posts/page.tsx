@@ -182,7 +182,7 @@ export default function () {
         })
     }
 
-    const handleChangeFile = (file: File, key: string) => {
+    const handleChangeFile = (file: any, key: string) => {
         setPost({
             ...post,
             [key]: {
@@ -243,6 +243,7 @@ export default function () {
             <div className={'flex flex-col gap-2'}>
                 <p className={'font-medium'}>Chọn trang</p>
                 <Select value={page} onValueChange={(value) => {
+                    setSelectedPost(undefined);
                     setPage(value as string)
                 }}>
                     <SelectTrigger className="w-[180px] bg-white">
@@ -277,7 +278,7 @@ export default function () {
                 </Select>
             </div>
         </div>
-        {selectedPost ? <Form
+        {(selectedPost && page) ? <Form
             handleChangeData={handleChangeData}
             handleChangeCheck={handleChangeCheck}
             handleChangeFile={handleChangeFile}
