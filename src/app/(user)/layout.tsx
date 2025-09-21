@@ -88,7 +88,7 @@ export default async function RootLayout(
             className={`antialiased`}
         >
         <main className="min-h-screen w-full">
-            <Header/>
+            {/*<Header/>*/}
             <Hero data={heroData.config}/>
             {children}
             <Footer traffic={heroData.traffic}/>
