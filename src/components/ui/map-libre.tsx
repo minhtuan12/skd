@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useRef, memo} from 'react';
+import {memo, useEffect, useRef} from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {cn} from "@/lib/utils";
@@ -60,6 +60,47 @@ const MapLibre = (
                 center: exactLoc as [number, number],
                 zoom: 12,
                 essential: true
+            });
+        }
+
+        if (tilerApiKey && interactive) {
+            map.on('load', () => {
+                map.addSource('islands', {
+                    type: 'geojson',
+                    data: {
+                        type: 'FeatureCollection',
+                        features: [
+                            {
+                                type: 'Feature',
+                                properties: {name: 'Quần đảo Hoàng Sa (Việt Nam)'},
+                                geometry: {type: 'Point', coordinates: [112.0, 16.5]},
+                            },
+                            {
+                                type: 'Feature',
+                                properties: {name: 'Quần đảo Trường Sa (Việt Nam)'},
+                                geometry: {type: 'Point', coordinates: [114.0, 10.0]},
+                            },
+                        ],
+                    },
+                });
+
+                map.addLayer({
+                    id: 'island-labels',
+                    type: 'symbol',
+                    source: 'islands',
+                    layout: {
+                        'text-field': ['get', 'name'],
+                        'text-font': ['Open Sans Bold'],
+                        'text-size': 14,
+                        'text-offset': [0, 0],
+                        'text-anchor': 'center',
+                    },
+                    paint: {
+                        'text-color': '#b17036',
+                        'text-halo-color': '#ffffff',
+                        'text-halo-width': 2,
+                    },
+                });
             });
         }
 
