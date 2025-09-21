@@ -4,7 +4,6 @@ import Link from "next/link"
 import {usePathname} from "next/navigation"
 import {ChevronRight} from "lucide-react"
 import {buildDetailPath, cn} from "@/lib/utils"
-import type {Menu} from "@/constants/menu"
 import {useEffect, useMemo, useRef} from "react"
 import {SectionType} from "@/models/section";
 
@@ -32,7 +31,7 @@ function generateUrl(item: any) {
                 return '/ban-do/ban-do-dat';
             }
             return '/ban-do/cac-trung-tam-quan-trac-dat';
-        case 'knowledge':
+        case 'knowledges':
             return `/ngan-hang-kien-thuc/${buildDetailPath(item.name, item._id as string)}/1`;
         case 'news':
             if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
@@ -67,7 +66,7 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
             }
         }
     }, [isAnyChildActive, isActiveRoute, pathname])
-    console.log(item)
+
     if (hasChildren) {
         return (
             <details

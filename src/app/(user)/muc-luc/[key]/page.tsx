@@ -54,6 +54,25 @@ function generateUrl(item: any) {
     }
 }
 
+function getTitle(key: string) {
+    switch (key) {
+        case 'policy':
+            return "THÔNG TIN CHÍNH SÁCH";
+        case 'map':
+            return "BẢN ĐỒ";
+        case 'knowledge':
+            return "NGÂN HÀNG KIẾN THỨC";
+        case 'news':
+            return "TIN TỨC, SỰ KIỆN & NGHIÊN CỨU";
+        case 'contact':
+            return "HỎI ĐÁP VÀ LIÊN HỆ";
+        case 'introduction':
+            return "GIỚI THIỆU";
+        default:
+            return "MỤC LỤC";
+    }
+}
+
 export default async function ({params, searchParams}: {
     params: Promise<{ key: string }>,
     searchParams: Promise<{ sub?: string }>
@@ -61,20 +80,22 @@ export default async function ({params, searchParams}: {
     const {key} = await params;
     const {sub} = await searchParams;
     let menu = [];
-    if (key === 'knowledge') {
-        const data = await fetchKnowledgeCategory();
-        menu = data.pages.map((page: IKnowledgeCategory) => {
-            return {
-                ...page,
-                name: page.name,
-                type: SectionType.list,
-                header_key: 'knowledge'
-            }
-        })
+    let title = '';
+    if (key === 'knowledges') {
+        // const data = await fetchKnowledgeCategory();
+        // menu = data.pages.map((page: IKnowledgeCategory) => {
+        //     return {
+        //         ...page,
+        //         name: page.name,
+        //         type: SectionType.list,
+        //         header_key: 'knowledge'
+        //     }
+        // })
     } else {
         const data = await fetchMenu();
         if (sub) {
             menu = data.menu.filter((i: ISection) => i.parent_id === sub && !i.is_deleted);
+            title = data.menu.find((i: ISection) => i._id === sub)?.name?.toUpperCase();
         } else {
             menu = data.menu.filter((i: ISection) => i.header_key === key && !i.parent_id && !i.is_deleted);
         }
@@ -82,7 +103,9 @@ export default async function ({params, searchParams}: {
 
     return <div className={'box-border flex flex-col gap-8 mt-10 lg:px-30 px-10 max-sm:px-6 pb-30'}>
         <div className={'flex flex-col gap-8 px-5'}>
-            <h1 className={'font-semibold text-center text-xl'}>MỤC LỤC</h1>
+            <h1 className={'font-semibold text-center text-xl'}>
+                {sub ? title : getTitle(key)}
+            </h1>
             <div className={'flex gap-12 flex-col'}>
                 <div className={'w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-7'}>
                     {
@@ -105,7 +128,7 @@ export default async function ({params, searchParams}: {
                                     />
                                 </div>
                                 <div className={'flex flex-col gap-0.5 flex-1 box-border pl-1'}>
-                                    <h1 className={'text-lg font-medium text-green-700 line-clamp-4'}>{item.name}</h1>
+                                    <h1 className={'text-lg font-medium text-green-700 line-clamp-4 text-center'}>{item.name}</h1>
                                 </div>
                             </Link>
                         ))

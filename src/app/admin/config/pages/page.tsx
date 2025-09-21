@@ -24,11 +24,12 @@ const sections = [
         key: 'map',
         isDefault: true
     },
-    // {
-    //     id: '3',
-    //     name: 'Ngân hàng kiến thức',
-    //     key: 'knowledge'
-    // },
+    {
+        id: '3',
+        name: 'Ngân hàng kiến thức',
+        key: 'knowledge',
+        isDefault: true
+    },
     {
         id: '4',
         name: 'Tin tức và sự kiện',
@@ -167,7 +168,7 @@ export default function () {
                     />
                     <div className={'w-2/3 h-full shadow-lg border border-gray-300 rounded-md py-5 px-7'}>
                         {
-                            selectedSection ? <SectionForm data={selectedSection as any}/> :
+                            selectedSection ? <SectionForm data={selectedSection as any} setSelectedSection={setSelectedSection}/> :
                                 <i className={'flex justify-center items-center h-full text-gray-500 text-lg'}>
                                     Chọn 1 trang bên trái
                                 </i>

@@ -32,6 +32,7 @@ const defaultItem = {
 
 const pages = [
     {name: 'Thông tin chính sách', key: 'policy'},
+    {name: 'Ngân hàng kiến thức', key: 'knowledge'},
     {name: 'Bản đồ', key: 'map'},
     {name: 'Tin tức sự kiện', key: 'news'},
     {name: 'Hỏi đáp liên hệ', key: 'contact'},

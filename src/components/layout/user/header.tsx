@@ -69,7 +69,7 @@ export default async function Header() {
     const categories = await fetchKnowledgeCategory();
     const sections = await fetchMenu();
     const menuItems = menu.map(item => {
-        if (item.key === 'knowledge') {
+        if (item.key === 'knowledges') {
             return {
                 ...item,
                 children: categories?.pages?.map((i: any) => ({
@@ -161,7 +161,7 @@ export default async function Header() {
                                                         {item.children.map((child: Menu, i: number) =>
                                                             <NavigationMenuLink key={i} asChild>
                                                                 <Link
-                                                                    href={child.key === 'knowledge' ? child.href : generateUrl(child)}
+                                                                    href={child.key === 'knowledges' ? child.href : generateUrl(child)}
                                                                     className={'w-full block'}
                                                                 >
                                                                     {child.title}

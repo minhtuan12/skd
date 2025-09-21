@@ -15,7 +15,10 @@ import {Separator} from "@/components/ui/separator";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {useUpdateOneSection} from "@/app/admin/config/pages/(hooks)/use-update-one-section";
 
-export default function ({data}: { data: ISection & { isDefault?: boolean, key: string } }) {
+export default function ({data, setSelectedSection}: {
+    data: ISection & { isDefault?: boolean, key: string },
+    setSelectedSection: any
+}) {
     const [pages, setPages] = useState(data?.children || []);
     const [page, setPage] = useState(data);
     const [imageUrl, setImageUrl] = useState('');
@@ -68,6 +71,7 @@ export default function ({data}: { data: ISection & { isDefault?: boolean, key: 
             updateSection(pages, {
                 onSuccess: () => {
                     toast.success('Cập nhật thành công')
+                    setSelectedSection(null);
                 }
             });
         } else {
@@ -94,6 +98,7 @@ export default function ({data}: { data: ISection & { isDefault?: boolean, key: 
                             onSuccess: () => {
                                 toast.success('Cập nhật thành công');
                                 setImageUrl('');
+                                setSelectedSection(null);
                             }
                         });
                     },
@@ -102,6 +107,7 @@ export default function ({data}: { data: ISection & { isDefault?: boolean, key: 
                 updateOneSection(page.type === SectionType['section'] ? {...page, children: pages} : page, {
                     onSuccess: () => {
                         toast.success('Cập nhật thành công')
+                        setSelectedSection(null);
                     }
                 });
             }
