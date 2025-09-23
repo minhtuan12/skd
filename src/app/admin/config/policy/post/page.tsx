@@ -18,7 +18,7 @@ import {useDeletePost} from "@/app/admin/config/policy/(hooks)/use-delete-post";
 import {useUpdatePost} from "@/app/admin/config/policy/(hooks)/use-update-post";
 import {useAddPostToSection} from "@/app/admin/config/policy/(hooks)/use-add-post-to-section";
 
-export function secureLink(link: string) {
+function secureLink(link: string) {
     if (link.includes('https')) return link;
     return link.replace('http', 'https');
 }
