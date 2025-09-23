@@ -33,10 +33,10 @@ async function addMap(request: NextRequest) {
         }
 
         const map = new MapModel({
-            name: data.name.trim(),
+            name: data.name,
             image_url: data.image_url,
-            data_url: data.data_url ? data.data_url.trim() : null,
-            source: data.source.trim()
+            data_url: data.data_url ? data.data_url : null,
+            source: data.source
         });
         await map.save();
 

@@ -1,6 +1,6 @@
 'use client'
 
-import {ChevronRight, ChevronUp, Loader2, Newspaper, User2,} from "lucide-react"
+import {ChevronRight, ChevronUp, Loader2, Newspaper, Ungroup, User2} from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -23,37 +23,45 @@ import {Skeleton} from "@/components/ui/skeleton";
 import {sideBarItems} from "@/constants/menu";
 import {usePathname, useRouter} from "next/navigation";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
-import {useFetchKnowledgeCategory} from "@/app/admin/config/(hooks)/use-knowledge-category";
-import {routes} from "@/constants/routes";
-import {IKnowledgeCategory} from "@/models/knowledge-category";
 import {useMemo} from "react";
 import {useDispatch} from "react-redux";
+import {useFetchSectionAdmin} from "@/app/admin/config/pages/(hooks)/use-section-admin";
+import {ISection, SectionType} from "@/models/section";
+
+const constantKeys = new Set(['map', 'news']);
 
 export function AppSidebar() {
     const {admin, logout} = useAdmin();
     const router = useRouter();
     const pathname = usePathname();
-    const {loading, data} = useFetchKnowledgeCategory();
+    const {loading, data} = useFetchSectionAdmin();
     const items = useMemo(() => {
-        if (data?.pages) {
+        if (data?.sections) {
             return sideBarItems.map(item => {
                 return {
                     ...item,
                     children: item.children.map((child: any) => {
-                        if (child.url.includes(routes.KnowledgeConfig)) {
-                            return {
-                                ...child,
-                                children: [
-                                    ...child.children,
-                                    ...data.pages.map((i: IKnowledgeCategory) => ({
-                                        title: i.name,
-                                        url: `/${i._id}`,
-                                        icon: Newspaper,
-                                    }))
-                                ]
-                            }
+                        if (!child.children || constantKeys.has(child.key)) return child;
+                        let children = data.sections
+                            .filter((i: ISection) => i.header_key === child.key
+                                && (i.type === SectionType.list || i.type === SectionType.post)
+                            )
+                            .sort((a: any, b: any) => {
+                                if (a.type === b.type) return 0;
+                                return a.type === SectionType.list ? -1 : 1;
+                            })
+                            .map((i: ISection) => ({
+                                title: i.name,
+                                url: `/${i._id}`,
+                                icon: i.type === SectionType.post ? Newspaper : Ungroup,
+                            }))
+                        return {
+                            ...child,
+                            children: [
+                                ...child.children,
+                                ...children
+                            ]
                         }
-                        return child;
                     })
                 }
             })

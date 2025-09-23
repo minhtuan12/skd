@@ -112,65 +112,42 @@ export const sideBarItems = [
                 title: "Quản lý các trang",
                 url: '/admin/config/pages',
                 icon: Home,
+                key: ''
             },
-            {
-                title: "Quản lý bài viết",
-                url: '/admin/config/posts',
-                icon: Home,
-            },
+            // {
+            //     title: "Quản lý bài viết",
+            //     url: '/admin/config/posts',
+            //     icon: Home,
+            // },
             {
                 title: "Trang chủ",
                 url: routes.HomeConfig,
                 icon: Home,
-            },
-            {
-                title: "Tin tức, sự kiện & nghiên cứu",
-                url: routes.NewsConfig,
-                icon: Newspaper,
+                key: 'home'
             },
             {
                 title: "Thông tin chính sách",
                 url: routes.PolicyConfig,
                 icon: Newspaper,
+                key: 'policy',
                 children: [
-                    // {
-                    //     title: "Kế hoạch hành động SKĐ",
-                    //     url: routes.Plan,
-                    //     icon: Newspaper,
-                    // },
-                    // {
-                    //     title: "Chiến lược SKĐ Quốc gia",
-                    //     url: routes.Strategy,
-                    //     icon: Newspaper,
-                    // },
-                    {
-                        title: "Văn bản chính sách",
-                        url: routes.Document,
-                        icon: Newspaper,
-                    },
-                ]
-            },
-            {
-                title: "Ngân hàng kiến thức",
-                url: routes.KnowledgeConfig,
-                icon: Newspaper,
-                children: [
-                    {
-                        title: "Quản lý trang",
-                        url: routes.Pages,
-                        icon: TreePalm,
-                    },
                     {
                         title: "Quản lý bài đăng",
                         url: routes.Post,
                         icon: TreePalm,
                     },
+                    // {
+                    //     title: "Văn bản chính sách",
+                    //     url: routes.Document,
+                    //     icon: Newspaper,
+                    // },
                 ]
             },
             {
                 title: "Bản đồ",
                 url: '',
                 icon: Newspaper,
+                key: 'map',
                 children: [
                     {
                         title: "Bản đồ đất",
@@ -178,9 +155,27 @@ export const sideBarItems = [
                         icon: MapPin,
                     },
                     {
-                        title: "Phòng thí nghiệm",
+                        title: "Bản đồ phòng phân tích",
                         url: routes.LabConfig,
                         icon: MapPin,
+                    },
+                ]
+            },
+            {
+                title: "Ngân hàng kiến thức",
+                url: routes.KnowledgeConfig,
+                icon: Newspaper,
+                key: 'knowledge',
+                children: [
+                    // {
+                    //     title: "Quản lý trang",
+                    //     url: routes.Pages,
+                    //     icon: TreePalm,
+                    // },
+                    {
+                        title: "Quản lý bài đăng",
+                        url: routes.Post,
+                        icon: TreePalm,
                     },
                 ]
             },
@@ -201,6 +196,12 @@ export const sideBarItems = [
             //         },
             //     ]
             // },
+            {
+                title: "Tin tức, sự kiện & nghiên cứu",
+                url: routes.NewsConfig,
+                icon: Newspaper,
+                key: 'news'
+            },
         ]
     },
 ]

@@ -96,9 +96,9 @@ export default function NewsConfig() {
     const handleSubmitNewsEvents = (newsEvents: any) => {
         const updatedNews = {
             ...newsEvents,
-            image_url: (newsEvents.image_url as string).trim(),
-            title: newsEvents.title.trim(),
-            description: newsEvents.description.trim()
+            image_url: (newsEvents.image_url as string),
+            title: newsEvents.title,
+            description: newsEvents.description
         }
         if (modalTitle.includes('Thêm')) {
             mutate(updatedNews, {

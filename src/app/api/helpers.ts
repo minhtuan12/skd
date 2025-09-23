@@ -191,3 +191,8 @@ export async function changePostOrder(model: any, id: string, newOrder: number, 
         throw e;
     }
 }
+
+export function secureLink(link: string) {
+    if (link.includes('https')) return link;
+    return link.replace('http', 'https');
+}

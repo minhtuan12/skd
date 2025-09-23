@@ -1,4 +1,5 @@
 import {model, models, Schema} from "mongoose";
+import {IPost} from "@/models/post";
 
 export interface ISection {
     _id?: string;
@@ -7,7 +8,8 @@ export interface ISection {
     parent_id: string | null;
     header_key: string;
     image_url: string | File;
-    post_id: string | null;
+    post_id: string | null | IPost;
+    post_ids: string[] | IPost[]
     order: number;
     createdAt?: string;
     children?: ISection[];
@@ -57,6 +59,10 @@ const SectionSchema = new Schema({
         ref: 'Posts',
         default: null
     },
+    post_ids: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Posts',
+    }],
     order: {
         type: Number,
         default: 0

@@ -25,10 +25,10 @@ async function updateMap(request: NextRequest, {params}: { params: Promise<{ id:
             {_id: new ObjectId(id)},
             {
                 $set: {
-                    name: data.name.trim(),
+                    name: data.name,
                     image_url: data.image_url,
-                    data_url: data.data_url ? data.data_url.trim() : null,
-                    source: data.source.trim()
+                    data_url: data.data_url ? data.data_url : null,
+                    source: data.source
                 }
             },
         )

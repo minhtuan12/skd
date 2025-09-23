@@ -1,100 +1,66 @@
 'use client'
 
 import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Loader2} from "lucide-react";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {Button} from "@/components/ui/button";
-import {IKnowledge} from "@/models/knowledge";
-import {useFetchKnowledge} from "@/app/admin/config/(hooks)/use-knowledge";
-import {useAddKnowledge} from "@/app/admin/config/(hooks)/use-add-knowledge";
-import KnowledgeForm from "@/app/admin/config/knowledge/form";
-import {toast} from "sonner";
-import {RootState} from "@/redux/store";
 import {setBreadcrumb} from "@/redux/slices/admin";
 import DataTable from "@/app/admin/config/knowledge/post/data-table";
-import {useFetchKnowledgeCategoryAdmin} from "@/app/admin/config/(hooks)/use-knowledge-category-admin";
-import {useAddCategoryToKnowledge} from "@/app/admin/config/(hooks)/use-add-category-to-knowledge";
+import {useFetchSectionAdmin} from "@/app/admin/config/pages/(hooks)/use-section-admin";
+import {IPost} from "@/models/post";
+import {useFetchPostList} from "@/app/admin/config/knowledge/(hooks)/use-post-admin";
+import Form from "@/app/admin/config/knowledge/form";
+import {ISection, SectionType} from "@/models/section";
+import {useAddPost} from "@/app/admin/config/knowledge/(hooks)/use-add-post";
+import {toast} from "sonner";
+import {useDeletePost} from "@/app/admin/config/knowledge/(hooks)/use-delete-post";
+import {useUpdatePost} from "@/app/admin/config/knowledge/(hooks)/use-update-post";
+import {useAddPostToSection} from "@/app/admin/config/knowledge/(hooks)/use-add-post-to-section";
 
-const defaultItem: IKnowledge = {
-    name: '',
-    category: [],
-    media: {
-        url: '',
-        media_type: 'image'
-    },
+export function secureLink(link: string) {
+    if (link.includes('https')) return link;
+    return link.replace('http', 'https');
+}
+
+const defaultItem: IPost = {
+    order: 0,
+    title: '',
     text: '',
     slide: {
-        url: null,
-        downloadable: true
+        url: '',
+        downloadable: true,
     },
     pdf: {
-        url: null,
-        downloadable: true
+        url: '',
+        downloadable: true,
     },
-    link: null,
+    downloads: [{name: '', file_url: ''}],
+    link: '',
+    video_url: '',
+    image_url: '',
     related_posts: [],
-    video_url: ''
+    header_key: 'knowledge'
 }
 
 export default function () {
-    const [openModal, setOpenModal] = useState(false);
-    const pageTitle = useSelector((state: RootState) => state.admin.knowledgePageTitle);
+    const [openModal, setOpenModal] = useState(false)
+    const [isUpdate, setIsUpdate] = useState(false);
     const dispatch = useDispatch();
-
-    const {data: categories, loading: loadingFetch} = useFetchKnowledgeCategoryAdmin();
-    const {error, refetch, loading, data} = useFetchKnowledge();
-    const {
-        mutate,
-        loading: loadingAdd,
-        isSuccess,
-        isError,
-        error: errorUpdate
-    } = useAddKnowledge();
-    const {mutate: addCategoryToKnowledge, loading: loadingSubmitAddCategory} = useAddCategoryToKnowledge();
-    // const {mutate: updateKnowledge, loading: loadingUpdate} = useUpdateKnowledge(categoryId);
-    const {uploadFile, loading: loadingUpload} = useUploadFile();
-    // const {data: subCategories} = useFetchSubCategory(categoryId);
-    // const hasSubCategories = useMemo(() => {
-    //     return subCategories?.pages?.children?.length > 0;
-    // }, [subCategories])
-
-    const [newKnowledge, setNewKnowledge] = useState<IKnowledge>(defaultItem);
+    const [post, setPost] = useState<IPost>(defaultItem);
     const [mediaUrl, setMediaUrl] = useState('');
-    const [modalTitle, setModalTitle] = useState(`Thêm mới`)
 
-    const handleChangeImage = (e: any, key: string, index = -1) => {
-        if (typeof e !== 'string') {
-            if (e.target.files && e.target.files[0]) {
-                const file = e.target.files[0]
-                const reader = new FileReader()
-                reader.onloadend = () => {
-                    setNewKnowledge((prev: any) => ({
-                        ...prev,
-                        media: {
-                            media_type: 'image',
-                            url: file
-                        }
-                    }))
-                    setMediaUrl(reader.result as string);
-                }
-                reader.readAsDataURL(file)
-            }
-        } else {
-            setNewKnowledge((prev: any) => ({
-                ...prev,
-                media: {
-                    media_type: 'image',
-                    url: e
-                }
-            }))
-            setMediaUrl(e as string);
-        }
-    }
+    const {data: posts, loading: loadingPosts} = useFetchPostList('knowledge');
+    const {data: sections, loading: loadingSections} = useFetchSectionAdmin();
+    const {mutate: createPost, loading: loadingAdd} = useAddPost();
+    const {mutate: updatePost, loading: loadingUpdate} = useUpdatePost();
+    const {mutate: deletePost, loading: loadingDelete} = useDeletePost();
+    const {mutate: addPostToSection, loading: loadingAddPostToSection} = useAddPostToSection();
+    const {uploadFile, loading: loadingUpload} = useUploadFile();
 
     const handleChangeData = (value: any, key: string) => {
         if (key === 'media') {
-            setNewKnowledge((prev: any) => ({
+            setPost((prev: any) => ({
                 ...prev,
                 media: {
                     ...prev.media,
@@ -102,68 +68,73 @@ export default function () {
                 }
             }))
         } else {
-            setNewKnowledge((prev: any) => ({
+            setPost((prev: any) => ({
                 ...prev,
                 [key]: value
             }))
         }
     }
 
-    // call api add knowledge
-    const handleSubmitKnowledge = (newKnowledge: any) => {
-        const updatedKnowledge = {
-            ...newKnowledge,
-            name: newKnowledge.name.trim(),
-            text: newKnowledge.link ? '' : newKnowledge.text,
+    const handleSubmitPost = (post: any) => {
+        const updatedPost = {
+            ...post,
+            text: post.link ? '' : post.text,
             slide: {
-                ...newKnowledge.slide,
-                url: newKnowledge.link ? null : newKnowledge.slide.url
+                ...post.slide,
+                url: post.link ? null : post.slide.url
             },
             pdf: {
-                ...newKnowledge.pdf,
-                url: newKnowledge.link ? null : newKnowledge.pdf.url
-            }
+                ...post.pdf,
+                url: post.link ? null : post.pdf.url
+            },
+            downloads: post.downloads.filter((i: any) => i.file_url)
         }
-        if (modalTitle.includes('Thêm')) {
-            mutate(updatedKnowledge, {
+        if (isUpdate) {
+            updatePost({...updatedPost}, {
                 onSuccess: () => {
-                    toast.success('Thêm mới thành công');
+                    toast.success('Cập nhật thành công');
+                    setOpenModal(false);
+                    setIsUpdate(false);
+                },
+            });
+        } else {
+            createPost({...updatedPost}, {
+                onSuccess: () => {
+                    toast.success('Đăng bài thành công');
                     setOpenModal(false);
                 },
             });
-        } else if (modalTitle.includes('Cập nhật')) {
-            // updateKnowledge(updatedKnowledge, {
-            //     onSuccess: () => {
-            //         toast.success('Cập nhật thành công');
-            //         setOpenModal(false);
-            //     },
-            // });
         }
     }
 
-    // call api upload files
     const handleUploadFiles = () => {
         const formData = new FormData();
         let uploadFiles = [
             {
-                file: newKnowledge.media?.url,
-                key: `media.url`,
-                type: newKnowledge.media?.media_type,
+                file: post.image_url,
+                key: `image_url`,
+                type: 'image'
             },
             {
-                file: newKnowledge.slide.url,
+                file: post.slide.url,
                 key: "slide.url",
                 type: 'raw',
             },
             {
-                file: newKnowledge.pdf.url,
+                file: post.pdf.url,
                 key: "pdf.url",
                 type: 'pdf',
             },
+            ...post.downloads.map((i: any, index: number) => ({
+                file: i.file_url,
+                key: `file_url.${index}`,
+                type: 'raw'
+            }))
         ]
         uploadFiles = uploadFiles.filter(item => (item.file && typeof item.file !== 'string'));
-        if (newKnowledge.link) {
-            uploadFiles = uploadFiles.filter(item => item.key.includes('media'));
+        if (post.link) {
+            handleSubmitPost(post);
+            return;
         }
         if (uploadFiles.length > 0) {
             uploadFiles.forEach(uploadFile => {
@@ -174,65 +145,133 @@ export default function () {
 
             uploadFile(formData, {
                 onSuccess: (res) => {
-                    let clone = newKnowledge;
+                    let clone = post;
                     const files = res.data;
                     for (let file of files) {
                         const [parent, child] = file.key.split('.');
-                        clone = {
-                            ...clone,
-                            [parent]: {
-                                ...clone[parent as keyof typeof clone] as any,
-                                [child]: file.url
+                        if (parent !== 'file_url') {
+                            clone = {
+                                ...clone,
+                                [parent]: {
+                                    ...clone[parent as keyof typeof clone] as any,
+                                    [child]: secureLink(file.url)
+                                }
+                            }
+                        } else {
+                            clone = {
+                                ...clone,
+                                downloads: [
+                                    ...clone.downloads.slice(0, Number(child)),
+                                    {...clone.downloads[Number(child)], file_url: secureLink(file.url)},
+                                    ...clone.downloads.slice(Number(child) + 1)
+                                ] as any
                             }
                         }
                     }
-                    handleSubmitKnowledge(clone);
+                    handleSubmitPost(clone);
                 },
             })
         } else {
-            handleSubmitKnowledge(newKnowledge);
+            handleSubmitPost(post);
         }
-    }
-
-    const handleAddKnowledge = () => {
-        setModalTitle(`Thêm mới`)
-        setNewKnowledge(defaultItem)
-        setMediaUrl('')
-        setOpenModal(true);
     }
 
     const handleSubmit = () => {
         handleUploadFiles();
     }
 
-    const handleClickEdit = (item: IKnowledge) => {
-        setOpenModal(true);
-        setNewKnowledge(item);
-        setModalTitle(`Cập nhật`);
-    }
-
     const handleChangeCheck = (checked: boolean, key: string) => {
-        setNewKnowledge({
-            ...newKnowledge,
+        setPost({
+            ...post,
             [key]: {
-                ...newKnowledge[key as keyof typeof newKnowledge] as any,
+                ...post[key as keyof typeof post] as any,
                 downloadable: checked
             }
         })
     }
 
-    const handleChangeFile = (file: File, key: string) => {
-        setNewKnowledge({
-            ...newKnowledge,
+    const handleChangeFile = (file: any, key: string) => {
+        setPost({
+            ...post,
             [key]: {
-                ...newKnowledge[key as keyof typeof newKnowledge] as any,
+                ...post[key as keyof typeof post] as any,
                 url: file
             }
         })
     }
 
+    const handleChangeDownloads = (value: any, key: string, index: number) => {
+        setPost({
+            ...post,
+            downloads: [
+                ...post.downloads.slice(0, index),
+                {
+                    ...post.downloads[index],
+                    [key]: value
+                },
+                ...post.downloads.slice(index + 1)
+            ] as any
+        })
+    }
+
+    const handleAddDownload = () => {
+        setPost({
+            ...post,
+            downloads: [
+                ...post.downloads,
+                {
+                    name: '',
+                    file_url: ''
+                }
+            ] as any
+        })
+    }
+
+    const handleChangeImage = (e: any) => {
+        if (typeof e !== 'string') {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0]
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setPost((prev: any) => ({
+                        ...prev,
+                        image_url: file
+                    }))
+                    setMediaUrl(reader.result as string);
+                }
+                reader.readAsDataURL(file)
+            }
+        } else {
+            setPost((prev: any) => ({
+                ...prev,
+                image_url: secureLink(e)
+            }))
+            setMediaUrl(e as string);
+        }
+    }
+
+    const handleChangeFilee = (file: any, index: number) => {
+        setPost({
+            ...post,
+            downloads: [
+                ...post.downloads.slice(0, index),
+                {
+                    ...post.downloads[index],
+                    file_url: file
+                },
+                ...post.downloads.slice(index + 1)
+            ] as any
+        })
+    }
+
+    const handleClickEdit = (item: IPost) => {
+        setIsUpdate(true);
+        setPost(item);
+        setOpenModal(true);
+    }
+
     const handleSelectRelatedPosts = (checked: boolean, itemId: string) => {
-        setNewKnowledge((prev: any) => ({
+        setPost((prev: any) => ({
             ...prev,
             related_posts: !checked ?
                 prev.related_posts.filter((i: string) => i !== itemId) :
@@ -240,13 +279,24 @@ export default function () {
         }))
     }
 
-    const handleSelectCategory = (checked: boolean, itemId: string) => {
-        setNewKnowledge((prev: any) => ({
-            ...prev,
-            category: !checked ?
-                prev.category.filter((i: string) => i !== itemId) :
-                [...prev.category, itemId]
-        }))
+    const handleDeleteDownload = (index: number) => {
+        setPost({
+            ...post,
+            downloads: [
+                ...post.downloads.slice(0, index),
+                ...post.downloads.slice(index + 1)
+            ] as any
+        })
+    }
+
+    const handleDelete = (id: string) => {
+        if (id) {
+            deletePost(id, {
+                onSuccess: () => {
+                    toast.success('Xóa thành công')
+                }
+            });
+        }
     }
 
     useEffect(() => {
@@ -264,48 +314,54 @@ export default function () {
                 {openModal ? <div className={'flex gap-4'}>
                         <Button
                             onClick={() => {
-                                setNewKnowledge(defaultItem);
+                                setPost(defaultItem);
                                 setOpenModal(false);
                             }} size={'lg'}
-                            disabled={loadingAdd || loadingUpload}
                         >
                             Quay lại
                         </Button>
-                        <Button
-                            onClick={handleSubmit} size={'lg'}
-                            disabled={
-                                !newKnowledge.name || !newKnowledge.media?.url
-                                || loadingAdd || loadingUpload
-                            }
-                        >
-                            {(loadingAdd || loadingUpload) &&
+                        <Button onClick={handleSubmit} size={'lg'} disabled={loadingUpload || loadingAdd || loadingUpdate}>
+                            {(loadingUpload || loadingAdd || loadingUpdate) &&
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            Lưu
+                            Lưu bài đăng
                         </Button>
                     </div>
-                    : <Button onClick={handleAddKnowledge} size={'lg'}>
+                    : <Button onClick={() => {
+                        setIsUpdate(false);
+                        setPost(defaultItem);
+                        setOpenModal(true);
+                    }} size={'lg'}>
                         Đăng bài
                     </Button>
                 }
             </div>
         </div>
-        {(loading || loadingSubmitAddCategory) ? <Loader2 className={'animate-spin'}/> :
-            !openModal ? <DataTable
-                loadingSubmit={loadingSubmitAddCategory}
-                addCategoryToKnowledge={addCategoryToKnowledge}
-                categories={categories?.knowledge_categories?.filter((i: any) => !i.is_deleted) || []}
-                data={data.knowledge}
-                handleClickEdit={handleClickEdit}
-                // handleClickDelete={handleChangeNewsVisibility}
-            /> : <KnowledgeForm
-                handleChangeFile={handleChangeFile}
-                data={newKnowledge}
-                imageUrl={mediaUrl}
-                handleChangeData={handleChangeData}
-                handleImageChange={handleChangeImage}
-                handleChangeCheck={handleChangeCheck}
-                handleSelectRelatedPosts={handleSelectRelatedPosts}
-            />
+        {(loadingPosts || loadingSections || loadingAddPostToSection) ? <Loader2 className={'animate-spin'}/> :
+            !openModal ?
+                <DataTable
+                    data={posts?.posts || []}
+                    sections={sections?.sections?.filter((i: ISection) => i.type === SectionType.list
+                        && i.header_key === 'knowledge'
+                    ) || []}
+                    addPostToSection={addPostToSection}
+                    handleClickUpdate={handleClickEdit}
+                    handleClickDelete={handleDelete}
+                    loadingDelete={loadingDelete}
+                /> :
+                <Form
+                    isOnePost={false}
+                    handleChangeFile={handleChangeFile}
+                    post={post}
+                    imageUrl={mediaUrl}
+                    handleChangeData={handleChangeData}
+                    handleImageChange={handleChangeImage}
+                    handleChangeCheck={handleChangeCheck}
+                    handleSelectRelatedPosts={handleSelectRelatedPosts}
+                    handleAddDownload={handleAddDownload}
+                    handleChangeDownloads={handleChangeDownloads}
+                    handleDeleteDownload={handleDeleteDownload}
+                    handleChangeFilee={handleChangeFilee}
+                />
         }
     </>
 }

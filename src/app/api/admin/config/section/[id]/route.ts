@@ -2,7 +2,8 @@ import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import {Types} from "mongoose";
 import {withAuthWithContext} from "@/app/api/middleware";
-import SectionModel from "@/models/section";
+import SectionModel, {SectionType} from "@/models/section";
+import Post from "@/models/post";
 
 const {ObjectId} = Types
 
@@ -89,5 +90,27 @@ async function changeVisibility(request: NextRequest, {params}: { params: Promis
     }
 }
 
+async function getSectionById(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+    try {
+        await connectDb();
+
+        const {id} = await params;
+        let section: any = await SectionModel.findOne({_id: id}).populate('post_id').lean();
+        if (section?.type === SectionType.list) {
+            const posts = await Post.find({parent_id: id});
+            section = {...section, posts};
+        }
+
+        return NextResponse.json({section});
+    } catch (error) {
+        console.error('Get detail section API error:', error);
+        return NextResponse.json(
+            {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
+            {status: 500}
+        );
+    }
+}
+
+export const GET = withAuthWithContext(getSectionById);
 export const PATCH = withAuthWithContext(updateOneSection);
 export const DELETE = withAuthWithContext(changeVisibility);

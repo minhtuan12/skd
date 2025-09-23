@@ -66,21 +66,8 @@ function generateUrl(item: any) {
 }
 
 export default async function Header() {
-    const categories = await fetchKnowledgeCategory();
     const sections = await fetchMenu();
     const menuItems = menu.map(item => {
-        if (item.key === 'knowledges') {
-            return {
-                ...item,
-                children: categories?.pages?.map((i: any) => ({
-                    ...i,
-                    title: i.name,
-                    href: `/${buildDetailPath(i.name, i._id)}`,
-                    hasPages: true,
-                    header_key: 'knowledge'
-                }))
-            };
-        }
         if (item.key === 'home') return item;
         return {
             ...item,

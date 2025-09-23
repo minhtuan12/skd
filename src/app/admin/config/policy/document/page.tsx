@@ -116,7 +116,7 @@ export default function () {
     const handleSubmitDocument = (newDocument: any) => {
         const updatedDocument = {
             ...newDocument,
-            title: newDocument.title.trim(),
+            title: newDocument.title,
         }
         if (modalTitle.includes('Thêm')) {
             mutate(updatedDocument, {

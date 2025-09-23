@@ -4,6 +4,7 @@ import {VideoPlayer} from "@/components/ui/video";
 import PptViewer from "@/components/custom/ppt-viewer";
 import {cloudinaryService} from "@/service/cloudinary";
 import cloudinary from "@/lib/cloudinary";
+import OtherPosts from "@/app/(user)/bai-viet/[id]/other-posts";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -47,7 +48,7 @@ export default async function ({params}: {
             {/* Detail */}
             <div className={'flex flex-col gap-8 2xl:px-50 xl:px-30 px-8'}>
                 <h1 className={'font-medium text-center text-3xl text-green-700'}>{data.name}</h1>
-                <div className={'flex flex-col gap-4'}>
+                <div className={'flex flex-col gap-10'}>
                     <div className={'flex flex-col gap-8'}>
                         {
                             post.text ? <div
@@ -91,6 +92,22 @@ export default async function ({params}: {
                             </div>
                         </div>
                     </div>
+
+                    {/* Related */}
+                    {/*{post.header_key === 'knowledge' ?*/}
+                    {/*    <div className={'flex flex-col gap-14'}>*/}
+                    {/*        <div className={'flex justify-center w-full'}>*/}
+                    {/*            <h1 className={'font-medium text-center text-2xl w-fit border-t-green-600 text-green-700 border-t-3 pt-2'}>Các*/}
+                    {/*                bài đăng liên quan</h1>*/}
+                    {/*        </div>*/}
+                    {/*        <div className={'w-full 2xl:px-60 xl:px-30 lg:px-4'}>*/}
+                    {/*            <OtherPosts*/}
+                    {/*                posts={post.related_posts}*/}
+                    {/*                exceptId={id}*/}
+                    {/*            />*/}
+                    {/*        </div>*/}
+                    {/*    </div> : ''*/}
+                    {/*}*/}
                 </div>
             </div>
         </div>

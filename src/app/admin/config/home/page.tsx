@@ -314,20 +314,20 @@ export default function HomeConfig() {
     const handleSubmitUpdateConfig = (newConfig: any) => {
         const updatedConfig = {
             introduction: {
-                content: newConfig.introduction.content.trim(),
-                image_url: newConfig.introduction.image_url.trim()
+                content: newConfig.introduction.content,
+                image_url: newConfig.introduction.image_url
             },
             news_and_events: newConfig.news_and_events.map((item: INewsAndEvents) => item._id),
-            knowledge_bank_video_url: newConfig.knowledge_bank_video_url.trim(),
+            knowledge_bank_video_url: newConfig.knowledge_bank_video_url,
             agricultural_policy: newConfig.agricultural_policy.map((item: IPolicyDocument) => item._id),
             banner: newConfig.banner.map((item: any) => ({
                 title: item.title,
                 description: item.description,
-                image_url: (item.image_url as string).trim()
+                image_url: (item.image_url as string)
             })),
             ads: newConfig.ads.map((i: any) => ({
-                image_url: (i.image_url as string).trim(),
-                link: i.link.trim()
+                image_url: (i.image_url as string),
+                link: i.link
             }))
         }
         mutate(updatedConfig, {

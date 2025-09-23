@@ -36,7 +36,7 @@ async function addLab(request: NextRequest) {
         }
 
         const lab = new Lab({
-            name: data.name.trim(),
+            name: data.name,
             category: data.category,
             address: data.address,
             location: data.location,

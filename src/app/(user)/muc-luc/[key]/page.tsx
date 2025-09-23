@@ -1,9 +1,8 @@
 import React from "react";
 import {ISection, SectionType} from "@/models/section";
-import {buildDetailPath, cn} from "@/lib/utils";
+import {cn} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import {IKnowledgeCategory} from "@/models/knowledge-category";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -30,22 +29,21 @@ async function fetchMenu() {
 }
 
 function generateUrl(item: any) {
-    if (item.type === SectionType.section) {
+    if (item.type === SectionType.section && item.header_key !== 'map' && item.header_key !== 'news') {
         return `/muc-luc/${item.header_key}?sub=${item._id}`;
     }
-    if (item.type === SectionType.post) {
+    if (item.type === SectionType.post && item.header_key !== 'map' && item.header_key !== 'news') {
         return item.post_id ? `/bai-viet/${item.post_id}` : '/';
     }
+    if (item.type === SectionType.list && item.header_key !== 'map' && item.header_key !== 'news') {
+        return `/danh-sach/${item._id}/1`;
+    }
     switch (item.header_key) {
-        case 'policy':
-            return '/thong-tin-chinh-sach/chinh-sach/1'
         case 'map':
             if (item.name === 'Bản đồ đất') {
                 return '/ban-do/ban-do-dat';
             }
             return '/ban-do/cac-trung-tam-quan-trac-dat';
-        case 'knowledge':
-            return `/ngan-hang-kien-thuc/${buildDetailPath(item.name, item._id as string)}/1`;
         case 'news':
             if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
             return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
@@ -81,24 +79,12 @@ export default async function ({params, searchParams}: {
     const {sub} = await searchParams;
     let menu = [];
     let title = '';
-    if (key === 'knowledges') {
-        // const data = await fetchKnowledgeCategory();
-        // menu = data.pages.map((page: IKnowledgeCategory) => {
-        //     return {
-        //         ...page,
-        //         name: page.name,
-        //         type: SectionType.list,
-        //         header_key: 'knowledge'
-        //     }
-        // })
+    const data = await fetchMenu();
+    if (sub) {
+        menu = data.menu.filter((i: ISection) => i.parent_id === sub && !i.is_deleted);
+        title = data.menu.find((i: ISection) => i._id === sub)?.name?.toUpperCase();
     } else {
-        const data = await fetchMenu();
-        if (sub) {
-            menu = data.menu.filter((i: ISection) => i.parent_id === sub && !i.is_deleted);
-            title = data.menu.find((i: ISection) => i._id === sub)?.name?.toUpperCase();
-        } else {
-            menu = data.menu.filter((i: ISection) => i.header_key === key && !i.parent_id && !i.is_deleted);
-        }
+        menu = data.menu.filter((i: ISection) => i.header_key === key && !i.parent_id && !i.is_deleted);
     }
 
     return <div className={'box-border flex flex-col gap-8 mt-10 lg:px-30 px-10 max-sm:px-6 pb-30'}>

@@ -28,7 +28,7 @@ async function updateLab(request: NextRequest, {params}: { params: Promise<{ id:
             {_id: new ObjectId(id)},
             {
                 $set: {
-                    name: data.name.trim(),
+                    name: data.name,
                     category: data.category,
                     address: data.address,
                     location: data.location,

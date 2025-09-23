@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {Loader2} from "lucide-react";
 import {TreeView} from "@/components/tree-view";
 import {useFetchSectionAdmin} from "@/app/admin/config/pages/(hooks)/use-section-admin";
-import {ISection} from "@/models/section";
+import {ISection, SectionType} from "@/models/section";
 import SectionForm from "@/app/admin/config/pages/section-form";
 import {useUpdateOneSection} from "@/app/admin/config/pages/(hooks)/use-update-one-section";
 import {toast} from "sonner";
@@ -85,7 +85,12 @@ function buildTree(
                 return i;
             }
             const {children, ...item} = i;
-            return {...item, draggable: true, droppable: true};
+            return {...item, draggable: false, droppable: false};
+        })
+        .map((i: any) => {
+            if (i.type !== SectionType.list) return i;
+            const {children, ...nonChildren} = i
+            return nonChildren;
         });
 }
 
@@ -158,17 +163,20 @@ export default function () {
         {
             (loading || loadingUpdateOne) ? <Loader2 className={'animate-spin w-8 h-8'}/> :
                 <div className={'w-full flex justify-between gap-10'}>
-                    <TreeView
-                        activeItemId={selectedSection?.id}
-                        data={headers} className={'w-1/3'}
-                        onSelectChange={(item: any) => {
-                            setSelectedSection(item);
-                        }}
-                        onDocumentDrag={handleDragPage}
-                    />
+                    <div className={'max-h-[calc(100vh-147px)] overflow-y-auto w-1/3'}>
+                        <TreeView
+                            activeItemId={selectedSection?.id}
+                            data={headers}
+                            onSelectChange={(item: any) => {
+                                setSelectedSection(item);
+                            }}
+                            onDocumentDrag={handleDragPage}
+                        />
+                    </div>
                     <div className={'w-2/3 h-full shadow-lg border border-gray-300 rounded-md py-5 px-7'}>
                         {
-                            selectedSection ? <SectionForm data={selectedSection as any} setSelectedSection={setSelectedSection}/> :
+                            selectedSection ?
+                                <SectionForm data={selectedSection as any} setSelectedSection={setSelectedSection}/> :
                                 <i className={'flex justify-center items-center h-full text-gray-500 text-lg'}>
                                     Chọn 1 trang bên trái
                                 </i>

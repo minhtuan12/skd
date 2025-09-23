@@ -55,7 +55,7 @@ export default function Hero({data}: { data: { title: string, description: strin
                     >
                         <Image
                             src={item.image_url}
-                            alt={item.title}
+                            alt={item.title || 'introduction'}
                             fill
                             className="object-cover"
                         />

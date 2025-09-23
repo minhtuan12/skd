@@ -141,78 +141,79 @@ export default function ({data, setSelectedSection}: {
             </div>
         </div>
 
-        {
-            !data?.isDefault ?
-                <div className={'box-border lg:px-40 md:px-20 px-0'}>
-                    <UploadFile
-                        url={(imageUrl && imageUrl !== '/') ? imageUrl : page.image_url as string}
-                        handleChangeFile={handleChangeImage} inputValue={''}
-                    />
-                </div> : ''
-        }
+        <div className={'max-h-[calc(100vh-250px)] overflow-y-auto'}>
+            {
+                !data?.isDefault ?
+                    <div className={'box-border lg:px-40 md:px-20 px-0'}>
+                        <UploadFile
+                            url={(imageUrl && imageUrl !== '/') ? imageUrl : page.image_url as string}
+                            handleChangeFile={handleChangeImage} inputValue={''}
+                        />
+                    </div> : ''
+            }
 
-        {data.type === SectionType['section'] && <Separator className={'mt-3'}/>}
+            {data.type === SectionType['section'] && <Separator className={'mt-3'}/>}
 
-        {/* Table of pages */}
-        {
-            (data?.isDefault || data.type === SectionType['section']) ?
-                <div className={'flex flex-col gap-3 mt-3'}>
-                    <div className={'font-medium text-base'}>Các trang con</div>
-                    <Table className={'text-base'}>
-                        <TableHeader className={'bg-[#f5f5f590]'}>
-                            <TableRow>
-                                <TableHead className={'text-center'}>STT</TableHead>
-                                <TableHead>Tên trang</TableHead>
-                                <TableHead>Loại trang</TableHead>
-                                <TableHead className={'text-center'}>Hiển thị</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {pages.map((item: ISection, index: number) => (
-                                <TableRow key={index}>
-                                    <TableCell
-                                        className="font-medium text-center">{index + 1}</TableCell>
-                                    <TableCell className="font-medium">
-                                        <Input
-                                            id="name"
-                                            value={item.name}
-                                            onChange={(e: any) => handleChangePageName(e.target.value, 'name', index)}
-                                        />
-                                    </TableCell>
-                                    <TableCell className="font-medium">
-                                        <Select
-                                            disabled={item.type === 'list'}
-                                            value={item.type || SectionType['post']}
-                                            onValueChange={value => handleSelect(value, index)}
-                                        >
-                                            <SelectTrigger className="w-[200px] bg-white !text-base">
-                                                <SelectValue/>
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value={SectionType['post']}>
-                                                    Bài viết
-                                                </SelectItem>
-                                                <SelectItem value={SectionType['section']}>
-                                                    Mục lục
-                                                </SelectItem>
-                                                <SelectItem disabled value={SectionType['list']}>
-                                                    Danh sách bài viết
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </TableCell>
-                                    <TableCell className={'text-center'}>
-                                        <Checkbox
-                                            value={item._id}
-                                            checked={!item.is_deleted}
-                                            onCheckedChange={(e) => handleChangePageName(!e, 'is_deleted', index)}
-                                        />
-                                    </TableCell>
+            {/* Table of pages */}
+            {
+                (data?.isDefault || data.type === SectionType['section']) ?
+                    <div className={'flex flex-col gap-3 mt-3'}>
+                        <div className={'font-medium text-base'}>Các trang con</div>
+                        <Table className={'text-base'}>
+                            <TableHeader className={'bg-[#f5f5f590]'}>
+                                <TableRow>
+                                    <TableHead className={'text-center'}>STT</TableHead>
+                                    <TableHead>Tên trang</TableHead>
+                                    <TableHead>Loại trang</TableHead>
+                                    <TableHead className={'text-center'}>Hiển thị</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div> : ''
-        }
+                            </TableHeader>
+                            <TableBody>
+                                {pages.map((item: ISection, index: number) => (
+                                    <TableRow key={index}>
+                                        <TableCell
+                                            className="font-medium text-center">{index + 1}</TableCell>
+                                        <TableCell className="font-medium">
+                                            <Input
+                                                id="name"
+                                                value={item.name}
+                                                onChange={(e: any) => handleChangePageName(e.target.value, 'name', index)}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="font-medium">
+                                            <Select
+                                                value={item.type || SectionType['post']}
+                                                onValueChange={value => handleSelect(value, index)}
+                                            >
+                                                <SelectTrigger className="w-[200px] bg-white !text-base">
+                                                    <SelectValue/>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value={SectionType['post']}>
+                                                        Bài viết
+                                                    </SelectItem>
+                                                    <SelectItem value={SectionType['section']}>
+                                                        Mục lục
+                                                    </SelectItem>
+                                                    <SelectItem value={SectionType['list']}>
+                                                        Danh sách bài viết
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </TableCell>
+                                        <TableCell className={'text-center'}>
+                                            <Checkbox
+                                                value={item._id}
+                                                checked={!item.is_deleted}
+                                                onCheckedChange={(e) => handleChangePageName(!e, 'is_deleted', index)}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div> : ''
+            }
+        </div>
     </div>
 }
