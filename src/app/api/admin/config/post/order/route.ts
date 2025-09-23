@@ -1,8 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import {withAuth} from "@/app/api/middleware";
-import Post from "@/models/post";
-import SectionModel from "@/models/section";
+import PostOrder from "@/models/post-order";
 
 async function updatePostOrderBySectionId(request: NextRequest) {
     try {
@@ -19,31 +18,20 @@ async function updatePostOrderBySectionId(request: NextRequest) {
         }
 
         const {sectionId, postId, oldOrder, newOrder} = data;
-        let bulkOps = [];
-        const section = await SectionModel.findOne({_id: sectionId});
-        const postIds = section.post_ids.filter((i: string) => i !== postId);
+        const current = await PostOrder.findOne({section_id: sectionId, post_id: postId});
         if (newOrder < oldOrder) {
-            bulkOps.push({
-                updateMany: {
-                    filter: {order: {$gte: newOrder, $lt: oldOrder}, _id: {$in: postIds}},
-                    update: {$inc: {order: 1}},
-                }
-            });
+            await PostOrder.updateMany(
+                {section_id: sectionId, order: {$gte: newOrder, $lt: oldOrder}},
+                {$inc: {order: 1}}
+            );
         } else {
-            bulkOps.push({
-                updateMany: {
-                    filter: {order: {$gt: oldOrder, $lte: newOrder}, _id: {$in: postIds}},
-                    update: {$inc: {order: -1}},
-                }
-            });
+            await PostOrder.updateMany(
+                {section_id: sectionId, order: {$gt: oldOrder, $lte: newOrder}},
+                {$inc: {order: -1}}
+            );
         }
-        bulkOps.push({
-            updateOne: {
-                filter: {_id: postId},
-                update: {$set: {order: newOrder}},
-            }
-        });
-        await Post.bulkWrite(bulkOps);
+        current.order = newOrder;
+        current.save();
 
         return NextResponse.json(
             JSON.stringify({message: "Cập nhật thành công"}),

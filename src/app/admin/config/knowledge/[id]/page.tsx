@@ -321,7 +321,11 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
             loadingDetailSection || loadingPostList ? <Loader2 className={'animate-spin'}/> : (
                 data?.section?.type === SectionType.list ? (
                     <DataTable
-                        data={posts?.posts?.filter((i: any) => data?.section?.post_ids?.includes(i._id)) || []}
+                        data={
+                            posts?.posts?.filter((i: any) =>
+                                new Set(data?.section?.post_ids)?.has(i._id)
+                                && i.section_id === id) || []
+                        }
                         handleChangeOrder={handleChangeOrder}
                     />
                 ) : <Form

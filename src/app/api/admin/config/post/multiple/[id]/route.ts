@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import {withAuthWithContext} from "@/app/api/middleware";
 import Post from "@/models/post";
 import SectionModel from "@/models/section";
+import PostOrder from "@/models/post-order";
 
 async function updatePost(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
@@ -42,9 +43,32 @@ async function deletePost(request: NextRequest, {params}: { params: Promise<{ id
         const {id} = await params;
         await Promise.all([
             Post.findByIdAndDelete(id),
-            SectionModel.updateMany({post_ids: id}, {$pull: {post_ids: id}})
+            SectionModel.updateMany({post_ids: id}, {$pull: {post_ids: id}}),
         ]);
 
+        const records = await PostOrder.find({
+            post_id: id
+        });
+
+        const grouped = records.reduce((acc: any, cur: any) => {
+            const sid = cur.section_id.toString();
+            if (!acc[sid]) acc[sid] = [];
+            acc[sid].push(cur);
+            return acc;
+        }, {} as Record<string, typeof records>);
+
+        for (const [sectionId, items] of Object.entries(grouped) as [string, any]) {
+            for (const item of items) {
+                await PostOrder.deleteOne({section_id: item.section_id, post_id: id});
+                await PostOrder.updateMany(
+                    {
+                        section_id: item.section_id,
+                        order: {$gt: item.order}
+                    },
+                    {$inc: {order: -1}}
+                );
+            }
+        }
         return NextResponse.json(
             JSON.stringify({message: "Xóa thành công"}),
             {status: 200}

@@ -17,10 +17,10 @@ export default function DataTable(
         </SelectItem>
     ))
 
-    return <Table className={'text-base table-fixed'}>
+    return <Table className={'text-base'}>
         <TableHeader className={'bg-[#f5f5f590]'}>
             <TableRow>
-                {/*<TableHead className={'text-center w-10'}>Ưu tiên</TableHead>*/}
+                <TableHead className={'text-center w-10'}>Ưu tiên</TableHead>
                 <TableHead className={'text-center w-20'}>Hình ảnh</TableHead>
                 <TableHead className={'pl-4 w-100'}>Tên</TableHead>
                 <TableHead className={'w-60 text-center'}>Ngày đăng</TableHead>
@@ -29,25 +29,25 @@ export default function DataTable(
         <TableBody>
             {data.map((item: any, index: number) => {
                 return <TableRow key={index}>
-                    {/*<TableCell className={'text-center w-10'}>*/}
-                    {/*    <Select*/}
-                    {/*        value={(item.order as number).toString()}*/}
-                    {/*        onValueChange={value => {*/}
-                    {/*            handleChangeOrder(*/}
-                    {/*                item._id,*/}
-                    {/*                item.order as number,*/}
-                    {/*                Number(value)*/}
-                    {/*            )*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        <SelectTrigger className="bg-white !text-base">*/}
-                    {/*            <SelectValue/>*/}
-                    {/*        </SelectTrigger>*/}
-                    {/*        <SelectContent>*/}
-                    {/*            {orderOptions}*/}
-                    {/*        </SelectContent>*/}
-                    {/*    </Select>*/}
-                    {/*</TableCell>*/}
+                    <TableCell className={'text-center w-10'}>
+                        <Select
+                            value={(item.order as number).toString()}
+                            onValueChange={value => {
+                                handleChangeOrder(
+                                    item._id,
+                                    item.order as number,
+                                    Number(value)
+                                )
+                            }}
+                        >
+                            <SelectTrigger className="bg-white !text-base">
+                                <SelectValue/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {orderOptions}
+                            </SelectContent>
+                        </Select>
+                    </TableCell>
                     <TableCell className={'h-20 w-20'}>
                         {
                             item?.image_url ? <Image

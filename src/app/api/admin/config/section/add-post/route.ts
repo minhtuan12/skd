@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import {withAuth} from "@/app/api/middleware";
 import SectionModel from "@/models/section";
 import Post from "@/models/post";
+import PostOrder from "@/models/post-order";
 
 async function addPost(request: NextRequest) {
     try {
@@ -21,16 +22,25 @@ async function addPost(request: NextRequest) {
         let newIds = [];
         if (section.post_ids.includes(data.postId)) {
             newIds = section.post_ids.map((i: any) => i.toString()).filter((i: any) => i !== data.postId)
-            await Post.updateMany(
-                {_id: {$in: section.post_ids}, order: {$gt: post.order}},
+            await PostOrder.updateMany(
+                {section_id: data.sectionId, order: {$gt: post.order}},
                 {$inc: {order: -1}}
             )
+            await PostOrder.deleteOne({
+                section_id: data.sectionId,
+                post_id: data.postId,
+            })
         } else {
             newIds = [...section.post_ids, data.postId];
-            await Post.updateMany(
-                {_id: {$in: section.post_ids}},
+            await PostOrder.updateMany(
+                {section_id: data.sectionId},
                 {$inc: {order: 1}}
             )
+            await PostOrder.create({
+                section_id: data.sectionId,
+                post_id: data.postId,
+                order: 0
+            })
         }
 
         await SectionModel.findByIdAndUpdate(data.sectionId, {$set: {post_ids: newIds}});

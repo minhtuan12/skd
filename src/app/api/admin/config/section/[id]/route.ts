@@ -4,6 +4,7 @@ import {Types} from "mongoose";
 import {withAuthWithContext} from "@/app/api/middleware";
 import SectionModel, {SectionType} from "@/models/section";
 import Post from "@/models/post";
+import PostOrder from "@/models/post-order";
 
 const {ObjectId} = Types
 
@@ -55,7 +56,7 @@ async function updateOneSection(request: NextRequest, {params}: { params: Promis
     }
 }
 
-async function changeVisibility(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+async function deleteSection(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
         await connectDb();
 
@@ -69,16 +70,36 @@ async function changeVisibility(request: NextRequest, {params}: { params: Promis
             );
         }
 
-        const isDeleted = section.is_deleted;
-        await SectionModel.findOneAndUpdate({
-            _id: new ObjectId(id)
-        }, {
-            $set: {
-                is_deleted: !isDeleted
+        if (section.type === SectionType.post) {
+            if (section.post_id) {
+                await Post.findByIdAndDelete(section.post_id);
             }
-        })
+        } else if (section.type === SectionType.section) {
+            const children = await SectionModel.find({parent_id: id});
+            for (let item of children) {
+                if (item.type === SectionType.post && item.post_id) {
+                    await Post.findByIdAndDelete(item.post_id);
+                } else if (item.type === SectionType.section) {
+                    await SectionModel.deleteMany({parent_id: item._id});
+                } else {
+                    const postOrders = await PostOrder.find({section_id: item._id});
+                    await Promise.all([
+                        PostOrder.deleteMany({section_id: item._id}),
+                        Post.deleteMany({_id: {$in: postOrders.map(i => i.post_id)}})
+                    ]);
+                }
+            }
+        } else {
+            const postOrders = await PostOrder.find({section_id: id});
+            await Promise.all([
+                PostOrder.deleteMany({section_id: id}),
+                Post.deleteMany({_id: {$in: postOrders.map(i => i.post_id)}})
+            ]);
+        }
+
+        await SectionModel.findByIdAndDelete(id);
         return NextResponse.json(
-            JSON.stringify({message: "Cập nhật thành công"}),
+            JSON.stringify({message: "Xóa thành công"}),
             {status: 200}
         );
     } catch (error) {
@@ -113,4 +134,4 @@ async function getSectionById(request: NextRequest, {params}: { params: Promise<
 
 export const GET = withAuthWithContext(getSectionById);
 export const PATCH = withAuthWithContext(updateOneSection);
-export const DELETE = withAuthWithContext(changeVisibility);
+export const DELETE = withAuthWithContext(deleteSection);

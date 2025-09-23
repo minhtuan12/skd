@@ -61,7 +61,7 @@ export default function DataTable(
         </Table>
         <div
             className={'min-h-[calc(100vh-205px)] max-h-[calc(100vh-205px)] overflow-y-auto border-b border-gray-200'}>
-            <Table className={'text-base table-fixed'}>
+            <Table className={'text-base'}>
                 <TableBody>
                     {data.map((item: IPost, index: number) => {
                         return <TableRow key={item._id}>

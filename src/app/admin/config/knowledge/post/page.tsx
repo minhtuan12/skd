@@ -339,7 +339,9 @@ export default function () {
         {(loadingPosts || loadingSections || loadingAddPostToSection) ? <Loader2 className={'animate-spin'}/> :
             !openModal ?
                 <DataTable
-                    data={posts?.posts || []}
+                    data={(Array.from(
+                        new Map(posts?.posts.map((p: any) => [p._id.toString(), p])).values()
+                    )) as any || []}
                     sections={sections?.sections?.filter((i: ISection) => i.type === SectionType.list
                         && i.header_key === 'knowledge'
                     ) || []}

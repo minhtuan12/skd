@@ -8,12 +8,13 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useUpdateSection} from "@/app/admin/config/pages/(hooks)/use-update-section";
-import {Loader2} from "lucide-react";
+import {Loader2, Trash} from "lucide-react";
 import {toast} from "sonner";
 import UploadFile from "@/app/admin/config/(components)/upload-file";
 import {Separator} from "@/components/ui/separator";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {useUpdateOneSection} from "@/app/admin/config/pages/(hooks)/use-update-one-section";
+import {useDeleteSection} from "@/app/admin/config/pages/(hooks)/use-delete-section";
 
 export default function ({data, setSelectedSection}: {
     data: ISection & { isDefault?: boolean, key: string },
@@ -26,6 +27,7 @@ export default function ({data, setSelectedSection}: {
     const {mutate: updateSection, loading} = useUpdateSection();
     const {uploadFile, loading: loadingUpload} = useUploadFile();
     const {mutate: updateOneSection, loading: loadingUpdateOne} = useUpdateOneSection();
+    const {mutate: deleteSection, loading: loadingDelete} = useDeleteSection();
 
     function handleChangePageName(value: string | boolean, key: string, index: number) {
         setPages((prev) => [
@@ -166,6 +168,7 @@ export default function ({data, setSelectedSection}: {
                                     <TableHead>Tên trang</TableHead>
                                     <TableHead>Loại trang</TableHead>
                                     <TableHead className={'text-center'}>Hiển thị</TableHead>
+                                    <TableHead className={'text-center'}></TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -207,6 +210,25 @@ export default function ({data, setSelectedSection}: {
                                                 checked={!item.is_deleted}
                                                 onCheckedChange={(e) => handleChangePageName(!e, 'is_deleted', index)}
                                             />
+                                        </TableCell>
+                                        <TableCell className={'text-center'}>
+                                            {
+                                                item._id ? <Button
+                                                    disabled={loadingDelete}
+                                                    className={'bg-red-500'}
+                                                    onClick={() => {
+                                                        deleteSection(item._id, {
+                                                            onSuccess: () => {
+                                                                toast.success('Xóa thành công');
+                                                                setSelectedSection(null);
+                                                            }
+                                                        });
+                                                    }}
+                                                >
+                                                    {loadingDelete && <Loader2 className={'w-4 h-4 animate-spin'}/>}
+                                                    <Trash/>Xóa
+                                                </Button> : ''
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 ))}

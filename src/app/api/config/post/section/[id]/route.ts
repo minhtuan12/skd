@@ -2,6 +2,9 @@ import {NextRequest, NextResponse} from "next/server";
 import connectDb from "@/lib/db";
 import SectionModel from "@/models/section";
 import Post from "@/models/post";
+import {Types} from "mongoose";
+
+const {ObjectId} = Types
 
 async function getPostList(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
@@ -19,7 +22,26 @@ async function getPostList(request: NextRequest, {params}: { params: Promise<{ i
                     _id: {$in: section.post_ids || []}
                 }
             },
-            {$sort: {createdAt: -1}},
+            {
+                $lookup: {
+                    from: 'postorders',
+                    localField: '_id',
+                    foreignField: 'post_id',
+                    as: 'orders'
+                }
+            },
+            {$unwind: {path: '$orders'}},
+            {
+                $match: {
+                    'orders.section_id': new ObjectId(id),
+                }
+            },
+            {
+                $sort: {
+                    'orders.section_id': 1,
+                    'orders.order': 1
+                }
+            },
             {
                 $facet: {
                     data: [
