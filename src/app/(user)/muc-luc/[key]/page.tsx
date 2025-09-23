@@ -29,6 +29,12 @@ async function fetchMenu() {
 }
 
 function generateUrl(item: any) {
+    if (item.header_key === 'introduction') {
+        return item.name.includes('sức khỏe đất') ? '/gioi-thieu/suc-khoe-dat' : '/gioi-thieu/du-an';
+    }
+    if (item.header_key === 'contact') {
+        return item.name === 'Hỏi đáp' ? '/hoi-dap-va-lien-he/hoi-dap' : '/hoi-dap-va-lien-he/lien-he';
+    }
     if (item.type === SectionType.section && item.header_key !== 'map' && item.header_key !== 'news') {
         return `/muc-luc/${item.header_key}?sub=${item._id}`;
     }

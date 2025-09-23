@@ -41,6 +41,12 @@ async function fetchMenu() {
 }
 
 function generateUrl(item: any) {
+    if (item.header_key === 'introduction') {
+        return item.name.includes('sức khỏe đất') ? '/gioi-thieu/suc-khoe-dat' : '/gioi-thieu/du-an';
+    }
+    if (item.header_key === 'contact') {
+        return item.name === 'Hỏi đáp' ? '/hoi-dap-va-lien-he/hoi-dap' : '/hoi-dap-va-lien-he/lien-he';
+    }
     if (item.type === SectionType.section) {
         return `/muc-luc/${item.header_key}?sub=${item._id}`;
     }
@@ -48,15 +54,11 @@ function generateUrl(item: any) {
         return item.post_id ? `/bai-viet/${item.post_id}` : '/';
     }
     switch (item.header_key) {
-        case 'policy':
-            return '/thong-tin-chinh-sach/chinh-sach/1'
         case 'map':
             if (item.name === 'Bản đồ đất') {
                 return '/ban-do/ban-do-dat';
             }
             return '/ban-do/cac-trung-tam-quan-trac-dat';
-        case 'knowledge':
-            return `/ngan-hang-kien-thuc/${buildDetailPath(item.name, item._id as string)}/1`;
         case 'news':
             if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
             return '/tin-tuc-va-su-kien/tin-tuc-su-kien';

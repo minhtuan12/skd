@@ -179,23 +179,23 @@ export const sideBarItems = [
                     },
                 ]
             },
-            // {
-            //     title: "Giới thiệu",
-            //     url: routes.IntroductionConfig,
-            //     icon: Newspaper,
-            //     children: [
-            //         {
-            //             title: "Sức khỏe đất",
-            //             url: routes.Land,
-            //             icon: TreePalm,
-            //         },
-            //         {
-            //             title: "Dự án",
-            //             url: routes.Project,
-            //             icon: TreePalm,
-            //         },
-            //     ]
-            // },
+            {
+                title: "Giới thiệu",
+                url: routes.IntroductionConfig,
+                icon: Newspaper,
+                children: [
+                    {
+                        title: "Sức khỏe đất",
+                        url: routes.Land,
+                        icon: TreePalm,
+                    },
+                    {
+                        title: "Dự án",
+                        url: routes.Project,
+                        icon: TreePalm,
+                    },
+                ]
+            },
             {
                 title: "Tin tức, sự kiện & nghiên cứu",
                 url: routes.NewsConfig,
