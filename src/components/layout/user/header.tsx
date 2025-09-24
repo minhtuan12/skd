@@ -128,18 +128,18 @@ export default async function Header() {
                             <NavigationMenu viewport={false}>
                                 <NavigationMenuList>
                                     {
-                                        menuItems.map((item: Menu, index: number) => (
+                                        menuItems.map((item: Menu) => (
                                             !item?.children ?
-                                                <Link key={index} href={item.href} className={'flex w-fit -mt-0.5'}>
+                                                <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>
                                                     <House/>
                                                 </Link> :
-                                                <NavigationMenuItem key={index} value={item.title}>
+                                                <NavigationMenuItem key={item.key} value={item.title}>
                                                     <NavigationMenuTrigger>
                                                         <Link href={item.href + '/' + item.key}>{item.title}</Link>
                                                     </NavigationMenuTrigger>
                                                     <NavigationMenuContent className={'w-auto space-y-3'}>
-                                                        {item.children.map((child: Menu, i: number) =>
-                                                            <NavigationMenuLink key={i} asChild>
+                                                        {item.children.map((child: any) =>
+                                                            <NavigationMenuLink key={child._id} asChild>
                                                                 <Link
                                                                     href={child.key === 'knowledges' ? child.href : generateUrl(child)}
                                                                     className={'w-full block'}
