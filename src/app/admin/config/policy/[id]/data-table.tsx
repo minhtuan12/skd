@@ -17,7 +17,7 @@ export default function DataTable(
         </SelectItem>
     ))
 
-    return <Table className={'text-base table-fixed'}>
+    return <Table className={'text-base'}>
         <TableHeader className={'bg-[#f5f5f590]'}>
             <TableRow>
                 <TableHead className={'text-center w-10'}>Ưu tiên</TableHead>

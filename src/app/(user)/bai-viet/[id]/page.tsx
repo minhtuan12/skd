@@ -94,20 +94,24 @@ export default async function ({params}: {
                     </div>
 
                     {/* Related */}
-                    {/*{post.header_key === 'knowledge' ?*/}
-                    {/*    <div className={'flex flex-col gap-14'}>*/}
-                    {/*        <div className={'flex justify-center w-full'}>*/}
-                    {/*            <h1 className={'font-medium text-center text-2xl w-fit border-t-green-600 text-green-700 border-t-3 pt-2'}>Các*/}
-                    {/*                bài đăng liên quan</h1>*/}
-                    {/*        </div>*/}
-                    {/*        <div className={'w-full 2xl:px-60 xl:px-30 lg:px-4'}>*/}
-                    {/*            <OtherPosts*/}
-                    {/*                posts={post.related_posts}*/}
-                    {/*                exceptId={id}*/}
-                    {/*            />*/}
-                    {/*        </div>*/}
-                    {/*    </div> : ''*/}
-                    {/*}*/}
+                    {data.header_key === 'knowledge' ?
+                        <div className={'flex flex-col gap-14'}>
+                            <div className={'flex justify-center w-full'}>
+                                <h1 className={'font-medium text-center text-2xl w-fit border-t-green-600 text-green-700 border-t-3 pt-2'}>Các
+                                    bài đăng liên quan</h1>
+                            </div>
+                            {
+                                post.related_posts?.length > 0 ? <div className={'w-full 2xl:px-0 xl:px-5 lg:px-4'}>
+                                    <OtherPosts
+                                        posts={post.related_posts}
+                                        exceptId={id}
+                                    />
+                                </div> : <div className={'text-gray-400 text-center'}>
+                                    Chưa có các bài đăng liên quan
+                                </div>
+                            }
+                        </div> : ''
+                    }
                 </div>
             </div>
         </div>

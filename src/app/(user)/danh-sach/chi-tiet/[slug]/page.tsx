@@ -65,8 +65,9 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
     const relatedPostsIfNotHave = otherPosts?.posts?.filter(
         (i: any) =>
             i._id !== id &&
-            !post?.related_posts?.some((it: any) => (it as IPost)._id === i._id)
-    )?.slice(6, 9) || [];
+            !post?.related_posts?.some((it: any) => (it as IPost)._id === i._id))
+        ?.map((i: any) => ({...i, is_section_post: false}))
+        ?.slice(6, 9) || [];
 
     return (
         !post ? <div className={'text-gray-500 italic text-center py-40'}>Không có thông tin</div> :

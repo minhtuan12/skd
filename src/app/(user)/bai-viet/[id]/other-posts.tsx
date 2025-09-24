@@ -44,14 +44,17 @@ function DocumentList({posts, exceptId}: { posts: any, exceptId: string }) {
                             className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-8 h-100 justify-center'}>
                             {
                                 documentList.map((item: any) => {
+                                    const detailPath = item.is_section_post ? `/bai-viet/${item._id}` :
+                                        `/danh-sach/chi-tiet/${buildDetailPath(item.title, item._id as string)}`;
+
                                     return <Link
-                                        href={item.post_id.link || `/bai-viet/${item._id}`}
+                                        href={item.link || detailPath}
                                         key={item._id}
                                         className={'rounded-sm w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >
                                         <Image
-                                            src={item.image_url as string}
-                                            alt={item.name}
+                                            src={item.image_url as string || '/logos/principles.png'}
+                                            alt={item.title}
                                             objectFit="cover"
                                             layout="fill"
                                         />

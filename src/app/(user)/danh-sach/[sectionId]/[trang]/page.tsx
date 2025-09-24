@@ -3,6 +3,7 @@ import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/c
 import {ChevronRight} from "lucide-react";
 import PostCard from './card';
 import {IPost} from "@/models/post";
+import {SectionType} from "@/models/section";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -46,7 +47,7 @@ export default async function ({params}: { params: Promise<{ sectionId: string, 
         <div className={'flex flex-col gap-8 px-5'}>
             <h1 className={'font-semibold text-center text-xl'}>{section?.name?.toUpperCase() || ''}</h1>
             <div className={'flex gap-12 flex-col'}>
-                <div className={'w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-y-16 gap-x-7'}>
+                <div className={`w-full grid grid-cols-1 md:grid-cols-2 ${section.header_key === 'policy' ? 'lg:grid-cols-5' : 'lg:grid-cols-3'} gap-y-16 gap-x-7`}>
                     {
                         result.data.map((item: IPost) => (
                             <PostCard

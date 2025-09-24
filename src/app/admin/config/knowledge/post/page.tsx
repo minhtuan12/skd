@@ -320,7 +320,8 @@ export default function () {
                         >
                             Quay lại
                         </Button>
-                        <Button onClick={handleSubmit} size={'lg'} disabled={loadingUpload || loadingAdd || loadingUpdate}>
+                        <Button onClick={handleSubmit} size={'lg'}
+                                disabled={loadingUpload || loadingAdd || loadingUpdate || !post.title || (!post.title?.trim())}>
                             {(loadingUpload || loadingAdd || loadingUpdate) &&
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                             Lưu bài đăng

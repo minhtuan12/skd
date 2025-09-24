@@ -43,13 +43,13 @@ export default function Form(
         handleChangeFilee: any
         isOnePost: boolean
     }) {
-    const {data: otherPosts, loading} = useFetchPostList('knowledge', isOnePost ? 'a' : '');
+    const {data: otherPosts, loading} = useFetchPostList('knowledge', 'a');
     const postSelection = useMemo(() =>
             otherPosts?.posts?.filter((item: any) => {
                 if (isOnePost) {
-                    return sectionId ? item._id !== sectionId : item;
+                    return sectionId ? item.section_id !== sectionId : item;
                 }
-                return post?._id ? (item._id !== post?._id && item.title) : item.title
+                return post?._id ? (item._id !== post?._id) : item
             }),
         [otherPosts]
     );
@@ -191,7 +191,7 @@ export default function Form(
                             {
                                 postSelection?.length > 0 ?
                                     postSelection.map((item: any, index: number) => (
-                                        <div className={'flex items-start gap-3'} key={index}>
+                                        <div className={`flex items-start gap-3`} key={index}>
                                             <Checkbox
                                                 value={item._id}
                                                 checked={post.related_posts.some(i => (i as string) === item._id)}

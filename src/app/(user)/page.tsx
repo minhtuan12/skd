@@ -126,7 +126,7 @@ export default async function Home() {
                     <CardWithTitle
                         border title={'Chính Sách Nông Nghiệp'} bgTitleColor={`bg-[${mainColors[2]}]`}
                         className={'h-auto md:h-1/2'} childrenBg={'justify-between'}
-                        href={"/thong-tin-chinh-sach/chinh-sach/1"}
+                        href={"/muc-luc/policy"}
                     >
                         <div className={'flex flex-col gap-2 h-auto md:h-[calc(100%-50px)]'}>
                             <h5 className={'text-black font-semibold text-[15px]'}>Thông tin chính sách</h5>
@@ -143,7 +143,7 @@ export default async function Home() {
                                 ))}
                             </ul>
                         </div>
-                        <Link href="/thong-tin-chinh-sach/chinh-sach/1"
+                        <Link href="/muc-luc/policy"
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">
                             Xem chính sách
                             <ChevronRight width={13}/></Link>
@@ -151,10 +151,10 @@ export default async function Home() {
                     <CardWithTitle
                         border title={'Ngân hàng kiến thức'} bgTitleColor={`bg-[${mainColors[3]}]`}
                         className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}
-                        href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
+                        href={`/muc-luc/knowledge`}
                     >
                         <VideoPlayer src={home.knowledge_bank_video_url}/>
-                        <Link href={`/ngan-hang-kien-thuc/${buildDetailPath(pages[0].name, pages[0]._id)}/1`}
+                        <Link href={`/muc-luc/knowledge`}
                               className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                             tài liệu
                             <ChevronRight width={13}/></Link>

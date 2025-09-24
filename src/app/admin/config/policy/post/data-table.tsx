@@ -43,7 +43,6 @@ export default function DataTable(
         <Table className={'text-base'}>
             <TableHeader className={'bg-[#f5f5f590]'}>
                 <TableRow className={'h-auto'}>
-                    <TableHead className={'text-center w-10'}>Hình ảnh</TableHead>
                     <TableHead className={'pl-3 w-50'}>Tên</TableHead>
                     {
                         sections?.length > 0 ? sections?.map((item: ISection) => (
@@ -65,17 +64,6 @@ export default function DataTable(
                 <TableBody>
                     {data.map((item: IPost, index: number) => {
                         return <TableRow key={item._id}>
-                            <TableCell className={'h-20 w-10'}>
-                                {
-                                    item?.image_url ? <Image
-                                        src={item?.image_url as string}
-                                        alt={item.title} width={0} height={0}
-                                        sizes={'100vw'}
-                                        style={{width: "100%", height: "100%"}}
-                                        className={'object-cover'}
-                                    /> : <i className={'text-gray-400'}>Không có</i>
-                                }
-                            </TableCell>
                             <TableCell
                                 className={'font-medium whitespace-normal pl-4 w-50'}>{item.title}</TableCell>
                             {

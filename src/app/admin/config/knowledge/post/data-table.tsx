@@ -40,7 +40,7 @@ export default function DataTable(
     }, [addPostToSection]);
 
     return <>
-        <Table className={'text-base table-fixed'}>
+        <Table className={'text-base'}>
             <TableHeader className={'bg-[#f5f5f590]'}>
                 <TableRow className={'h-auto'}>
                     <TableHead className={'text-center w-10'}>Hình ảnh</TableHead>
