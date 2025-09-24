@@ -157,10 +157,13 @@ button[aria-label="Download"] {
     }
     --tw-prose-bullets: black !important;
     position: relative;
-    img {
-        height: 300px !important;
-        border-radius: 6px;
-    }
+}
+
+.prose img {
+    margin: auto;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 6px;
 }
 
 .prose a {

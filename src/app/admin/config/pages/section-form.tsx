@@ -15,6 +15,16 @@ import {Separator} from "@/components/ui/separator";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {useUpdateOneSection} from "@/app/admin/config/pages/(hooks)/use-update-one-section";
 import {useDeleteSection} from "@/app/admin/config/pages/(hooks)/use-delete-section";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@/components/ui/alert-dialog";
 
 export default function ({data, setSelectedSection}: {
     data: ISection & { isDefault?: boolean, key: string },
@@ -23,6 +33,7 @@ export default function ({data, setSelectedSection}: {
     const [pages, setPages] = useState(data?.children || []);
     const [page, setPage] = useState(data);
     const [imageUrl, setImageUrl] = useState('');
+    const [deletedItem, setDeletedItem] = useState<any>(null);
 
     const {mutate: updateSection, loading} = useUpdateSection();
     const {uploadFile, loading: loadingUpload} = useUploadFile();
@@ -214,18 +225,11 @@ export default function ({data, setSelectedSection}: {
                                         <TableCell className={'text-center'}>
                                             {
                                                 item._id ? <Button
-                                                    disabled={loadingDelete}
                                                     className={'bg-red-500'}
                                                     onClick={() => {
-                                                        deleteSection(item._id, {
-                                                            onSuccess: () => {
-                                                                toast.success('Xóa thành công');
-                                                                setSelectedSection(null);
-                                                            }
-                                                        });
+                                                        setDeletedItem(item._id);
                                                     }}
                                                 >
-                                                    {loadingDelete && <Loader2 className={'w-4 h-4 animate-spin'}/>}
                                                     <Trash/>Xóa
                                                 </Button> : ''
                                             }
@@ -237,5 +241,34 @@ export default function ({data, setSelectedSection}: {
                     </div> : ''
             }
         </div>
+        <AlertDialog open={!!deletedItem}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Xóa trang</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Tất cả nội dung trong trang này đều sẽ bị xóa, bạn chắc chắn chứ?
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Hủy</AlertDialogCancel>
+                    <AlertDialogAction
+                        disabled={loadingDelete}
+                        className={'bg-red-400'}
+                        onClick={() => {
+                            deleteSection(deletedItem, {
+                                onSuccess: () => {
+                                    toast.success('Xóa thành công');
+                                    setSelectedSection(null);
+                                    setDeletedItem(null);
+                                }
+                            });
+                        }}
+                    >
+                        {loadingDelete && <Loader2 className={'w-4 h-4 animate-spin'}/>}
+                        Xác nhận
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </div>
 }
