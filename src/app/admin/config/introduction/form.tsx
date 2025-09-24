@@ -12,6 +12,7 @@ import {SimpleEditor} from "@/components/tiptap-templates/simple/simple-editor";
 import {generateJSON} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import {useUpdateIntroduction} from "@/app/admin/config/(hooks)/use-update-introduction";
+import {Image} from "@tiptap/extension-image"
 
 interface IProps {
     title: string,
@@ -47,7 +48,7 @@ export default function IntroductionForm({title, content, handleChangeContent, h
                 <div className="space-y-2 min-h-full h-auto flex-1 mt-0.5">
                     <Label required htmlFor="description" className={'mb-4'}>Nội dung</Label>
                     <SimpleEditor
-                        content={generateJSON(content, [StarterKit])}
+                        content={generateJSON(content, [StarterKit, Image])}
                         handleChange={({editor}: any) => handleChangeContent(editor.getHTML())}
                     />
                     <div className={'h-2 mt-2'}></div>

@@ -10,6 +10,7 @@ import {generateJSON} from "@tiptap/core";
 import {formatDate} from "@/lib/utils";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Dot} from "lucide-react";
+import {Image} from "@tiptap/extension-image"
 
 interface IProps {
     readonly?: boolean
@@ -125,7 +126,7 @@ const NewsEventsItem = memo((
                 <div className="space-y-2 h-full flex-1 mt-0.5">
                     <Label required htmlFor="description" className={'mb-4 gap-0'}><Dot/>Chi tiết</Label>
                     <SimpleEditor
-                        content={generateJSON(description, [StarterKit])}
+                        content={generateJSON(description, [StarterKit, Image])}
                         handleChange={({editor}: any) => handleChangeData(editor.getHTML(), 'description')}
                     />
                 </div>

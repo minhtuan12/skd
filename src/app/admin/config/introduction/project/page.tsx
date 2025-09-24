@@ -13,6 +13,7 @@ import {Label} from "@/components/ui/label";
 import {SimpleEditor} from "@/components/tiptap-templates/simple/simple-editor";
 import {generateJSON} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
+import {Image} from "@tiptap/extension-image"
 
 export default function () {
     const dispatch = useDispatch();
@@ -69,7 +70,7 @@ export default function () {
                     <Label required htmlFor="description" className={'mb-4'}>Nội dung</Label>
                     {content ?
                         <SimpleEditor
-                            content={generateJSON(content, [StarterKit])}
+                            content={generateJSON(content, [StarterKit, Image])}
                             handleChange={({editor}: any) => setContent(editor.getHTML())}
                         /> : ''
                     }

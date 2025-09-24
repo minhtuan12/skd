@@ -168,7 +168,16 @@ const MobileToolbarContent = ({
     </>
 )
 
-export function SimpleEditor({content, handleChange, className}: any) {
+async function handleImageUploadWithState(file: File, setUploading: any) {
+    try {
+        setUploading(true);
+        return await handleImageUpload(file);
+    } finally {
+        setUploading(false);
+    }
+}
+
+export function SimpleEditor({content, handleChange, className, setUploading}: any) {
     const isMobile = useIsMobile()
     const {height} = useWindowSize()
     const [mobileView, setMobileView] = React.useState<
@@ -215,7 +224,7 @@ export function SimpleEditor({content, handleChange, className}: any) {
                 accept: "image/*",
                 maxSize: MAX_FILE_SIZE,
                 limit: 3,
-                upload: handleImageUpload,
+                upload: (file) => handleImageUploadWithState(file, setUploading),
                 onError: (error) => console.error("Upload failed:", error),
             }),
             Table.configure({

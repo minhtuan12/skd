@@ -13,12 +13,14 @@ import {Label} from "@/components/ui/label";
 import {SimpleEditor} from "@/components/tiptap-templates/simple/simple-editor";
 import {generateJSON} from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
+import {Image} from "@tiptap/extension-image"
 
 export default function () {
     const dispatch = useDispatch();
     const {error, loading, data} = useFetchIntroduction('land');
     const {mutate, loading: loadingUpdate, isSuccess, isError, error: errorUpdate} = useUpdateIntroduction();
     const [content, setContent] = useState(data?.introduction?.land || '');
+    const [uploading, setUploading] = useState(false);
 
     const handleUpdate = () => {
         mutate({
@@ -52,14 +54,12 @@ export default function () {
         }
     }, [data?.introduction?.land]);
 
-    console.log(content)
-
     return <>
         <div className="flex items-center justify-between space-y-2 flex-wrap">
             <h2 className="text-3xl font-bold tracking-tight">Giới thiệu về sức khỏe đất</h2>
             <div
                 className={'flex items-center gap-4 flex-wrap max-[400px]:justify-between max-[400px]:w-full'}>
-                <Button onClick={handleSubmit} disabled={loadingUpdate}>
+                <Button onClick={handleSubmit} disabled={loadingUpdate || uploading}>
                     {loadingUpdate &&
                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}Cập nhật
                 </Button>
@@ -71,7 +71,8 @@ export default function () {
                     <Label required htmlFor="description" className={'mb-4'}>Nội dung</Label>
                     {content ?
                         <SimpleEditor
-                            content={generateJSON(content, [StarterKit])}
+                            setUploading={setUploading}
+                            content={generateJSON(content, [StarterKit, Image])}
                             handleChange={({editor}: any) => setContent(editor.getHTML())}
                         /> : ''
                     }

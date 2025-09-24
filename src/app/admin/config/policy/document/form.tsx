@@ -10,6 +10,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Separator} from "@/components/ui/separator";
 import {Input} from "@/components/ui/input";
 import {IPolicyDocument} from "@/models/policy-document";
+import {Image} from "@tiptap/extension-image"
 
 export default function DocumentForm(
     {
@@ -171,7 +172,7 @@ export default function DocumentForm(
             <div className="flex flex-col gap-2 h-full">
                 <Label htmlFor="name" className={'gap-0'}><Dot/>Mô tả</Label>
                 <SimpleEditor
-                    content={generateJSON(text as string, [StarterKit])}
+                    content={generateJSON(text as string, [StarterKit, Image])}
                     handleChange={({editor}: any) => handleChangeData(editor.getHTML(), 'text')}
                     className={link ? 'bg-gray-200' : ''}
                 />

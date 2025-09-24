@@ -6,6 +6,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Dot, Trash} from "lucide-react";
+import {Image} from "@tiptap/extension-image"
 
 export default function (
     {
@@ -198,7 +199,7 @@ export default function (
             <div className="flex flex-col gap-2 h-full">
                 <Label htmlFor="name" className={'gap-0'}><Dot/>Nội dung</Label>
                 <SimpleEditor
-                    content={generateJSON(post.text as string, [StarterKit])}
+                    content={generateJSON(post.text as string, [StarterKit, Image])}
                     handleChange={({editor}: any) => handleChangeData(editor.getHTML(), 'text')}
                     className={post.link ? 'bg-gray-200' : ''}
                 />

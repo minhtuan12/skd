@@ -11,6 +11,7 @@ import {Separator} from "@/components/ui/separator";
 import {Input} from "@/components/ui/input";
 import {IPost} from "@/models/post";
 import {useFetchPostList} from "@/app/admin/config/policy/(hooks)/use-post-admin";
+import {Image} from "@tiptap/extension-image"
 
 export default function Form(
     {
@@ -226,7 +227,7 @@ export default function Form(
             <div className="flex flex-col gap-2 h-full">
                 <Label htmlFor="name" className={'gap-0'}><Dot/>Nội dung</Label>
                 <SimpleEditor
-                    content={generateJSON(post.text as string, [StarterKit])}
+                    content={generateJSON(post.text as string, [StarterKit, Image])}
                     handleChange={({editor}: any) => handleChangeData(editor.getHTML(), 'text')}
                     className={post.link ? 'bg-gray-200' : ''}
                 />
