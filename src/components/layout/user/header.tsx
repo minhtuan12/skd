@@ -31,10 +31,20 @@ async function fetchMenu() {
 
 function generateUrl(item: any) {
     if (item.header_key === 'introduction') {
-        return item.name.includes('sức khỏe đất') ? '/gioi-thieu/suc-khoe-dat' : '/gioi-thieu/du-an';
+        return item.order === 0 ? '/gioi-thieu/suc-khoe-dat' : '/gioi-thieu/du-an';
     }
     if (item.header_key === 'contact') {
-        return item.name === 'Hỏi đáp' ? '/hoi-dap-va-lien-he/hoi-dap' : '/hoi-dap-va-lien-he/lien-he';
+        return item.order === 0 ? '/hoi-dap-va-lien-he/hoi-dap' : '/hoi-dap-va-lien-he/lien-he';
+    }
+    if (item.header_key === 'map') {
+        if (item.order === 0) {
+            return '/ban-do/ban-do-dat';
+        }
+        return '/ban-do/cac-trung-tam-quan-trac-dat';
+    }
+    if (item.header_key === 'news') {
+        if (item.order === 1) return '/tin-tuc-va-su-kien/nghien-cuu/1';
+        return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
     }
     if (item.type === SectionType.section) {
         return `/muc-luc/${item.header_key}?sub=${item._id}`;
@@ -45,18 +55,7 @@ function generateUrl(item: any) {
     if (item.type === SectionType.list) {
         return `/danh-sach/${item._id}/1`;
     }
-    switch (item.header_key) {
-        case 'map':
-            if (item.name === 'Bản đồ đất') {
-                return '/ban-do/ban-do-dat';
-            }
-            return '/ban-do/cac-trung-tam-quan-trac-dat';
-        case 'news':
-            if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
-            return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
-        default:
-            return '/';
-    }
+    return '/'
 }
 
 export default async function Header() {
