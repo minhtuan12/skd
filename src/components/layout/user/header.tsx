@@ -18,17 +18,6 @@ import {ISection, SectionType} from "@/models/section";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
-async function fetchKnowledgeCategory() {
-    const res = await fetch(`${baseUrl}/api/config/knowledge-category`,
-        {cache: 'no-store', credentials: 'include'}
-    );
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch knowledge category');
-    }
-    return res.json();
-}
-
 async function fetchMenu() {
     const res = await fetch(`${baseUrl}/api/config/global`,
         {cache: 'no-store', credentials: 'include'}
@@ -52,6 +41,9 @@ function generateUrl(item: any) {
     }
     if (item.type === SectionType.post) {
         return item.post_id ? `/bai-viet/${item.post_id}` : '/';
+    }
+    if (item.type === SectionType.list) {
+        return `/danh-sach/${item._id}/1`;
     }
     switch (item.header_key) {
         case 'map':
