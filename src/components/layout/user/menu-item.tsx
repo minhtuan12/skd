@@ -85,7 +85,7 @@ export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps
                 >
                     <div className="flex items-center gap-2">
             <span className={cn("truncate font-normal", isActiveRoute && "font-semibold text-black")}>
-                <Link href={generateUrl(item)}>{item.title}</Link>
+                <Link href={item.href + '/' + item.key}>{item.title}</Link>
             </span>
                     </div>
                     <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-open:rotate-90"/>
