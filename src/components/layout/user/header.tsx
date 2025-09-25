@@ -133,7 +133,7 @@ export default async function Header() {
                                                 <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>
                                                     <House/>
                                                 </Link> :
-                                                <NavigationMenuItem key={item.key} value={item.title}>
+                                                <NavigationMenuItem key={item.key}>
                                                     <NavigationMenuTrigger>
                                                         <Link href={item.href + '/' + item.key}>{item.title}</Link>
                                                     </NavigationMenuTrigger>
