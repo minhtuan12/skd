@@ -125,7 +125,7 @@ export default async function Header() {
                         className="container max-[1024px]:hidden flex items-center justify-between text-black 2xl:text-[17px] text-sm">
                         <nav
                             className="items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
-                            <NavigationMenu viewport={false}>
+                            <NavigationMenu viewport={true}>
                                 <NavigationMenuList>
                                     {
                                         menuItems.map((item: Menu) => (
