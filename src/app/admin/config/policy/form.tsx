@@ -41,12 +41,6 @@ export default function Form(
         handleChangeFilee: any
         isOnePost: boolean
     }) {
-    const {data: otherPosts, loading} = useFetchPostList('policy');
-    const postSelection = useMemo(() =>
-            otherPosts?.posts?.filter((item: IPost) => item._id !== post?._id && item.title),
-        [otherPosts]
-    );
-
     return <div className={'flex gap-8 h-full pb-10'}>
         <div className="space-y-5 w-1/3">
             <div className={'space-y-4'}>

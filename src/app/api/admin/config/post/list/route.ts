@@ -102,7 +102,8 @@ async function getPosts(request: NextRequest) {
             ...listSections.filter((item: any) => item.post_id).map((item: any) => ({
                 ...item.post_id,
                 title: item.name,
-                section_id: item._id
+                section_id: item._id,
+                _id: item.post_id._id
             }))
         ]
         return NextResponse.json({posts: result});

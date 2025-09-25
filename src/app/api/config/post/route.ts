@@ -15,7 +15,7 @@ async function getPost(request: NextRequest) {
         }
         let relatedPosts: any = [];
         for (let postId of post.post_id.related_posts) {
-            const item: any = await Post.findOne({_id: postId}).lean();
+            const item: any = await Post.findById(postId).lean();
             if (item.title) {
                 relatedPosts.push({...item, is_section_post: false});
             } else {
