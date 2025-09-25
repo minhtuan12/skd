@@ -6,16 +6,15 @@ import {Input} from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
 import {buildDetailPath} from "@/lib/utils";
-import {ISection, SectionType} from "@/models/section";
 import {
     NavigationMenu,
     NavigationMenuContent,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle
+    NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
+import {ISection, SectionType} from "@/models/section";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -125,21 +124,15 @@ export default async function Header() {
                     <div
                         className="container max-[1024px]:hidden flex items-center justify-between text-black 2xl:text-[17px] text-sm">
                         <nav
-                            className="-mb-1 items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
+                            className="items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
                             <NavigationMenu viewport={false}>
                                 <NavigationMenuList>
                                     {
                                         menuItems.map((item: Menu) => (
                                             !item?.children ?
-                                                <NavigationMenuItem key={item.key}>
-                                                    <NavigationMenuTrigger noContent>
-                                                        <Link href={item.href}
-                                                              className={'flex w-fit mt-0.5'}>
-                                                            <House/>
-                                                        </Link>
-                                                    </NavigationMenuTrigger>
-                                                </NavigationMenuItem>
-                                                :
+                                                <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>
+                                                    <House/>
+                                                </Link> :
                                                 <NavigationMenuItem key={item.key}>
                                                     <NavigationMenuTrigger>
                                                         <Link href={item.href + '/' + item.key}>{item.title}</Link>
@@ -148,7 +141,7 @@ export default async function Header() {
                                                         {item.children.map((child: any) =>
                                                             <NavigationMenuLink key={child._id} asChild>
                                                                 <Link
-                                                                    href={generateUrl(child)}
+                                                                    href={child.key === 'knowledges' ? child.href : generateUrl(child)}
                                                                     className={'w-full block'}
                                                                 >
                                                                     {child.title}
