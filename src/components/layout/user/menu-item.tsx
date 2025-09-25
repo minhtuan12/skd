@@ -14,31 +14,32 @@ interface ClientMenuItemProps {
 }
 
 function generateUrl(item: any) {
+    if (item.header_key === 'introduction') {
+        return item.order === 0 ? '/gioi-thieu/suc-khoe-dat' : '/gioi-thieu/du-an';
+    }
+    if (item.header_key === 'contact') {
+        return item.order === 0 ? '/hoi-dap-va-lien-he/hoi-dap' : '/hoi-dap-va-lien-he/lien-he';
+    }
+    if (item.header_key === 'map') {
+        if (item.order === 0) {
+            return '/ban-do/ban-do-dat';
+        }
+        return '/ban-do/cac-trung-tam-quan-trac-dat';
+    }
+    if (item.header_key === 'news') {
+        if (item.order === 1) return '/tin-tuc-va-su-kien/nghien-cuu/1';
+        return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
+    }
     if (item.type === SectionType.section) {
         return `/muc-luc/${item.header_key}?sub=${item._id}`;
-    }
-    if (item.href.includes('/muc-luc')) {
-        return `/muc-luc/${item.key}`;
     }
     if (item.type === SectionType.post) {
         return item.post_id ? `/bai-viet/${item.post_id}` : '/';
     }
-    switch (item.header_key) {
-        case 'policy':
-            return '/thong-tin-chinh-sach/chinh-sach/1'
-        case 'map':
-            if (item.name === 'Bản đồ đất') {
-                return '/ban-do/ban-do-dat';
-            }
-            return '/ban-do/cac-trung-tam-quan-trac-dat';
-        case 'knowledges':
-            return `/ngan-hang-kien-thuc/${buildDetailPath(item.name, item._id as string)}/1`;
-        case 'news':
-            if (item.name === 'Nghiên cứu') return '/tin-tuc-va-su-kien/nghien-cuu/1';
-            return '/tin-tuc-va-su-kien/tin-tuc-su-kien';
-        default:
-            return '/';
+    if (item.type === SectionType.list) {
+        return `/danh-sach/${item._id}/1`;
     }
+    return '/'
 }
 
 export function MenuItem({item, parentHref = "", level = 0}: ClientMenuItemProps) {
