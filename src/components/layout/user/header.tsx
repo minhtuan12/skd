@@ -134,15 +134,13 @@ export default async function Header() {
                                                 </Link> :
                                                 <NavigationMenuItem key={item.key}>
                                                     <NavigationMenuTrigger>
-                                                        {/*<Link href={item.href + '/' + item.key}>*/}
-                                                            {item.title}
-                                                        {/*</Link>*/}
+                                                        <Link href={item.href + '/' + item.key}>{item.title}</Link>
                                                     </NavigationMenuTrigger>
                                                     <NavigationMenuContent className={'w-auto space-y-3'}>
                                                         {item.children.map((child: any) =>
                                                             <NavigationMenuLink key={child._id} asChild>
                                                                 <Link
-                                                                    href={child.key === 'knowledges' ? child.href : generateUrl(child)}
+                                                                    href={generateUrl(child)}
                                                                     className={'w-full block'}
                                                                 >
                                                                     {child.title}
