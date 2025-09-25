@@ -6,15 +6,8 @@ import {Input} from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
 import {buildDetailPath} from "@/lib/utils";
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger
-} from "@/components/ui/navigation-menu";
 import {ISection, SectionType} from "@/models/section";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -125,35 +118,57 @@ export default async function Header() {
                         className="container max-[1024px]:hidden flex items-center justify-between text-black 2xl:text-[17px] text-sm">
                         <nav
                             className="items-center max-lg:flex-wrap max-lg:justify-center max-lg:space-x-6 space-x-6 max-[1115px]:text-center min-[1115px]:space-x-4 flex max-[1115px]:space-x-0 max-[1115px]:w-full max-[1115px]:justify-between">
-                            <NavigationMenu viewport={false}>
-                                <NavigationMenuList>
-                                    {
-                                        menuItems.map((item: Menu) => (
-                                            !item?.children ?
-                                                <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>
-                                                    <House/>
-                                                </Link> :
-                                                <NavigationMenuItem key={item.key}>
-                                                    <NavigationMenuTrigger>
-                                                        <Link href={item.href + '/' + item.key}>{item.title}</Link>
-                                                    </NavigationMenuTrigger>
-                                                    <NavigationMenuContent className={'w-auto space-y-3'}>
-                                                        {item.children.map((child: any) =>
-                                                            <NavigationMenuLink key={child._id} asChild>
-                                                                <Link
-                                                                    href={child.key === 'knowledges' ? child.href : generateUrl(child)}
-                                                                    className={'w-full block'}
-                                                                >
-                                                                    {child.title}
-                                                                </Link>
-                                                            </NavigationMenuLink>
-                                                        )}
-                                                    </NavigationMenuContent>
-                                                </NavigationMenuItem>
-                                        ))
-                                    }
-                                </NavigationMenuList>
-                            </NavigationMenu>
+                            {/*<NavigationMenu viewport={false}>*/}
+                            {/*    <NavigationMenuList>*/}
+                            {/*        {*/}
+                            {/*            menuItems.map((item: Menu) => (*/}
+                            {/*                !item?.children ?*/}
+                            {/*                    <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>*/}
+                            {/*                        <House/>*/}
+                            {/*                    </Link> :*/}
+                            {/*                    <NavigationMenuItem key={item.key}>*/}
+                            {/*                        <NavigationMenuTrigger>*/}
+                            {/*                            <Link href={item.href + '/' + item.key}>{item.title}</Link>*/}
+                            {/*                        </NavigationMenuTrigger>*/}
+                            {/*                        <NavigationMenuContent className={'w-auto space-y-3'}>*/}
+                            {/*                            {item.children.map((child: any) =>*/}
+                            {/*                                <NavigationMenuLink key={child._id} asChild>*/}
+                            {/*                                    <Link*/}
+                            {/*                                        href={child.key === 'knowledges' ? child.href : generateUrl(child)}*/}
+                            {/*                                        className={'w-full block'}*/}
+                            {/*                                    >*/}
+                            {/*                                        {child.title}*/}
+                            {/*                                    </Link>*/}
+                            {/*                                </NavigationMenuLink>*/}
+                            {/*                            )}*/}
+                            {/*                        </NavigationMenuContent>*/}
+                            {/*                    </NavigationMenuItem>*/}
+                            {/*            ))*/}
+                            {/*        }*/}
+                            {/*    </NavigationMenuList>*/}
+                            {/*</NavigationMenu>*/}
+                            {menuItems.map((item: Menu) => (
+                                !item?.children ?
+                                    <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>
+                                        <House/>
+                                    </Link> :
+                                    <DropdownMenu key={item.key}>
+                                        <DropdownMenuTrigger>{item.title}</DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            {item.children.map((child: any) =>
+                                                <DropdownMenuLabel key={child._id}>
+                                                    <Link
+                                                        href={child.key === 'knowledges' ? child.href : generateUrl(child)}
+                                                        className={'w-full block'}
+                                                    >
+                                                        {child.title}
+                                                    </Link>
+                                                </DropdownMenuLabel>
+                                            )}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                            ))
+                            }
                         </nav>
                     </div>
                 </div>
