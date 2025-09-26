@@ -130,27 +130,29 @@ export default async function Header() {
                                     {
                                         menuItems.map((item: Menu) => (
                                             !item?.children ?
-                                                <NavigationMenuItem key={item.key}>
-                                                    <Link key={item.key} href={item.href}
-                                                          className={'flex w-fit -mt-0.5'}>
-                                                        <House/>
-                                                    </Link>
-                                                </NavigationMenuItem> :
+                                                <Link key={item.key} href={item.href}
+                                                      className={'flex w-fit -mt-0.5'}>
+                                                    <House/>
+                                                </Link> :
                                                 <NavigationMenuItem key={item.key}>
                                                     <NavigationMenuTrigger>
                                                         <Link href={item.href + '/' + item.key}>{item.title}</Link>
                                                     </NavigationMenuTrigger>
                                                     <NavigationMenuContent className={'w-auto space-y-3'}>
-                                                        {item.children.map((child: any) =>
-                                                            <NavigationMenuLink key={child._id} asChild>
-                                                                <Link
-                                                                    href={child.key === 'knowledges' ? child.href : generateUrl(child)}
-                                                                    className={'w-full block'}
-                                                                >
-                                                                    {child.title}
-                                                                </Link>
-                                                            </NavigationMenuLink>
-                                                        )}
+                                                        <ul className={'space-y-2'}>
+                                                            {item.children.map((child: any) =>
+                                                                <li key={child._id}>
+                                                                    <NavigationMenuLink key={child._id} asChild>
+                                                                        <Link
+                                                                            href={child.key === 'knowledges' ? child.href : generateUrl(child)}
+                                                                            className={'w-full block'}
+                                                                        >
+                                                                            {child.title}
+                                                                        </Link>
+                                                                    </NavigationMenuLink>
+                                                                </li>
+                                                            )}
+                                                        </ul>
                                                     </NavigationMenuContent>
                                                 </NavigationMenuItem>
                                         ))
