@@ -130,9 +130,12 @@ export default async function Header() {
                                     {
                                         menuItems.map((item: Menu) => (
                                             !item?.children ?
-                                                <Link key={item.key} href={item.href} className={'flex w-fit -mt-0.5'}>
-                                                    <House/>
-                                                </Link> :
+                                                <NavigationMenuItem key={item.key}>
+                                                    <Link key={item.key} href={item.href}
+                                                          className={'flex w-fit -mt-0.5'}>
+                                                        <House/>
+                                                    </Link>
+                                                </NavigationMenuItem> :
                                                 <NavigationMenuItem key={item.key}>
                                                     <NavigationMenuTrigger>
                                                         <Link href={item.href + '/' + item.key}>{item.title}</Link>
