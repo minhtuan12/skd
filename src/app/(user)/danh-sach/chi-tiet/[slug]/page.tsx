@@ -60,7 +60,8 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
     const diffPosts = otherPosts?.posts?.filter(
         (i: any) =>
             i._id !== id &&
-            !post?.related_posts?.some((it: any) => (it as IPost)._id === i._id)
+            !post?.related_posts?.some((it: any) => (it as IPost)._id === i._id) &&
+            !i.title?.includes('http')
     )?.slice(0, 5) || [];
     const relatedPostsIfNotHave = otherPosts?.posts?.filter(
         (i: any) =>
@@ -135,7 +136,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                                         {i.title}
                                     </Link>
                                 </div>
-                            )) : <i className={'text-gray-500'}>Chưa có thông tin mới</i>
+                            )) : <i className={'text-gray-500 text-center text-lg'}>Chưa có thông tin mới</i>
                         }
                     </div>
                 </div>

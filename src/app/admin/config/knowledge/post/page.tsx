@@ -149,7 +149,12 @@ export default function () {
                     const files = res.data;
                     for (let file of files) {
                         const [parent, child] = file.key.split('.');
-                        if (parent !== 'file_url') {
+                        if (file.key === 'image_url') {
+                            clone = {
+                                ...clone,
+                                image_url: secureLink(file.url)
+                            }
+                        } else if (parent !== 'file_url') {
                             clone = {
                                 ...clone,
                                 [parent]: {

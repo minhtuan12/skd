@@ -4,6 +4,12 @@ import Link from "next/link";
 import {IPost} from "@/models/post";
 import {ISection} from "@/models/section";
 
+const tags = {
+    policy: 'CHÍNH SÁCH',
+    knowledge: 'NGÂN HÀNG KIẾN THỨC',
+    contact: 'HỎI ĐÁP'
+}
+
 export default function (
     {
         item,
@@ -40,7 +46,7 @@ export default function (
         </div>
         <div className={'flex flex-col gap-0.5 flex-1 box-border pl-1'}>
             <p className={'font-medium text-gray-500 text-base'}>
-                {section.header_key === 'policy' ? 'CHÍNH SÁCH' : 'NGÂN HÀNG KIẾN THỨC'}
+                {tags[section.header_key as keyof typeof tags]}
             </p>
             <h1 className={'text-[18px] font-medium text-green-700 line-clamp-4'}>{item.title}</h1>
             {/*{*/}

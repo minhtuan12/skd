@@ -22,6 +22,8 @@ export const routes = {
     IntroductionConfig: '/admin/config/introduction',
     Land: '/land',
     Project: '/project',
+    // Contact
+    ContactConfig: '/admin/config/contact-question',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

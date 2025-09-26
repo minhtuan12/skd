@@ -5,6 +5,7 @@ import PptViewer from "@/components/custom/ppt-viewer";
 import {cloudinaryService} from "@/service/cloudinary";
 import cloudinary from "@/lib/cloudinary";
 import OtherPosts from "@/app/(user)/bai-viet/[id]/other-posts";
+import {SectionType} from "@/models/section";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -49,52 +50,60 @@ export default async function ({params}: {
             <div className={'flex flex-col gap-8 2xl:px-50 xl:px-30 px-8'}>
                 <h1 className={'font-medium text-center text-3xl text-green-700'}>{data.name}</h1>
                 <div className={'flex flex-col gap-10'}>
-                    <div className={'flex flex-col gap-8'}>
-                        {
-                            post.text ? <div
-                                dangerouslySetInnerHTML={{__html: post.text}}
-                                className={'xl:text-justify pr-2 box-border prose'}
-                            /> : ''
-                        }
-                        <div className={'flex flex-col gap-14'}>
+                    {
+                        data.header_key === 'contact' ? <div className={'flex-1 flex justify-center'}>
+                            <iframe
+                                className={'shadow-lg rounded-lg box-border pt-4 bg-gray-100'}
+                                src={post.title}
+                                width="700" height="1150" marginHeight={0} marginWidth={0}>Đang tải…
+                            </iframe>
+                        </div> : <div className={'flex flex-col gap-8'}>
                             {
-                                post.slide.url ? <div className={'mt-3'}>
-                                    <PptViewer
-                                        slides={post.slides} pptUrl={post.slide.url}
-                                        downloadNotification={''}
-                                        downloadable={post.slide.downloadable}
-                                        downloads={[]}
-                                    />
-                                </div> : ''
+                                post.text ? <div
+                                    dangerouslySetInnerHTML={{__html: post.text}}
+                                    className={'xl:text-justify pr-2 box-border prose'}
+                                /> : ''
                             }
-                            {
-                                post.pdf.url ? <div className={'mt-3'}>
-                                    <PdfViewer url={post.pdf.url} downloadable={post.pdf.downloadable}/>
-                                </div> : ''
-                            }
-                            {
-                                post.video_url ? <div className={'mt-3 px-20'}>
-                                    <VideoPlayer src={post.video_url}/>
-                                </div> : ''
-                            }
-                            <div className={'flex flex-col gap-1 justify-start'}>
+                            <div className={'flex flex-col gap-14'}>
                                 {
-                                    (post.downloads && post.downloads?.length > 0) ? post.downloads.map((item: any, index: number) => (
-                                        <a
-                                            key={index}
-                                            className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
-                                            href={item.file_url}
-                                        >
-                                            Tải xuống {item.name}
-                                        </a>
-                                    )) : ''
+                                    post.slide.url ? <div className={'mt-3'}>
+                                        <PptViewer
+                                            slides={post.slides} pptUrl={post.slide.url}
+                                            downloadNotification={''}
+                                            downloadable={post.slide.downloadable}
+                                            downloads={[]}
+                                        />
+                                    </div> : ''
                                 }
+                                {
+                                    post.pdf.url ? <div className={'mt-3'}>
+                                        <PdfViewer url={post.pdf.url} downloadable={post.pdf.downloadable}/>
+                                    </div> : ''
+                                }
+                                {
+                                    post.video_url ? <div className={'mt-3 px-20'}>
+                                        <VideoPlayer src={post.video_url}/>
+                                    </div> : ''
+                                }
+                                <div className={'flex flex-col gap-1 justify-start'}>
+                                    {
+                                        (post.downloads && post.downloads?.length > 0) ? post.downloads.map((item: any, index: number) => (
+                                            <a
+                                                key={index}
+                                                className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
+                                                href={item.file_url}
+                                            >
+                                                Tải xuống {item.name}
+                                            </a>
+                                        )) : ''
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
 
                     {/* Related */}
-                    {data.header_key === 'knowledge' ?
+                    {data.header_key === 'knowledge' || (data.header_key === 'contact' && data.type === SectionType.list) ?
                         <div className={'flex flex-col gap-14'}>
                             <div className={'flex justify-center w-full'}>
                                 <h1 className={'font-medium text-center text-2xl w-fit border-t-green-600 text-green-700 border-t-3 pt-2'}>Các

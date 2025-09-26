@@ -202,6 +202,13 @@ export const sideBarItems = [
                 icon: Newspaper,
                 key: 'news'
             },
+            {
+                title: "Hỏi đáp & liên hệ",
+                url: routes.ContactConfig,
+                icon: Newspaper,
+                key: 'contact',
+                children: []
+            },
         ]
     },
 ]

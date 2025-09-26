@@ -37,6 +37,11 @@ const defaultItem: IPost = {
     order: 0
 }
 
+function secureLink(link: string) {
+    if (link.includes('https')) return link;
+    return link.replace('http', 'https');
+}
+
 export default function ({params}: { params: Promise<{ id: string }> }) {
     const {id} = React.use(params);
     const [post, setPost] = useState<IPost>(defaultItem as any);
@@ -139,7 +144,12 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
                     const files = res.data;
                     for (let file of files) {
                         const [parent, child] = file.key.split('.');
-                        if (parent !== 'file_url') {
+                        if (file.key === 'image_url') {
+                            clone = {
+                                ...clone,
+                                image_url: secureLink(file.url)
+                            }
+                        } else if (parent !== 'file_url') {
                             clone = {
                                 ...clone,
                                 [parent]: {

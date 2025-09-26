@@ -6,16 +6,22 @@ import {setBreadcrumb} from "@/redux/slices/admin";
 import {Loader2} from "lucide-react";
 import {useUploadFile} from "@/app/admin/config/(hooks)/use-upload-file";
 import {Button} from "@/components/ui/button";
-import DataTable from "@/app/admin/config/knowledge/[id]/data-table";
-import Form from "@/app/admin/config/knowledge/form";
+import DataTable from "@/app/admin/config/contact-question/[id]/data-table";
+import Form from "@/app/admin/config/contact-question/form";
 import {toast} from "sonner";
 import {IPost} from "@/models/post";
-import {useAddPost} from "@/app/admin/config/posts/(hooks)/use-add-post";
-import {useUpdatePost} from "@/app/admin/config/posts/(hooks)/use-update-post";
+import {useAddPost} from "@/app/admin/config/contact-question/(hooks)/use-add-post";
+import {useUpdatePost} from "@/app/admin/config/contact-question/(hooks)/use-update-post";
 import {useFetchSectionAdmin} from "@/app/admin/config/pages/(hooks)/use-detail-section";
+import {useDeletePost} from "@/app/admin/config/contact-question/(hooks)/use-delete-post";
 import {SectionType} from "@/models/section";
-import {useFetchPostList} from "@/app/admin/config/knowledge/(hooks)/use-post-admin";
-import {useUpdatePostOrder} from "@/app/admin/config/knowledge/(hooks)/use-change-post-order";
+import {useFetchPostList} from "@/app/admin/config/contact-question/(hooks)/use-post-admin";
+import {useUpdatePostOrder} from "@/app/admin/config/contact-question/(hooks)/use-change-post-order";
+
+function secureLink(link: string) {
+    if (link.includes('https')) return link;
+    return link.replace('http', 'https');
+}
 
 const defaultItem: IPost = {
     title: '',
@@ -33,26 +39,24 @@ const defaultItem: IPost = {
     video_url: '',
     image_url: '',
     related_posts: [],
-    header_key: 'knowledge',
+    header_key: 'contact',
     order: 0
-}
-
-function secureLink(link: string) {
-    if (link.includes('https')) return link;
-    return link.replace('http', 'https');
 }
 
 export default function ({params}: { params: Promise<{ id: string }> }) {
     const {id} = React.use(params);
     const [post, setPost] = useState<IPost>(defaultItem as any);
+    const [isUpdate, setIsUpdate] = useState(false);
     const [mediaUrl, setMediaUrl] = useState('');
+    const [openModal, setOpenModal] = useState(false);
 
     const {loading: loadingDetailSection, data} = useFetchSectionAdmin(id);
-    const {loading: loadingPostList, data: posts} = useFetchPostList('knowledge');
-    const {loading: loadingAddPost, mutate: addPost} = useAddPost();
+    const {loading: loadingPostList, data: posts} = useFetchPostList('contact');
+    const {mutate: createPost, loading: loadingAdd} = useAddPost();
     const {loading: loadingUpdatePost, mutate: updatePost} = useUpdatePost();
     const {uploadFile, loading: loadingUpload} = useUploadFile();
-    const {loading: loadingOrder, mutate: changeOrder} = useUpdatePostOrder('knowledge');
+    const {loading: loadingOrder, mutate: changeOrder} = useUpdatePostOrder('contact');
+    const {mutate: deletePost, loading: loadingDelete} = useDeletePost();
 
     const dispatch = useDispatch();
 
@@ -87,16 +91,19 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
             },
             downloads: post.downloads.filter((i: any) => i.file_url)
         }
-        if (updatedPost?._id) {
+        if (isUpdate) {
             updatePost({...updatedPost}, {
                 onSuccess: () => {
                     toast.success('Cập nhật thành công');
+                    setOpenModal(false);
+                    setIsUpdate(false);
                 },
             });
         } else {
-            addPost({...updatedPost, sectionId: id}, {
+            createPost({...updatedPost, sectionId: id, addDirectly: true}, {
                 onSuccess: () => {
                     toast.success('Đăng bài thành công');
+                    setOpenModal(false);
                 },
             });
         }
@@ -154,7 +161,7 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
                                 ...clone,
                                 [parent]: {
                                     ...clone[parent as keyof typeof clone] as any,
-                                    [child]: file.url
+                                    [child]: secureLink(file.url)
                                 }
                             }
                         } else {
@@ -162,7 +169,7 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
                                 ...clone,
                                 downloads: [
                                     ...clone.downloads.slice(0, Number(child)),
-                                    {...clone.downloads[Number(child)], file_url: file.url},
+                                    {...clone.downloads[Number(child)], file_url: secureLink(file.url)},
                                     ...clone.downloads.slice(Number(child) + 1)
                                 ] as any
                             }
@@ -246,7 +253,7 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
         } else {
             setPost((prev: any) => ({
                 ...prev,
-                image_url: e
+                image_url: secureLink(e)
             }))
             setMediaUrl(e as string);
         }
@@ -285,6 +292,22 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
         })
     }
 
+    const handleClickEdit = (item: IPost) => {
+        setIsUpdate(true);
+        setPost(item);
+        setOpenModal(true);
+    }
+
+    const handleDelete = (id: string) => {
+        if (id) {
+            deletePost(id, {
+                onSuccess: () => {
+                    toast.success('Xóa thành công')
+                }
+            });
+        }
+    }
+
     function handleChangeOrder(postId: string, oldOrder: number, newOrder: number) {
         if (oldOrder === newOrder) {
             return;
@@ -318,29 +341,69 @@ export default function ({params}: { params: Promise<{ id: string }> }) {
                     data?.section?.type === SectionType.post ?
                         <Button
                             onClick={handleSubmit} size={'lg'}
-                            disabled={loadingUpload || loadingAddPost || loadingUpdatePost}
+                            disabled={loadingUpload || loadingAdd || loadingUpdatePost}
                         >
-                            {(loadingUpload || loadingAddPost || loadingUpdatePost) &&
+                            {(loadingUpload || loadingAdd || loadingUpdatePost) &&
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                            Lưu bài đăng
-                        </Button> : ''
+                            Lưu
+                        </Button> : openModal ? <div className={'flex gap-4'}>
+                                <Button
+                                    onClick={() => {
+                                        setPost(defaultItem)
+                                        setOpenModal(false);
+                                    }} size={'lg'}
+                                >
+                                    Quay lại
+                                </Button>
+                                <Button
+                                    onClick={handleSubmit} size={'lg'}
+                                    disabled={loadingUpload || loadingAdd || loadingUpdatePost}
+                                >
+                                    {(loadingUpload || loadingAdd || loadingUpdatePost) &&
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                    Lưu
+                                </Button>
+                            </div>
+                            :
+                            <Button onClick={() => {
+                                setOpenModal(false);
+                                setPost(defaultItem)
+                                setOpenModal(true);
+                            }} size={'lg'}>
+                                Đăng bài
+                            </Button>
                 }
             </div>
         </div>
         {
             loadingDetailSection || loadingPostList || loadingOrder ? <Loader2 className={'animate-spin'}/> : (
                 data?.section?.type === SectionType.list ? (
-                    <DataTable
-                        data={
-                            posts?.posts?.filter((i: any) =>
-                                new Set(data?.section?.post_ids)?.has(i._id)
-                                && i.section_id === id) || []
-                        }
+                    !openModal ? <DataTable
+                        data={(Array.from(
+                            new Map(posts?.posts.filter((p: any) => !p.title?.includes('http')).map((p: any) => [p._id.toString(), p])).values()
+                        )) as any || []}
+                        handleClickUpdate={handleClickEdit}
+                        handleClickDelete={handleDelete}
+                        loadingDelete={loadingDelete}
                         handleChangeOrder={handleChangeOrder}
+                    /> : <Form
+                        sectionId={id}
+                        linkAttachedOnly={false}
+                        handleChangeFile={handleChangeFile}
+                        post={post}
+                        imageUrl={mediaUrl}
+                        handleChangeData={handleChangeData}
+                        handleImageChange={handleChangeImage}
+                        handleChangeCheck={handleChangeCheck}
+                        handleSelectRelatedPosts={handleSelectRelatedPosts}
+                        handleAddDownload={handleAddDownload}
+                        handleChangeDownloads={handleChangeDownloads}
+                        handleDeleteDownload={handleDeleteDownload}
+                        handleChangeFilee={handleChangeFilee}
                     />
                 ) : <Form
                     sectionId={id}
-                    isOnePost={true}
+                    linkAttachedOnly={true}
                     handleChangeFile={handleChangeFile}
                     post={post}
                     imageUrl={mediaUrl}

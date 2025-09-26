@@ -39,6 +39,11 @@ const pages = [
     {name: 'Giới thiệu', key: 'introduction'},
 ]
 
+function secureLink(link: string) {
+    if (link.includes('https')) return link;
+    return link.replace('http', 'https');
+}
+
 export default function () {
     const dispatch = useDispatch();
 
@@ -141,12 +146,17 @@ export default function () {
                     const files = res.data;
                     for (let file of files) {
                         const [parent, child] = file.key.split('.');
-                        if (parent !== 'file_url') {
+                        if (file.key === 'image_url') {
+                            clone = {
+                                ...clone,
+                                image_url: secureLink(file.url)
+                            }
+                        } else if (parent !== 'file_url') {
                             clone = {
                                 ...clone,
                                 [parent]: {
                                     ...clone[parent as keyof typeof clone] as any,
-                                    [child]: file.url
+                                    [child]: secureLink(file.url)
                                 }
                             }
                         } else {
@@ -154,7 +164,7 @@ export default function () {
                                 ...clone,
                                 downloads: [
                                     ...clone.downloads.slice(0, Number(child)),
-                                    {...clone.downloads[Number(child)], file_url: file.url},
+                                    {...clone.downloads[Number(child)], file_url: secureLink(file.url)},
                                     ...clone.downloads.slice(Number(child) + 1)
                                 ] as any
                             }

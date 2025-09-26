@@ -17,9 +17,6 @@ function generateUrl(item: any) {
     if (item.header_key === 'introduction') {
         return item.order === 0 ? '/gioi-thieu/suc-khoe-dat' : '/gioi-thieu/du-an';
     }
-    if (item.header_key === 'contact') {
-        return item.order === 0 ? '/hoi-dap-va-lien-he/hoi-dap' : '/hoi-dap-va-lien-he/lien-he';
-    }
     if (item.header_key === 'map') {
         if (item.order === 0) {
             return '/ban-do/ban-do-dat';
