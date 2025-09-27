@@ -92,7 +92,7 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                                 <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
                                 <div className={'flex-1'}>
                                     <Image
-                                        src={item.image_url as string} alt={item.name}
+                                        src={item.image_url as string || '/logos/principles.png'} alt={item.name}
                                         width={0}
                                         height={0}
                                         sizes={'100vw'}

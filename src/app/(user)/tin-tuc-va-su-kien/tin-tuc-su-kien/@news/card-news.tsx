@@ -37,7 +37,7 @@ export default function CardNews(
             !hideImage ? <div className={cn(imageClassname, `rounded-md`)}>
                 {imageHeight ?
                     <Image
-                        src={news.image_url as string}
+                        src={news.image_url as string || '/logos/principles.png'}
                         alt={news.title}
                         width={0}
                         height={0}
@@ -46,7 +46,7 @@ export default function CardNews(
                         className={'rounded-md object-cover'}
                     /> :
                     <Image
-                        src={news.image_url as string}
+                        src={news.image_url as string || '/logos/principles.png'}
                         alt={news.title}
                         width={0}
                         height={0}
@@ -61,12 +61,12 @@ export default function CardNews(
             <p className={'font-medium text-gray-500'}>{tag[news.type as keyof typeof tag]}</p>
             <Link
                 href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}
-                className={'text-lg font-medium text-green-700 line-clamp-4'}
+                className={'text-lg font-medium text-green-700 line-clamp-2 text-ellipsis overflow-hidden'}
             >
                 {news.title}
             </Link>
             <div className={'text-gray-500 text-md line-clamp-2 prose'}
-                 dangerouslySetInnerHTML={{__html: news.description}}/>
+                 dangerouslySetInnerHTML={{__html: (news.description || '').replace(/<img[^>]*>/gi, "")}}/>
         </div>
         {!hideDetailBtn ?
             <div className={'flex justify-end max-sm:w-full'}>

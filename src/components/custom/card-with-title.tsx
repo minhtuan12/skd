@@ -49,7 +49,7 @@ export default function CardWithTitle(
                                 {title}
                             </Link>
                     ) : <div className={'w-full h-48 relative'}><Image
-                        src={bgImageUrl}
+                        src={bgImageUrl || '/logos/principles.png'}
                         alt={title}
                         layout="fill"
                         objectFit="cover"

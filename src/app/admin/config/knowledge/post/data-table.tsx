@@ -40,7 +40,7 @@ export default function DataTable(
     }, [addPostToSection]);
 
     return <>
-        <Table className={'text-base'}>
+        <Table className={'text-base table-fixed'}>
             <TableHeader className={'bg-[#f5f5f590]'}>
                 <TableRow className={'h-auto'}>
                     <TableHead className={'text-center w-10'}>Hình ảnh</TableHead>
@@ -61,14 +61,14 @@ export default function DataTable(
         </Table>
         <div
             className={'min-h-[calc(100vh-205px)] max-h-[calc(100vh-205px)] overflow-y-auto border-b border-gray-200'}>
-            <Table className={'text-base'}>
+            <Table className={'text-base table-fixed'}>
                 <TableBody>
                     {data.map((item: IPost, index: number) => {
                         return <TableRow key={item._id}>
                             <TableCell className={'h-20 w-10'}>
                                 {
                                     item?.image_url ? <Image
-                                        src={item?.image_url as string}
+                                        src={item?.image_url as string || '/logos/principles.png'}
                                         alt={item.title} width={0} height={0}
                                         sizes={'100vw'}
                                         style={{width: "100%", height: "100%"}}

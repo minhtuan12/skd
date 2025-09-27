@@ -54,7 +54,7 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                                         className={'rounded-sm w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >
                                         <Image
-                                            src={item.image_url as string}
+                                            src={item.image_url as string || '/logos/principles.png'}
                                             alt={item.title}
                                             objectFit="cover"
                                             layout="fill"

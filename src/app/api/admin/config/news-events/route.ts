@@ -11,7 +11,7 @@ async function getNewsEvents(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const type = searchParams.get('type');
         const typeCondition = type !== 'all' ? {type} : {};
-        const newsEvents = await NewsEvents.find({...typeCondition}).sort('-is_highlight');
+        const newsEvents = await NewsEvents.find({...typeCondition}).sort({is_highlight: -1, updatedAt: -1});
 
         return NextResponse.json({news_events: newsEvents, type});
     } catch (error) {

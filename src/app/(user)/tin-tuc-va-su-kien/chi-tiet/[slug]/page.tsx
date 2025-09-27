@@ -25,7 +25,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                 <div className={'flex flex-col gap-5 px-5 2xl:px-50 xl:px-30'}>
                     <h1 className={'font-medium text-center text-3xl text-green-700'}>{item.title}</h1>
                     <Image
-                        src={item.image_url as string}
+                        src={item.image_url as string || '/logos/principles.png'}
                         alt={item.title} sizes={'100vw'}
                         width={0} height={0}
                         style={{width: '100%', height: '100%'}}

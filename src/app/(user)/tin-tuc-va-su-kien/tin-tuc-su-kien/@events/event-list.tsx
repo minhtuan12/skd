@@ -47,7 +47,7 @@ function EventList({data}: { data: any }) {
                                     return <Link href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`} key={item._id}
                                                  className={'w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}>
                                         <Image
-                                            src={item.image_url as string}
+                                            src={item.image_url as string || '/logos/principles.png'}
                                             alt={item.title}
                                             objectFit="cover"
                                             layout="fill"

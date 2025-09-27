@@ -24,7 +24,7 @@ export default function KnowledgeCard(
     >
         <div className={cn(imageClassname, `rounded-md 2xl:h-[265px] xl:h-[200px] md:h-[150px] border border-gray-300`)}>
             <Image
-                src={knowledge?.media?.url as string}
+                src={knowledge?.media?.url as string || '/logos/principles.png'}
                 alt={knowledge.name as string}
                 width={0}
                 height={0}
@@ -41,7 +41,7 @@ export default function KnowledgeCard(
             {
                 knowledge.text ? <div
                     className={'text-gray-500 line-clamp-2 prose !text-md [&>h1]:text-sm'}
-                    dangerouslySetInnerHTML={{__html: knowledge.text as string}}
+                    dangerouslySetInnerHTML={{__html: (knowledge.text || '').replace(/<img[^>]*>/gi, "") as string}}
                 /> : ''
             }
         </div>

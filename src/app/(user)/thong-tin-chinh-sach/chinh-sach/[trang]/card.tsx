@@ -25,7 +25,7 @@ export default function PolicyCard(
     >
         <div className={cn(imageClassname, `rounded-md 2xl:h-[180px] xl:h-[200px] md:h-[150px] border border-gray-300`)}>
             <Image
-                src={item.image_url as string}
+                src={item.image_url as string || '/logos/principles.png'}
                 alt={item.title}
                 width={0}
                 height={0}

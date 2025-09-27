@@ -51,7 +51,7 @@ export default function DataTable(
                     <TableCell className={'h-20 w-20'}>
                         {
                             item?.image_url ? <Image
-                                src={item?.image_url as string}
+                                src={item?.image_url as string || '/logos/principles.png'}
                                 alt={item.title} width={0} height={0}
                                 sizes={'100vw'}
                                 style={{width: "100%", height: "100%"}}

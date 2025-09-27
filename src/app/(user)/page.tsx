@@ -65,7 +65,7 @@ export default async function Home() {
                     </div>
                 </div>
                 <Image
-                    src={home.introduction.image_url}
+                    src={home.introduction.image_url || '/logos/principles.png'}
                     alt="Giới thiệu về Sức khỏe Đất"
                     width={0}
                     height={0}
@@ -226,7 +226,7 @@ export default async function Home() {
                                         className={'relative w-full border-gray-300 border rounded rounded-b-[5px] shadow-lg aspect-[16/9]'}
                                     >
                                         <Image
-                                            src={item.image_url as string} alt={item.link} fill
+                                            src={item.image_url as string || '/logos/principles.png'} alt={item.link} fill
                                             className={'object-fit w-full h-full rounded rounded-b-[5px]'}
                                         />
                                     </Link>

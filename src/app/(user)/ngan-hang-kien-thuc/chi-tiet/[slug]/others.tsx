@@ -52,7 +52,7 @@ function Others({documents, exceptId}: { documents: any, exceptId: string }) {
                                         className={'rounded-sm w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >
                                         <Image
-                                            src={item.media?.url as string}
+                                            src={item.media?.url as string || '/logos/principles.png'}
                                             alt={item.name}
                                             objectFit="cover"
                                             layout="fill"
