@@ -47,7 +47,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                             <div className={'w-full 2xl:px-60 xl:px-30 lg:px-4'}>
                                 <OtherItems items={otherItems} exceptId={id}/>
                             </div>
-                            : <i className={'text-gray-500'}>Chưa có các tin liên quan</i>
+                            : <i className={'text-gray-500 text-center text-lg'}>Chưa có các tin liên quan</i>
                     }
                 </div>
 

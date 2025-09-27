@@ -4,6 +4,7 @@ import {Types} from "mongoose";
 import NewsEvents from "@/models/news-events";
 import {withAuthWithContext} from "@/app/api/middleware";
 import {sanitizeHtml} from "@/lib/utils";
+import Config from "@/models/config";
 
 const {ObjectId} = Types
 
@@ -59,4 +60,85 @@ async function updateNewsEvents(request: NextRequest, {params}: { params: Promis
     }
 }
 
+async function deleteNews(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+    try {
+        await connectDb();
+
+        const {id} = await params;
+        if (!id) {
+            return NextResponse.json(
+                JSON.stringify({message: "Không tồn tại"}),
+                {status: 404}
+            );
+        }
+
+        await NewsEvents.updateMany(
+            {related_posts: id},
+            {$pull: {related_posts: id}}
+        );
+        let homeConfig = await Config.findOne({});
+        if (homeConfig && homeConfig?.home?.news_and_events) {
+            homeConfig.home.news_and_events = homeConfig.home.news_and_events.filter((i: any) => i !== id);
+            await homeConfig.save();
+        }
+
+        const result = await NewsEvents.findByIdAndDelete(id);
+
+        if (!result) {
+            return NextResponse.json(
+                JSON.stringify({message: "Không tồn tại"}),
+                {status: 404}
+            );
+        }
+        return NextResponse.json(
+            JSON.stringify({message: "Cập nhật thành công"}),
+            {status: 200}
+        );
+    } catch (error) {
+        console.error('Delete news API error:', error);
+        return NextResponse.json(
+            {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
+            {status: 500}
+        );
+    }
+}
+
+async function checkHighlight(request: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+    try {
+        await connectDb();
+
+        const {id} = await params;
+        if (!id) {
+            return NextResponse.json(
+                JSON.stringify({message: "Không tồn tại"}),
+                {status: 404}
+            );
+        }
+
+        let news: any = await NewsEvents.findById(id).lean();
+        if (news) {
+            const isHighlight = news.is_highlight;
+            await NewsEvents.findByIdAndUpdate(id, {$set: {is_highlight: !isHighlight}})
+
+            return NextResponse.json(
+                JSON.stringify({message: "Cập nhật thành công"}),
+                {status: 200}
+            );
+        }
+
+        return NextResponse.json(
+            JSON.stringify({message: "Không tồn tại"}),
+            {status: 404}
+        );
+    } catch (error) {
+        console.error('Delete news API error:', error);
+        return NextResponse.json(
+            {error: 'Internal server error', message: 'Đã có lỗi xảy ra'},
+            {status: 500}
+        );
+    }
+}
+
 export const PATCH = withAuthWithContext(updateNewsEvents);
+export const DELETE = withAuthWithContext(deleteNews);
+export const POST = withAuthWithContext(checkHighlight);

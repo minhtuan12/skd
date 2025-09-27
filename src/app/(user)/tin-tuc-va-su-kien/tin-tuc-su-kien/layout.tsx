@@ -15,7 +15,7 @@ export default async function TinTucSuKien(
             <h1 className={'font-semibold text-center text-xl'}>TIN TỨC</h1>
             <div className={'flex gap-12'}>
                 <div className={'w-2/3 flex flex-col gap-6'}>
-                    <CardNews news={newsData.topNews[0]}/>
+                    <CardNews news={newsData.topNews[0]} imageHeight={400}/>
                     <div className={'w-full grid grid-cols-1 gap-y-8 md:gap-y-0 md:grid-cols-2 gap-x-6'}>
                         {newsData.topNews.slice(1, 3).map((item: INewsAndEvents, index: number) => (
                             <CardNews news={item} key={index}/>

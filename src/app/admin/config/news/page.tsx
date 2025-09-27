@@ -19,6 +19,8 @@ import {useUpdateNewsEvents} from "@/app/admin/config/(hooks)/use-update-news-ev
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {NEWS_EVENTS} from "@/constants/common";
 import DataTable from "@/app/admin/config/news/data-table";
+import {useDeleteNewsEvents} from "@/app/admin/config/(hooks)/use-delete-news-events";
+import {useHighlightNewsEvents} from "@/app/admin/config/(hooks)/use-highlight-news-events";
 
 const defaultItem = {
     date: new Date(),
@@ -40,13 +42,16 @@ export default function NewsConfig() {
     const {setHandlers, setLoading} = useContext(AdminButtonContext);
     const {error, refetch, loading} = useNewsEvents(currentTab);
     const {mutate, loading: loadingAdd, isSuccess, isError, error: errorUpdate} = useAddNewsEvents(currentTab);
+    const {mutate: deleteNews, loading: loadingDelete} = useDeleteNewsEvents(currentTab);
     const {mutate: updateNews, loading: loadingUpdate} = useUpdateNewsEvents(currentTab);
+    const {mutate: highlight, loading: loadingHighlight} = useHighlightNewsEvents(currentTab);
     const {uploadFile, loading: loadingUpload} = useUploadFile();
 
     const [newNewsEvent, setNewNewsEvent] = useState<INewsAndEvents>(defaultItem)
     const [imageUrl, setImageUrl] = useState('');
     const [modalTitle, setModalTitle] = useState(`Thêm mới ${currentTab}`)
     const [files, setFiles] = useState<string[]>([]);
+    const [deletedId, setDeletedId] = useState<any>(null);
 
     const activeTabRef = useRef(currentTab);
 
@@ -172,15 +177,14 @@ export default function NewsConfig() {
 
     const handleChangeNewsVisibility = (item: INewsAndEvents) => {
         if (item._id) {
-            updateNews({
-                _id: item._id,
-                is_deleted: !item.is_deleted
-            }, {
+            setDeletedId(item._id);
+            deleteNews(item._id, {
                 onSuccess: () => {
-                    toast.success('Cập nhật thành công');
+                    toast.success('Xóa thành công');
                 },
                 onSettled: () => {
                     setLoading(false);
+                    setDeletedId(null);
                     setOpenModal(false);
                 }
             });
@@ -191,6 +195,16 @@ export default function NewsConfig() {
         setOpenModal(true)
         setNewNewsEvent(item)
         setModalTitle(`Cập nhật ${NEWS_EVENTS[currentTab as keyof typeof NEWS_EVENTS]}`)
+    }
+
+    const handleCheckHighlight = (itemId: string) => {
+        if (itemId) {
+            highlight(itemId, {
+                onSuccess: () => {
+                    toast.success('Cập nhật thành công');
+                }
+            })
+        }
     }
 
     return <>
@@ -239,12 +253,16 @@ export default function NewsConfig() {
                     {tabs.map(tab => (
                         <TabsContent value={tab} className={'mt-2'} key={tab}>
                             {
-                                loading ? <Loader2 className={'animate-spin'}/> :
+                                (loading || loadingHighlight) ? <Loader2 className={'animate-spin'}/> :
                                     !openModal ? <DataTable
+                                        tab={tab}
                                         data={news}
                                         handleClickEdit={handleClickEdit}
                                         handleClickDelete={handleChangeNewsVisibility}
                                         loadingUpdate={loadingUpdate}
+                                        loadingDelete={loadingDelete}
+                                        deletedId={deletedId}
+                                        handleCheckHighlight={handleCheckHighlight}
                                     /> : <NewsEventsItem
                                         isForm
                                         fileName={''}

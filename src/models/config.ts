@@ -10,6 +10,7 @@ export interface INewsAndEvents {
     description: string;
     related_posts: string[] | INewsAndEvents[];
     is_deleted?: boolean;
+    is_highlight?: boolean;
     createdAt?: string;
 }
 

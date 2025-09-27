@@ -81,7 +81,7 @@ export async function getConfig(request: NextRequest) {
                             $facet: {
                                 topNews: [
                                     {$match: {type: "news", is_deleted: false}},
-                                    {$sort: {date: -1}},
+                                    {$sort: {is_highlight: -1}},
                                     {$limit: 3}
                                 ],
                                 newsData: [

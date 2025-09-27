@@ -191,8 +191,8 @@ export default async function Home() {
                                         {NEWS_EVENTS[item.type as keyof typeof NEWS_EVENTS]} | {new Date(item.date).toLocaleDateString('vi-VN', dateOptions as any)}
                                     </div>
                                     <div className={'flex flex-col mt-1 flex-1 min-[1400px]:gap-2'}>
-                                        <h4 className={'font-semibold text-lg'}>{item.title}</h4>
-                                        <div className="text-[15px] text-gray-500 font-medium prose"
+                                        <h4 className={'font-semibold text-lg line-clamp-2 text-ellipsis overflow-hidden'}>{item.title}</h4>
+                                        <div className="text-[15px] text-gray-500 font-medium prose line-clamp-3"
                                              dangerouslySetInnerHTML={{__html: item.description}}
                                         />
                                     </div>

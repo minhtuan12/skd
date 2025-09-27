@@ -25,6 +25,10 @@ const NewsEventsSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: "NewsEvent"
     },
+    is_highlight: {
+        type: Boolean,
+        default: false
+    },
     is_deleted: {
         type: Boolean,
         default: false
