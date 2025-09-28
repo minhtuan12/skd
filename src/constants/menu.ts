@@ -209,6 +209,12 @@ export const sideBarItems = [
                 key: 'contact',
                 children: []
             },
+            {
+                title: "Footer",
+                url: routes.FooterConfig,
+                icon: Newspaper,
+                key: 'footer',
+            },
         ]
     },
 ]

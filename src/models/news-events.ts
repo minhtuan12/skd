@@ -29,6 +29,10 @@ const NewsEventsSchema = new Schema({
         type: Boolean,
         default: false
     },
+    order: {
+        type: Number,
+        default: 0
+    },
     is_deleted: {
         type: Boolean,
         default: false

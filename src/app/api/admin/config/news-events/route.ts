@@ -3,6 +3,7 @@ import connectDb from "@/lib/db";
 import NewsEvents from "@/models/news-events";
 import {withAuth} from "@/app/api/middleware";
 import {sanitizeHtml} from "@/lib/utils";
+import PostOrder from "@/models/post-order";
 
 async function getNewsEvents(request: NextRequest) {
     try {
@@ -11,7 +12,8 @@ async function getNewsEvents(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const type = searchParams.get('type');
         const typeCondition = type !== 'all' ? {type} : {};
-        const newsEvents = await NewsEvents.find({...typeCondition}).sort({is_highlight: -1, updatedAt: -1});
+        const sort = type === 'event' ? {order: 1} : (type === 'news' ? {is_highlight: -1, updatedAt: -1} : {});
+        const newsEvents = await NewsEvents.find({...typeCondition}).sort({...sort as any});
 
         return NextResponse.json({news_events: newsEvents, type});
     } catch (error) {
@@ -37,6 +39,12 @@ async function addNewsEvents(request: NextRequest) {
             );
         }
 
+        if (data.type === 'event') {
+            await NewsEvents.updateMany(
+                {type: 'event'},
+                {$inc: {order: 1}}
+            )
+        }
         const newNewsEvents = new NewsEvents({
             title: data.title,
             description: sanitizeHtml(data.description),

@@ -24,6 +24,8 @@ export const routes = {
     Project: '/project',
     // Contact
     ContactConfig: '/admin/config/contact-question',
+    // Footer
+    FooterConfig: '/admin/config/footer',
 
     ThongTinChinhSach: '/thong-tin-chinh-sach',
     ChienLuoc: '/chien-luoc',

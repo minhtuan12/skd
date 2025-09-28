@@ -97,7 +97,7 @@ export async function getConfig(request: NextRequest) {
                                 ],
                                 eventsData: [
                                     {$match: {type: "event", is_deleted: false}},
-                                    {$sort: {createdAt: -1}},
+                                    {$sort: {order: 1}},
                                 ],
                                 eventsCount: [
                                     {$match: {type: "event", is_deleted: false}},

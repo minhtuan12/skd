@@ -1,10 +1,24 @@
 import Link from "next/link";
 import {routes} from "@/constants/routes";
 
-export default function Footer({traffic}: {traffic: number}) {
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+
+async function fetchFooter() {
+    const res = await fetch(`${baseUrl}/api/config/footer`,
+        {cache: 'no-store', credentials: 'include'}
+    );
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch footer');
+    }
+    return res.json();
+}
+
+export default async function Footer({traffic}: { traffic: number }) {
+    const {footer} = await fetchFooter();
     const social = [
         {
-            href: '#',
+            href: footer.about_us.facebook || '#',
             icon: <svg fill="#e6e6e6" width="20px" height="20px" viewBox="0 0 32 32"
                        xmlns="http://www.w3.org/2000/svg" stroke="#e6e6e6">
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -16,7 +30,7 @@ export default function Footer({traffic}: {traffic: number}) {
                 </g>
             </svg>
         }, {
-            href: '#',
+            href: footer.about_us.youtube || '#',
             icon: <svg fill="#e6e6e6" height="15px" width="15px" version="1.1" id="Layer_1"
                        xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                        viewBox="-271 311.2 256 179.8" xmlSpace="preserve" stroke="#e6e6e6">
@@ -29,7 +43,7 @@ export default function Footer({traffic}: {traffic: number}) {
             </svg>
         },
         {
-            href: '#',
+            href: footer.about_us.email || '#',
             icon: <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
                        xmlnsXlink="http://www.w3.org/1999/xlink" width="15px" height="15px" viewBox="0 0 512.00 512.00"
                        xmlSpace="preserve" fill="#e6e6e6" stroke="#e6e6e6" strokeWidth="20.48">
@@ -50,14 +64,13 @@ export default function Footer({traffic}: {traffic: number}) {
     return <>
         <div className="w-full h-2 bg-[linear-gradient(to_right,_#3B82F6_0%,_white_49%,_#FACC15_51%,_white_100%)]"/>
         <footer
-            className="bg-[#1E2637] text-white pt-10 box-border h-auto pb-4 lg:pb-0 lg:h-75 px-10 lg:px-10 xl:px-40 mx-auto">
-            <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
+            className="bg-[#1E2637] text-white pt-10 box-border h-auto pb-4 lg:pb-0 lg:h-86 px-10 lg:px-10 xl:px-40 mx-auto">
+            <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 text-sm h-auto">
                 <div>
                     <h5 className="font-bold mb-2 text-base">VỀ CHÚNG TÔI</h5>
-                    <p className={'text-[13px] text-gray-400 mt-3'}>Ngân hàng kiến thức trực tuyến về Sức khỏe đất
-                        là
-                        cổng
-                        thông tin chính thức, cung cấp tài liệu, chính sách và dữ liệu đáng tin cậy.</p>
+                    <p className={'text-[15px] text-gray-400 mt-3'}>
+                        {footer.about_us.text}
+                    </p>
                     <div className={'mt-4 flex items-center gap-[10px]'}>
                         {social.map((item, i) => (
                             <div className={`w-5 h-5 ${i > 0 ? 'mt-1' : ''}`} key={i}>
@@ -70,16 +83,17 @@ export default function Footer({traffic}: {traffic: number}) {
                 </div>
                 <div>
                     <h5 className="font-bold mb-2 text-base">LIÊN KẾT NHANH</h5>
-                    <ul className="space-y-2 text-[13px] text-gray-400 mt-3">
-                        <li><Link href="#">Thông tin chính sách</Link></li>
-                        <li><Link href="#">Ngân hàng kiến thức</Link></li>
-                        <li><Link href="#">Tin tức & Sự kiện</Link></li>
-                        <li><Link href="#">Hỏi đáp & Liên hệ</Link></li>
+                    <ul className="space-y-2 text-[15px] text-gray-400 mt-3">
+                        <li><Link href="/muc-luc/policy">Thông tin chính sách</Link></li>
+                        <li><Link href="/muc-luc/map">Bản đồ</Link></li>
+                        <li><Link href="/muc-luc/knowledge">Ngân hàng kiến thức</Link></li>
+                        <li><Link href="/muc-luc/news">Tin tức & Sự kiện</Link></li>
+                        <li><Link href="/muc-luc/contact">Hỏi đáp & Liên hệ</Link></li>
                     </ul>
                 </div>
                 <div>
                     <h5 className="font-bold mb-2 text-base">LIÊN HỆ</h5>
-                    <div className="space-y-3 text-[13px] text-gray-400 mt-3">
+                    <div className="space-y-3 text-[15px] text-gray-400 mt-3">
                         <p className={'flex items-center gap-2'}>
                             <svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                  xmlnsXlink="http://www.w3.org/1999/xlink" width="15px" height="15px"
@@ -92,7 +106,7 @@ export default function Footer({traffic}: {traffic: number}) {
                                           d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path>
                                 </g>
                             </svg>
-                            Số 2 Ngọc Hà, Ba Đình, Hà Nội
+                            {footer.contact.address}
                         </p>
                         <p className={'flex items-center gap-1'}>
                             <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none"
@@ -105,7 +119,7 @@ export default function Footer({traffic}: {traffic: number}) {
                                         fill="#e6e6e6"></path>
                                 </g>
                             </svg>
-                            (024) 3843 5432
+                            {footer.contact.phone}
                         </p>
                         <p className={'flex items-center gap-2'}>
                             <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
@@ -123,15 +137,18 @@ export default function Footer({traffic}: {traffic: number}) {
                                     </g>
                                 </g>
                             </svg>
-                            lienhe.skd@map.gov.vn
+                            {footer.contact.email}
                         </p>
                     </div>
                 </div>
                 <div>
                     <h5 className="font-bold mb-2 text-base">ĐỐI TÁC & NHÀ TÀI TRỢ</h5>
-                    <div className="space-y-2 text-[13px] text-gray-400 mt-3">
-                        <p>Bộ Nông nghiệp & PTNT</p>
-                        <p>Tổ chức Lương thực và Nông nghiệp Liên Hợp Quốc (FAO)</p>
+                    <div className="space-y-2 text-[15px] text-gray-400 mt-3">
+                        {
+                            (footer.sponsors || [])?.map((s: string, index: number) => (
+                                <p key={index}>{s}</p>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
@@ -140,7 +157,7 @@ export default function Footer({traffic}: {traffic: number}) {
             </div>
             <div className="h-[2px] bg-gray-100 opacity-10 w-full mt-2"></div>
             <div
-                className="mt-2 lg:mt-6 text-xs text-gray-400 flex w-full justify-between max-sm:flex max-sm:flex-col-reverse max-sm:gap-4">
+                className="mt-2 lg:mt-6 text-[15px] text-gray-400 flex w-full justify-between max-sm:flex max-sm:flex-col-reverse max-sm:gap-4">
                 <p className={'max-sm:text-center'}>© 2025 Bản quyền thuộc về Cổng thông tin Sức khỏe đất.</p>
                 <div className={'flex items-center gap-4 max-sm:w-full max-sm:justify-between'}>
                     <Link href={'#'}>Điều khoản sử dụng</Link>
