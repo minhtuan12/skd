@@ -100,7 +100,7 @@ export default async function Home() {
                     href="/ban-do/cac-trung-tam-quan-trac-dat"
                 >
                     <div className={'flex flex-col gap-3 h-full'}>
-                        <h5 className={'text-black font-semibold text-[15px]'}>Ngân hàng kiến thức</h5>
+                        <h5 className={'text-black font-semibold text-[15px]'}>Danh sách các phòng thí nghiệm được chỉ định thử nghiệm phân bón</h5>
                         <div className={'flex-1'}>
                             <MapWrapper marks={[
                                 [105.8342, 21.0278], // Hà Nội

@@ -15,11 +15,11 @@ async function fetchMaps() {
 }
 
 export default async function BanDoDat() {
-    const {maps} = await fetchMaps();
+    const {maps, title} = await fetchMaps();
 
     return <div className={'box-border pb-40 flex flex-col gap-6 mt-6'}>
         <div className={'flex flex-col gap-6 h-full'}>
-            <h1 className={'font-semibold text-center text-xl'}>BẢN ĐỒ ĐẤT</h1>
+            <h1 className={'font-semibold text-center text-xl'}>{title?.toUpperCase() || 'BẢN ĐỒ ĐẤT'}</h1>
             <MapWrapper maps={maps}/>
         </div>
     </div>
