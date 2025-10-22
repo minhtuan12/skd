@@ -1,14 +1,14 @@
 'use client'
 
-import {Input} from "@/components/ui/input";
-import {ILab} from "@/models/lab";
-import {BookText, MapPin} from "lucide-react";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { ILab } from "@/models/lab";
+import { BookText, MapPin } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MapWrapper from "@/components/custom/map-wrapper";
 import React from "react";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import * as turf from "@turf/turf";
-import {formatDate} from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 function haversineDistance([lng1, lat1]: [number, number], [lng2, lat2]: [number, number]) {
     const toRad = (x: number) => (x * Math.PI) / 180;
@@ -45,7 +45,7 @@ function isPointInProvince(point: any, provinceFeature: any) {
     return turf.booleanPointInPolygon(pt, provinceFeature);
 }
 
-export default function ({labs, tilerApiKey}: any) {
+export default function ({ labs, tilerApiKey }: any) {
     const [selectedLoc, setSelectedLoc] = React.useState<number[]>([]);
     const [nearLabs, setNearLabs] = React.useState<any>([]);
     const [features, setFeatures] = React.useState<any>(null);
@@ -54,31 +54,19 @@ export default function ({labs, tilerApiKey}: any) {
     const [filteredLabs, setFilteredLabs] = React.useState(labs);
 
     function handleSelect(name: any) {
+        if (name === 'all') {
+            setSelectedProvince('all');
+            return;
+        }
         const provinceFeature = features.find(
             (f: any) => f.properties.GID_1 === name
         );
 
         setSelectedProvince(provinceFeature);
-        if (provinceFeature) {
-            const result = filteredLabs.filter((item: ILab) => {
-                return isPointInProvince(
-                    item.location.coordinates,
-                    provinceFeature
-                );
-            });
-            setFilteredLabs(result);
-        } else {
-            setFilteredLabs(filteredLabs);
-        }
     }
 
     function handleSelectTarget(target: any) {
         setSelectedTarget(target);
-        if (target) {
-            setFilteredLabs(filteredLabs.filter((item: ILab) => item.category?.toLowerCase()?.includes(target === 'fertilizer' ? 'phân' : 'đất')))
-        } else {
-            setFilteredLabs(filteredLabs);
-        }
     }
 
     const popupHTMLs = React.useMemo(() => {
@@ -106,7 +94,7 @@ export default function ({labs, tilerApiKey}: any) {
             const marks = filteredLabs.map((item: ILab) => item.location.coordinates);
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    const {latitude, longitude} = pos.coords;
+                    const { latitude, longitude } = pos.coords;
                     setNearLabs(filterNearby([longitude, latitude], marks));
                 },
                 (err) => {
@@ -126,6 +114,26 @@ export default function ({labs, tilerApiKey}: any) {
         fetchProvinces();
     }, []);
 
+    React.useEffect(() => {
+        let result = labs;
+
+        if (selectedProvince && selectedProvince !== "all") {
+            result = result.filter((item: ILab) =>
+                isPointInProvince(item.location.coordinates, selectedProvince)
+            );
+        }
+
+        if (selectedTarget && selectedTarget !== "all") {
+            result = result.filter((item: ILab) =>
+                item.category?.toLowerCase()?.includes(
+                    selectedTarget === "fertilizer" ? "phân" : "đất"
+                )
+            );
+        }
+
+        setFilteredLabs(result);
+    }, [selectedProvince, selectedTarget]);
+
     return <>
         <div
             className={'max-md:h-[1000px] h-[650px] pt-4 px-3 pb-3 bg-[#f6f4f4] rounded-lg flex gap-2 flex-col md:flex-row max-md:gap-4'}>
@@ -144,14 +152,14 @@ export default function ({labs, tilerApiKey}: any) {
                         {
                             filteredLabs?.map((lab: ILab, i: number) => (
                                 <div key={i}
-                                     onClick={() => setSelectedLoc(lab.location.coordinates)}
-                                     className={'py-2 px-4 border-b border-gray-100 bg-white box-border flex flex-col gap-0.5 cursor-pointer hover:bg-gray-100'}>
+                                    onClick={() => setSelectedLoc(lab.location.coordinates)}
+                                    className={'py-2 px-4 border-b border-gray-100 bg-white box-border flex flex-col gap-0.5 cursor-pointer hover:bg-gray-100'}>
                                     <div className={'font-medium text-[red] text-[17px]'}>{lab.name}</div>
                                     <div className={'text-gray-400 gap-3 font-medium flex items-center'}>
-                                        <BookText className={'w-3 h-3'}/>{lab.category}
+                                        <BookText className={'w-3 h-3'} />{lab.category}
                                     </div>
                                     <div className={'text-gray-400 gap-3 font-medium flex items-center'}>
-                                        <MapPin className={'w-3 h-3'}/>{lab.address}
+                                        <MapPin className={'w-3 h-3'} />{lab.address}
                                     </div>
                                 </div>
                             ))
@@ -164,9 +172,10 @@ export default function ({labs, tilerApiKey}: any) {
                     className={'flex gap-10 w-full justify-center items-center h-9 max-sm:flex-col max-sm:gap-2 max-sm:my-6'}>
                     <Select value={selectedProvince?.properties?.GID_1 || ''} onValueChange={handleSelect}>
                         <SelectTrigger className="w-[200px] bg-white !text-base">
-                            <SelectValue placeholder="Chọn tỉnh/thành phố"/>
+                            <SelectValue placeholder="Chọn tỉnh/thành phố" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value={"all"} className={'!text-base'}>Tất cả</SelectItem>
                             {
                                 features?.map((item: any, index: number) => <SelectItem
                                     className={'!text-base'}
@@ -181,9 +190,10 @@ export default function ({labs, tilerApiKey}: any) {
 
                     <Select value={selectedTarget || ''} onValueChange={handleSelectTarget}>
                         <SelectTrigger className="w-[200px] bg-white !text-base">
-                            <SelectValue placeholder="Chọn chỉ tiêu"/>
+                            <SelectValue placeholder="Chọn chỉ tiêu" />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value={"all"} className={'!text-base'}>Tất cả</SelectItem>
                             <SelectItem value={"fertilizer"} className={'!text-base'}>Phân bón</SelectItem>
                             <SelectItem value={"soil"} className={'!text-base'}>Đất</SelectItem>
                         </SelectContent>
