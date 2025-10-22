@@ -50,6 +50,7 @@ export default function ({labs, tilerApiKey}: any) {
     const [nearLabs, setNearLabs] = React.useState<any>([]);
     const [features, setFeatures] = React.useState<any>(null);
     const [selectedProvince, setSelectedProvince] = React.useState<any>(null);
+    const [selectedTarget, setSelectedTarget] = React.useState<any>(null);
     const [filteredLabs, setFilteredLabs] = React.useState(labs);
 
     function handleSelect(name: any) {
@@ -59,7 +60,7 @@ export default function ({labs, tilerApiKey}: any) {
 
         setSelectedProvince(provinceFeature);
         if (provinceFeature) {
-            const result = labs.filter((item: ILab) => {
+            const result = filteredLabs.filter((item: ILab) => {
                 return isPointInProvince(
                     item.location.coordinates,
                     provinceFeature
@@ -67,7 +68,16 @@ export default function ({labs, tilerApiKey}: any) {
             });
             setFilteredLabs(result);
         } else {
-            setFilteredLabs(labs);
+            setFilteredLabs(filteredLabs);
+        }
+    }
+
+    function handleSelectTarget(target: any) {
+        setSelectedTarget(target);
+        if (target) {
+            setFilteredLabs(filteredLabs.filter((item: ILab) => item.category?.toLowerCase()?.includes(target === 'fertilizer' ? 'phân' : 'đất')))
+        } else {
+            setFilteredLabs(filteredLabs);
         }
     }
 
@@ -169,12 +179,13 @@ export default function ({labs, tilerApiKey}: any) {
                         </SelectContent>
                     </Select>
 
-                    <Select>
+                    <Select value={selectedTarget || ''} onValueChange={handleSelectTarget}>
                         <SelectTrigger className="w-[200px] bg-white !text-base">
                             <SelectValue placeholder="Chọn chỉ tiêu"/>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={"hanoi1"} className={'!text-base'}>Chỉ tiêu 1</SelectItem>
+                            <SelectItem value={"fertilizer"} className={'!text-base'}>Phân bón</SelectItem>
+                            <SelectItem value={"soil"} className={'!text-base'}>Đất</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

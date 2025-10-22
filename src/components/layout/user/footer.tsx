@@ -64,7 +64,7 @@ export default async function Footer({traffic}: { traffic: number }) {
     return <>
         <div className="w-full h-2 bg-[linear-gradient(to_right,_#3B82F6_0%,_white_49%,_#FACC15_51%,_white_100%)]"/>
         <footer
-            className="bg-[#1E2637] text-white pt-10 box-border h-auto pb-4 lg:pb-0 lg:h-86 px-10 lg:px-10 xl:px-40 mx-auto">
+            className="bg-[#1E2637] text-white pt-10 box-border h-auto pb-[50px] px-10 lg:px-10 xl:px-40 mx-auto">
             <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 text-sm h-auto">
                 <div>
                     <h5 className="font-bold mb-2 text-base">VỀ CHÚNG TÔI</h5>
