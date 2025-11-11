@@ -6,6 +6,7 @@ import {cloudinaryService} from "@/service/cloudinary";
 import cloudinary from "@/lib/cloudinary";
 import OtherPosts from "@/app/(user)/bai-viet/[id]/other-posts";
 import {SectionType} from "@/models/section";
+import { getSecureLink } from "@/lib/utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -91,7 +92,7 @@ export default async function ({params}: {
                                             <a
                                                 key={index}
                                                 className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
-                                                href={item.file_url}
+                                                href={getSecureLink(item.file_url)}
                                             >
                                                 Tải xuống {item.name}
                                             </a>

@@ -1,11 +1,12 @@
 import React from "react";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight} from "lucide-react";
-import PostCard from './card';
 import {IPost} from "@/models/post";
-import {SectionType} from "@/models/section";
+import dynamic from "next/dynamic";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+
+const PostCard = dynamic(() => import("./card"));
 
 async function fetchDetailSection(id: string) {
     if (id) {

@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react";
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -48,7 +48,8 @@ export default function CardWithTitle(
                             >
                                 {title}
                             </Link>
-                    ) : <div className={'w-full h-48 relative'}><Image
+                    ) : <div className={'w-full h-48 relative'}><Image priority
+                        fetchPriority="high"
                         src={bgImageUrl || '/logos/principles.png'}
                         alt={title}
                         layout="fill"

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import {buildDetailPath, cn} from "@/lib/utils";
-import {IKnowledge} from "@/models/knowledge";
+import { buildDetailPath, cn } from "@/lib/utils";
+import { IKnowledge } from "@/models/knowledge";
 import Link from "next/link";
 
 export default function KnowledgeCard(
@@ -10,12 +10,12 @@ export default function KnowledgeCard(
         imageClassname = '',
         imageHeight,
     }:
-    {
-        knowledge: IKnowledge,
-        className?: string,
-        imageClassname?: string,
-        imageHeight?: number,
-    }
+        {
+            knowledge: IKnowledge,
+            className?: string,
+            imageClassname?: string,
+            imageHeight?: number,
+        }
 ) {
     const detailPath = buildDetailPath(knowledge.name, knowledge._id as string);
     return <Link
@@ -23,12 +23,13 @@ export default function KnowledgeCard(
         className={cn(className, 'flex flex-col gap-4')}
     >
         <div className={cn(imageClassname, `rounded-md 2xl:h-[265px] xl:h-[200px] md:h-[150px] border border-gray-300`)}>
-            <Image
+            <Image priority
+                fetchPriority="high"
                 src={knowledge?.media?.url as string || '/logos/principles.png'}
                 alt={knowledge.name as string}
                 width={0}
                 height={0}
-                style={{width: '100%', height: '100%'}}
+                style={{ width: '100%', height: '100%' }}
                 sizes="100vw"
                 className={'rounded-md object-cover'}
             />
@@ -41,7 +42,7 @@ export default function KnowledgeCard(
             {
                 knowledge.text ? <div
                     className={'text-gray-500 line-clamp-2 prose !text-md [&>h1]:text-sm'}
-                    dangerouslySetInnerHTML={{__html: (knowledge.text || '').replace(/<img[^>]*>/gi, "") as string}}
+                    dangerouslySetInnerHTML={{ __html: (knowledge.text || '').replace(/<img[^>]*>/gi, "") as string }}
                 /> : ''
             }
         </div>

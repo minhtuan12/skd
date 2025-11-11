@@ -1,14 +1,14 @@
 'use client'
 
-import React, {useCallback, useMemo, useState} from "react";
-import {ChevronLeft, ChevronRight, Loader2} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {IKnowledge} from "@/models/knowledge";
+import React, { useCallback, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { IKnowledge } from "@/models/knowledge";
 import Link from "next/link";
-import {buildDetailPath} from "@/lib/utils";
+import { buildDetailPath } from "@/lib/utils";
 import Image from "next/image";
 
-function Others({documents, exceptId}: { documents: any, exceptId: string }) {
+function Others({ documents, exceptId }: { documents: any, exceptId: string }) {
     const [start, setStart] = useState(0);
     const docs = useMemo(() => {
         return documents.filter((i: IKnowledge) => i._id !== exceptId);
@@ -33,12 +33,12 @@ function Others({documents, exceptId}: { documents: any, exceptId: string }) {
         return docs.slice(start);
     }, [start, docs]);
 
-    return !documents ? <Loader2 className={'animate-spin w-7 h-7'}/> :
+    return !documents ? <Loader2 className={'animate-spin w-7 h-7'} /> :
         <>
             {
                 docs.length === 0 ? <div className={'italic text-gray-700 font-medium'}>
-                        Chưa có thông tin mới
-                    </div> :
+                    Chưa có thông tin mới
+                </div> :
                     <>
                         <div
                             className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-8 h-100 justify-center'}>
@@ -51,13 +51,14 @@ function Others({documents, exceptId}: { documents: any, exceptId: string }) {
                                         key={item._id}
                                         className={'rounded-sm w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >
-                                        <Image
+                                        <Image priority
+                                            fetchPriority="high"
                                             src={item.media?.url as string || '/logos/principles.png'}
                                             alt={item.name}
                                             objectFit="cover"
                                             layout="fill"
                                         />
-                                        <div className={`absolute inset-0 bg-[#00000080]`}/>
+                                        <div className={`absolute inset-0 bg-[#00000080]`} />
                                         <div
                                             className="absolute inset-0 p-7 text-white box-border flex flex-row gap-8 md:gap-5 md:flex-col max-md:items-center">
                                             <h3 className="text-xl leading-8 line-clamp-2 md:text-3xl md:leading-12 md:line-clamp-6 drop-shadow-md md:mt-5">{item.name}</h3>
@@ -71,12 +72,12 @@ function Others({documents, exceptId}: { documents: any, exceptId: string }) {
                                 <Button
                                     onClick={scrollPrev}
                                     className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                    <ChevronLeft/>
+                                    <ChevronLeft />
                                 </Button>
                                 <Button
                                     onClick={scrollNext}
                                     className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                    <ChevronRight/>
+                                    <ChevronRight />
                                 </Button>
                             </div> : ""
                         }

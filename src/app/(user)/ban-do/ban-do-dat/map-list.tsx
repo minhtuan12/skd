@@ -1,25 +1,27 @@
 "use client"
 
-import {useRef, useState} from "react"
-import {ChevronLeft, ChevronRight} from "lucide-react"
-import {IMap} from "@/models/map";
-import {Button} from "@/components/ui/button";
-import CardWithTitle from "@/components/custom/card-with-title";
+import { useRef, useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { IMap } from "@/models/map";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import useMapPagination from "@/app/(user)/ban-do/ban-do-dat/use-pagination";
-import {mainColors} from "@/constants/common";
+import { mainColors } from "@/constants/common";
+import dynamic from "next/dynamic";
 
-export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenMap: any }) {
+const CardWithTitle = dynamic(() => import("@/components/custom/card-with-title"), { ssr: false });
+
+export default function MapList({ maps, setChosenMap }: { maps: IMap[], setChosenMap: any }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [currentPage, setCurrentPage] = useState(0)
-    const {totalPages} = useMapPagination(maps);
+    const { totalPages } = useMapPagination(maps);
     const bgColors = mainColors.map(color => `bg-[${color}]`);
 
     const scrollLeft = () => {
         if (containerRef.current) {
             const width = containerRef.current.clientWidth
-            containerRef.current.scrollBy({left: -width, behavior: "smooth"})
+            containerRef.current.scrollBy({ left: -width, behavior: "smooth" })
             setCurrentPage(prev => prev - 1)
         }
     }
@@ -27,7 +29,7 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
     const scrollRight = () => {
         if (containerRef.current) {
             const width = containerRef.current.clientWidth
-            containerRef.current.scrollBy({left: width, behavior: "smooth"})
+            containerRef.current.scrollBy({ left: width, behavior: "smooth" })
             setCurrentPage(prev => prev + 1)
         }
     }
@@ -39,7 +41,7 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                 onClick={scrollLeft}
                 className="text-black border border-gray-100 hover:bg-gray-100 absolute -left-5 xl:-left-15 top-1/2 -translate-y-1/2 z-10 bg-white shadow rounded-full p-2"
             >
-                <ChevronLeft/>
+                <ChevronLeft />
             </Button>
 
             <div
@@ -91,20 +93,21 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                             <div className={'flex flex-col gap-3 h-full'}>
                                 <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
                                 <div className={'flex-1'}>
-                                    <Image
+                                    <Image priority
+                                        fetchPriority="high"
                                         src={item.image_url as string || '/logos/principles.png'} alt={item.name}
                                         width={0}
                                         height={0}
                                         sizes={'100vw'}
-                                        style={{width: 'auto', height: 'auto'}}
+                                        style={{ width: 'auto', height: 'auto' }}
                                         className={'object-cover'}
                                     />
                                 </div>
                             </div>
                             <Link href="#"
-                                  className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                                className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                                 bản
-                                đồ <ChevronRight width={13} className={'mt-[3px]'}/></Link>
+                                đồ <ChevronRight width={13} className={'mt-[3px]'} /></Link>
                         </CardWithTitle>
                     )
                 })}
@@ -115,11 +118,11 @@ export default function MapList({maps, setChosenMap}: { maps: IMap[], setChosenM
                 onClick={scrollRight}
                 className="text-black border border-gray-100 hover:bg-gray-100 absolute -right-5 xl:-right-15 top-1/2 -translate-y-1/2 z-10 bg-white shadow rounded-full p-2"
             >
-                <ChevronRight/>
+                <ChevronRight />
             </Button>
 
             <div className="flex justify-center mt-10 gap-2">
-                {Array.from({length: totalPages}).map((_, index) => (
+                {Array.from({ length: totalPages }).map((_, index) => (
                     <span
                         key={index}
                         className={`w-3 h-3 rounded-full ${currentPage === index ? "bg-blue-600" : "bg-gray-300"}`}

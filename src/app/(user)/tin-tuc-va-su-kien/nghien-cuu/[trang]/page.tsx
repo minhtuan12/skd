@@ -1,9 +1,11 @@
 import React from "react";
 import {fetchNewsEvents} from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-news-events";
-import CardNews from "@/app/(user)/tin-tuc-va-su-kien/tin-tuc-su-kien/@news/card-news";
 import {INewsAndEvents} from "@/models/config";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight} from "lucide-react";
+import dynamic from "next/dynamic";
+
+const CardNews = dynamic(() => import("@/app/(user)/tin-tuc-va-su-kien/tin-tuc-su-kien/@news/card-news"));
 
 export default async function NghienCuu({params}: { params: Promise<{ trang: string }> }) {
     const {trang} = await params;

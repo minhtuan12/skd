@@ -1,15 +1,15 @@
 'use client'
 
-import React, {useCallback, useMemo, useState} from "react";
-import {ChevronLeft, ChevronRight, Loader2} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {IPolicyDocument} from "@/models/policy-document";
+import React, { useCallback, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { IPolicyDocument } from "@/models/policy-document";
 import Link from "next/link";
-import {buildDetailPath, formatDateVN} from "@/lib/utils";
+import { buildDetailPath, formatDateVN } from "@/lib/utils";
 import Image from "next/image";
-import {INewsAndEvents} from "@/models/config";
+import { INewsAndEvents } from "@/models/config";
 
-function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
+function OtherItems({ items, exceptId }: { items: any, exceptId: string }) {
     const [start, setStart] = useState(0);
     const filteredItems = useMemo(() => {
         return items.filter((i: IPolicyDocument) => i._id !== exceptId);
@@ -34,18 +34,18 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
         return filteredItems.slice(start);
     }, [start, filteredItems]);
 
-    return !items ? <Loader2 className={'animate-spin w-7 h-7'}/> :
+    return !items ? <Loader2 className={'animate-spin w-7 h-7'} /> :
         <>
             {
                 filteredItems.length === 0 ? <div className={'italic text-gray-700 font-medium'}>
-                        Chưa có những chính sách mới
-                    </div> :
+                    Chưa có những chính sách mới
+                </div> :
                     <>
                         <div
                             className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-8 h-150 md:h-100 justify-center'}>
                             {
                                 newsList.map((item: INewsAndEvents) => {
-                                    const {day, year, month} = formatDateVN(item.date);
+                                    const { day, year, month } = formatDateVN(item.date);
                                     const detailPath = buildDetailPath(item.title, item._id as string);
 
                                     return <Link
@@ -53,13 +53,14 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                                         key={item._id}
                                         className={'rounded-sm w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}
                                     >
-                                        <Image
+                                        <Image priority
+                                            fetchPriority="high"
                                             src={item.image_url as string || '/logos/principles.png'}
                                             alt={item.title}
                                             objectFit="cover"
                                             layout="fill"
                                         />
-                                        <div className={`absolute inset-0 bg-[#00000080]`}/>
+                                        <div className={`absolute inset-0 bg-[#00000080]`} />
                                         <div
                                             className="absolute inset-0 p-7 text-white box-border flex flex-row gap-8 md:gap-5 md:flex-col max-md:items-center max-sm:flex-col max-sm:gap-4">
                                             <div className={'bg-white box-border py-3 px-5 w-fit rounded-lg max-sm:w-full max-sm:flex max-sm:gap-3 max-sm:items-center max-sm:py-1 max-sm:px-1 max-sm:justify-center'}>
@@ -80,12 +81,12 @@ function OtherItems({items, exceptId}: { items: any, exceptId: string }) {
                                 <Button
                                     onClick={scrollPrev}
                                     className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                    <ChevronLeft/>
+                                    <ChevronLeft />
                                 </Button>
                                 <Button
                                     onClick={scrollNext}
                                     className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                    <ChevronRight/>
+                                    <ChevronRight />
                                 </Button>
                             </div> : ''
                         }

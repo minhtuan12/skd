@@ -1,6 +1,6 @@
 import Image from "next/image";
-import {buildDetailPath, cn} from "@/lib/utils";
-import {IPolicyDocument} from "@/models/policy-document";
+import { buildDetailPath, cn } from "@/lib/utils";
+import { IPolicyDocument } from "@/models/policy-document";
 import Link from "next/link";
 
 export default function PolicyCard(
@@ -10,12 +10,12 @@ export default function PolicyCard(
         imageClassname = '',
         imageHeight,
     }:
-    {
-        item: IPolicyDocument,
-        className?: string,
-        imageClassname?: string,
-        imageHeight?: number,
-    }
+        {
+            item: IPolicyDocument,
+            className?: string,
+            imageClassname?: string,
+            imageHeight?: number,
+        }
 ) {
     const detailPath = buildDetailPath(item.title, item._id as string);
 
@@ -24,12 +24,13 @@ export default function PolicyCard(
         className={cn(className, 'flex flex-col gap-2.5')}
     >
         <div className={cn(imageClassname, `rounded-md 2xl:h-[180px] xl:h-[200px] md:h-[150px] border border-gray-300`)}>
-            <Image
+            <Image priority
+                fetchPriority="high"
                 src={item.image_url as string || '/logos/principles.png'}
                 alt={item.title}
                 width={0}
                 height={0}
-                style={{width: '100%', height: '100%'}}
+                style={{ width: '100%', height: '100%' }}
                 sizes="100vw"
                 className={'rounded-md object-cover'}
             />

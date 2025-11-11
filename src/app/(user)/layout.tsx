@@ -1,13 +1,15 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import "../globals.css";
 import React from "react";
-import Header from "@/components/layout/user/header";
 import GoToTopButton from "@/components/custom/to-top-button";
-import Footer from "@/components/layout/user/footer";
-import {fetchGlobalConfig} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-global-config";
+import { fetchGlobalConfig } from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-global-config";
 import Hero from "@/components/layout/user/hero";
-import {Toaster} from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import localFont from "next/font/local";
+import dynamic from "next/dynamic";
+
+const Header = dynamic(() => import("@/components/layout/user/header"));
+const Footer = dynamic(() => import("@/components/layout/user/footer"));
 
 const latoFont = localFont({
     src: [
@@ -83,19 +85,22 @@ export default async function RootLayout(
 
     return (
         <html lang="en"
-              className={`${latoFont.className}`}>
-        <body
-            className={`antialiased`}
-        >
-        <main className="min-h-screen w-full">
-            <Header/>
-            <Hero data={heroData.config}/>
-            {children}
-            <Footer traffic={heroData.traffic}/>
-            <GoToTopButton/>
-            <Toaster position="top-center" richColors/>
-        </main>
-        </body>
+            className={`${latoFont.className}`}>
+            <head>
+                <meta name="google-site-verification" content="TsN4_FgWkK8ctMzhKTDyBADOk1voplVdDq19r_hZ7fw" />
+            </head>
+            <body
+                className={`antialiased`}
+            >
+                <main className="min-h-screen w-full">
+                    <Header />
+                    <Hero data={heroData.config} />
+                    {children}
+                    <Footer traffic={heroData.traffic} />
+                    <GoToTopButton />
+                    <Toaster position="top-center" richColors />
+                </main>
+            </body>
         </html>
     );
 }

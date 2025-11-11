@@ -1,6 +1,6 @@
 import React from "react";
-import {ISection, SectionType} from "@/models/section";
-import {cn} from "@/lib/utils";
+import { ISection, SectionType } from "@/models/section";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
 async function fetchKnowledgeCategory() {
     const res = await fetch(`${baseUrl}/api/config/knowledge-category`,
-        {cache: 'no-store', credentials: 'include'}
+        { cache: 'no-store', credentials: 'include' }
     );
 
     if (!res.ok) {
@@ -19,7 +19,7 @@ async function fetchKnowledgeCategory() {
 
 async function fetchMenu() {
     const res = await fetch(`${baseUrl}/api/config/global`,
-        {cache: 'no-store', credentials: 'include'}
+        { cache: 'no-store', credentials: 'include' }
     );
 
     if (!res.ok) {
@@ -74,12 +74,12 @@ function getTitle(key: string) {
     }
 }
 
-export default async function ({params, searchParams}: {
+export default async function ({ params, searchParams }: {
     params: Promise<{ key: string }>,
     searchParams: Promise<{ sub?: string }>
 }) {
-    const {key} = await params;
-    const {sub} = await searchParams;
+    const { key } = await params;
+    const { sub } = await searchParams;
     let menu = [];
     let title = '';
     const data = await fetchMenu();
@@ -106,12 +106,13 @@ export default async function ({params, searchParams}: {
                             >
                                 <div
                                     className={cn(`rounded-md 2xl:h-[265px] xl:h-[200px] md:h-[150px] border border-gray-300`)}>
-                                    <Image
+                                    <Image priority
+                                        fetchPriority="high"
                                         src={item?.image_url as string || '/logos/principles.png'}
                                         alt={item.name as string}
                                         width={0}
                                         height={0}
-                                        style={{width: '100%', height: '100%'}}
+                                        style={{ width: '100%', height: '100%' }}
                                         sizes="100vw"
                                         className={`rounded-md ${item.image_url ? 'object-cover' : 'object-contain'}`}
                                     />

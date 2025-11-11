@@ -1,8 +1,8 @@
 import Image from "next/image";
-import {buildDetailPath, cn} from "@/lib/utils";
+import { buildDetailPath, cn } from "@/lib/utils";
 import Link from "next/link";
-import {IPost} from "@/models/post";
-import {ISection} from "@/models/section";
+import { IPost } from "@/models/post";
+import { ISection } from "@/models/section";
 
 const tags = {
     policy: 'CHÍNH SÁCH',
@@ -18,13 +18,13 @@ export default function (
         imageHeight,
         section
     }:
-    {
-        item: IPost,
-        className?: string,
-        imageClassname?: string,
-        imageHeight?: number,
-        section: ISection
-    }
+        {
+            item: IPost,
+            className?: string,
+            imageClassname?: string,
+            imageHeight?: number,
+            section: ISection
+        }
 ) {
     const detailPath = buildDetailPath(item.title, item._id as string);
 
@@ -34,12 +34,13 @@ export default function (
     >
         <div
             className={cn(imageClassname, `rounded-md ${section.header_key === 'knowledge' ? '2xl:h-[265px] xl:h-[200px] md:h-[150px]' : '2xl:h-[180px] xl:h-[200px] md:h-[150px]'} border border-gray-300`)}>
-            <Image
+            <Image priority
+                fetchPriority="high"
                 src={item.image_url as string || '/logos/principles.png'}
                 alt={item.title}
                 width={0}
                 height={0}
-                style={{width: '100%', height: '100%'}}
+                style={{ width: '100%', height: '100%' }}
                 sizes="100vw"
                 className={'rounded-md object-cover'}
             />

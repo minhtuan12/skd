@@ -3,10 +3,12 @@ import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/c
 import {ChevronRight} from "lucide-react";
 import {fetchKnowledge} from "@/app/(user)/ngan-hang-kien-thuc/(fetch-data)/fetch-knowledge";
 import {IKnowledge} from "@/models/knowledge";
-import KnowledgeCard from "@/app/(user)/ngan-hang-kien-thuc/knowledge-card";
 import {buildDetailPath, getIdFromSlug} from "@/lib/utils";
 import {fetchKnowledgeCategory} from "@/app/(user)/ngan-hang-kien-thuc/(fetch-data)/fetch-knowledge-category";
 import CategorySelect from "@/app/(user)/ngan-hang-kien-thuc/[category]/[trang]/category-select";
+import dynamic from "next/dynamic";
+
+const KnowledgeCard = dynamic(() => import("@/app/(user)/ngan-hang-kien-thuc/knowledge-card"));
 
 export default async function ({params, searchParams}: {
     params: Promise<{ category: string, trang: string }>,

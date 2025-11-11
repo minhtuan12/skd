@@ -4,11 +4,15 @@ import { Input } from "@/components/ui/input";
 import { ILab } from "@/models/lab";
 import { BookText, MapPin } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import MapWrapper from "@/components/custom/map-wrapper";
 import React from "react";
 import { toast } from "sonner";
 import * as turf from "@turf/turf";
 import { formatDate } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+const MapWrapper = dynamic(() => import("@/components/custom/map-wrapper"), {
+    ssr: false,
+});
 
 function haversineDistance([lng1, lat1]: [number, number], [lng2, lat2]: [number, number]) {
     const toRad = (x: number) => (x * Math.PI) / 180;

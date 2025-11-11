@@ -1,14 +1,12 @@
 import {buildDetailPath, getIdFromSlug} from "@/lib/utils";
 import {IPolicyDocument} from "@/models/policy-document";
 import {fetchDetailDocument} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-detail-document";
-import Image from "next/image";
 import React from "react";
 import OtherDocuments from "@/app/(user)/thong-tin-chinh-sach/chinh-sach/chi-tiet/[slug]/other-documents";
 import {fetchPolicyDocument} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-policy-document";
 import PptViewer from "@/components/custom/ppt-viewer";
 import PdfViewer from "@/components/custom/pdf-viewer";
 import Link from "next/link";
-import {IKnowledgeCategory} from "@/models/knowledge-category";
 
 export default async function ({params}: { params: Promise<{ slug: string }> }) {
     const {slug} = await params;

@@ -1,14 +1,14 @@
-import {buildDetailPath, formatDate, getIdFromSlug} from "@/lib/utils";
+import { buildDetailPath, formatDate, getIdFromSlug } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
-import {INewsAndEvents} from "@/models/config";
-import {fetchDetailNews} from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-detail";
-import {fetchNewsEvents} from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-news-events";
+import { INewsAndEvents } from "@/models/config";
+import { fetchDetailNews } from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-detail";
+import { fetchNewsEvents } from "@/app/(user)/tin-tuc-va-su-kien/(fetch-data)/fetch-news-events";
 import OtherItems from "@/app/(user)/tin-tuc-va-su-kien/chi-tiet/[slug]/other-items";
 import Link from "next/link";
 
-export default async function ({params}: { params: Promise<{ slug: string }> }) {
-    const {slug} = await params;
+export default async function ({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     const id: string = getIdFromSlug(slug);
     const item: INewsAndEvents = await fetchDetailNews(id);
     const otherItems = await fetchNewsEvents(item.type as any, 0);
@@ -24,15 +24,16 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                 {/* Detail */}
                 <div className={'flex flex-col gap-5 px-5 2xl:px-50 xl:px-30'}>
                     <h1 className={'font-medium text-center text-3xl text-green-700'}>{item.title}</h1>
-                    <Image
+                    <Image priority
+                        fetchPriority="high"
                         src={item.image_url as string || '/logos/principles.png'}
                         alt={item.title} sizes={'100vw'}
                         width={0} height={0}
-                        style={{width: '100%', height: '100%'}}
+                        style={{ width: '100%', height: '100%' }}
                     />
                     <div>{formatDate(item.date as any)}</div>
-                    <div dangerouslySetInnerHTML={{__html: item.description}}
-                         className={'xl:text-justify pr-2 box-border prose'}/>
+                    <div dangerouslySetInnerHTML={{ __html: item.description }}
+                        className={'xl:text-justify pr-2 box-border prose'} />
                 </div>
 
                 {/* Related */}
@@ -45,7 +46,7 @@ export default async function ({params}: { params: Promise<{ slug: string }> }) 
                     {
                         item?.related_posts?.length > 0 ?
                             <div className={'w-full 2xl:px-60 xl:px-30 lg:px-4'}>
-                                <OtherItems items={otherItems} exceptId={id}/>
+                                <OtherItems items={otherItems} exceptId={id} />
                             </div>
                             : <i className={'text-gray-500 text-center text-lg'}>Chưa có các tin liên quan</i>
                     }

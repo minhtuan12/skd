@@ -1,20 +1,20 @@
 import Link from "next/link";
 import AnimatedSection from "@/components/custom/animated-section";
-import {ArrowRight, ChevronRight} from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import CardWithTitle from "@/components/custom/card-with-title";
-import {VideoPlayer} from "@/components/ui/video";
+import { VideoPlayer } from "@/components/ui/video";
 import MapWrapper from "@/components/custom/map-wrapper";
-import {IAds, INewsAndEvents} from "@/models/config";
-import {dateOptions, mainColors, NEWS_EVENTS} from "@/constants/common";
+import { IAds, INewsAndEvents } from "@/models/config";
+import { dateOptions, mainColors, NEWS_EVENTS } from "@/constants/common";
 import Image from "next/image";
-import {IPolicyDocument} from "@/models/policy-document";
-import {buildDetailPath} from "@/lib/utils";
+import { IPolicyDocument } from "@/models/policy-document";
+import { buildDetailPath } from "@/lib/utils";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
 async function fetchHomeConfig() {
     const res = await fetch(`${baseUrl}/api/config?page=home`,
-        {cache: 'no-store', credentials: 'include'}
+        { cache: 'no-store', credentials: 'include' }
     );
 
     if (!res.ok) {
@@ -25,7 +25,7 @@ async function fetchHomeConfig() {
 
 async function fetchKnowledgeCategories() {
     const res = await fetch(`${baseUrl}/api/config/knowledge-category`,
-        {cache: 'no-store', credentials: 'include'}
+        { cache: 'no-store', credentials: 'include' }
     );
 
     if (!res.ok) {
@@ -35,8 +35,8 @@ async function fetchKnowledgeCategories() {
 }
 
 export default async function Home() {
-    const {config: {home}} = await fetchHomeConfig();
-    const {pages} = await fetchKnowledgeCategories();
+    const { config: { home } } = await fetchHomeConfig();
+    const { pages } = await fetchKnowledgeCategories();
 
     return (
         <>
@@ -44,10 +44,10 @@ export default async function Home() {
             <AnimatedSection
                 asTag={'section'}
                 className="h-auto my-14 px-10 lg:px-10 xl:px-40 flex flex-col sm:flex-row items-center justify-between gap-10"
-                initial={{opacity: 0, y: 30}}
-                whileInView={{opacity: 1, y: 0}}
-                transition={{duration: 0.6}}
-                viewport={{once: true}}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
             >
                 <div className={'max-md:w-full w-1/2'}>
                     <h2 className="text-4xl max-lg:text-2xl font-semibold mb-4">Giới thiệu về Sức khỏe đất</h2>
@@ -59,12 +59,14 @@ export default async function Home() {
                             <button
                                 className="cursor-pointer hover:opacity-90 font-medium bg-blue-600 text-white px-5 py-2.5 rounded-[10px] flex items-center justify-center gap-2">
                                 Tìm hiểu thêm
-                                <ArrowRight width={16} strokeWidth={'3'}/>
+                                <ArrowRight width={16} strokeWidth={'3'} />
                             </button>
                         </Link>
                     </div>
                 </div>
                 <Image
+                    priority
+                    fetchPriority="high"
                     src={home.introduction.image_url || '/logos/principles.png'}
                     alt="Giới thiệu về Sức khỏe Đất"
                     width={0}
@@ -85,13 +87,13 @@ export default async function Home() {
                     <div className={'flex flex-col gap-3 h-full'}>
                         <h5 className={'text-black font-semibold text-[15px]'}>Bản đồ</h5>
                         <div className={'flex-1'}>
-                            <MapWrapper/>
+                            <MapWrapper />
                         </div>
                     </div>
                     <Link href="/ban-do/ban-do-dat"
-                          className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                        className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                         bản
-                        đồ <ChevronRight width={13}/></Link>
+                        đồ <ChevronRight width={13} /></Link>
                 </CardWithTitle>
 
                 <CardWithTitle
@@ -113,13 +115,13 @@ export default async function Home() {
                                 [108.2772, 14.0583], // Trung Việt Nam
                                 [106.3456, 9.8426],  // Bến Tre
                                 [107.0448, 20.9712]  // Hạ Long
-                            ]}/>
+                            ]} />
                         </div>
                     </div>
                     <Link href="/ban-do/cac-trung-tam-quan-trac-dat"
-                          className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                        className="mt-4 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                         tài liệu
-                        <ChevronRight width={13}/></Link>
+                        <ChevronRight width={13} /></Link>
                 </CardWithTitle>
 
                 <div className={'flex flex-col gap-5 max-md:h-auto h-[600px] lg:h-auto'}>
@@ -144,20 +146,20 @@ export default async function Home() {
                             </ul>
                         </div>
                         <Link href="/muc-luc/policy"
-                              className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">
+                            className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">
                             Xem chính sách
-                            <ChevronRight width={13}/></Link>
+                            <ChevronRight width={13} /></Link>
                     </CardWithTitle>
                     <CardWithTitle
                         border title={'Ngân hàng kiến thức'} bgTitleColor={`bg-[${mainColors[3]}]`}
                         className={'h-auto md:h-1/2 min-[1595px]:h-2/3'}
                         href={`/muc-luc/knowledge`}
                     >
-                        <VideoPlayer src={home.knowledge_bank_video_url}/>
+                        <VideoPlayer src={home.knowledge_bank_video_url} />
                         <Link href={`/muc-luc/knowledge`}
-                              className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
+                            className="mt-4 md:mt-0 text-blue-600 w-fit flex items-center gap-1 text-[13px] font-medium">Xem
                             tài liệu
-                            <ChevronRight width={13}/></Link>
+                            <ChevronRight width={13} /></Link>
                     </CardWithTitle>
                 </div>
             </section>
@@ -166,10 +168,10 @@ export default async function Home() {
             <AnimatedSection
                 asTag={'section'}
                 className="mx-auto px-10 lg:px-10 xl:px-40 pb-30"
-                initial={{opacity: 0}}
-                whileInView={{opacity: 1}}
-                transition={{duration: 0.5}}
-                viewport={{once: true}}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
             >
                 <h2 className="text-2xl font-semibold text-center">Tin tức và Sự kiện mới nhất</h2>
                 <h4 className={'text-md font-medium mt-1 text-center text-gray-600'}>Cập nhật các hoạt động, nghiên cứu
@@ -193,7 +195,7 @@ export default async function Home() {
                                     <div className={'flex flex-col mt-1 flex-1 min-[1400px]:gap-2'}>
                                         <h4 className={'font-semibold text-lg line-clamp-2 text-ellipsis overflow-hidden'}>{item.title}</h4>
                                         <div className="text-[15px] text-gray-500 font-medium prose line-clamp-3"
-                                             dangerouslySetInnerHTML={{__html: item.description}}
+                                            dangerouslySetInnerHTML={{ __html: item.description }}
                                         />
                                     </div>
                                 </CardWithTitle>
@@ -202,8 +204,8 @@ export default async function Home() {
                     }
                 </div>
                 <Link href={'/tin-tuc-va-su-kien/tin-tuc-su-kien'}
-                      className={'text-blue-600 font-medium flex items-center justify-end mt-5'}>Xem thêm <ChevronRight
-                    className={'w-4 h-4 text-blue-600 mt-0.5'}/></Link>
+                    className={'text-blue-600 font-medium flex items-center justify-end mt-5'}>Xem thêm <ChevronRight
+                        className={'w-4 h-4 text-blue-600 mt-0.5'} /></Link>
             </AnimatedSection>
 
             {/* Ads */}
@@ -212,10 +214,10 @@ export default async function Home() {
                     <AnimatedSection
                         asTag={'section'}
                         className="mx-auto px-10 lg:px-10 xl:px-40 pb-30"
-                        initial={{opacity: 0}}
-                        whileInView={{opacity: 1}}
-                        transition={{duration: 0.5}}
-                        viewport={{once: true}}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        viewport={{ once: true }}
                     >
                         <div
                             className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 mt-12 place-items-center">
@@ -225,7 +227,8 @@ export default async function Home() {
                                         href={item.link} key={i} target={'_blank'}
                                         className={'relative w-full border-gray-300 border rounded rounded-b-[5px] shadow-lg aspect-[16/9]'}
                                     >
-                                        <Image
+                                        <Image priority
+                                            fetchPriority="high"
                                             src={item.image_url as string || '/logos/principles.png'} alt={item.link} fill
                                             className={'object-fit w-full h-full rounded rounded-b-[5px]'}
                                         />

@@ -1,6 +1,5 @@
 import {fetchIntroduction} from "@/app/(user)/gioi-thieu/(fetch-data)/fetch-introduction";
 import React from "react";
-import PolicyDocument from "@/models/policy-document";
 
 export default async function SucKhoeDat() {
     const data = await fetchIntroduction('land');

@@ -2,8 +2,10 @@ import React from "react";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination";
 import {ChevronRight} from "lucide-react";
 import {fetchPolicyDocument} from "@/app/(user)/thong-tin-chinh-sach/(fetch-data)/fetch-policy-document";
-import PolicyCard from "@/app/(user)/thong-tin-chinh-sach/chinh-sach/[trang]/card";
 import {IPolicyDocument} from "@/models/policy-document";
+import dynamic from "next/dynamic";
+
+const PolicyCard = dynamic(() => import("@/app/(user)/thong-tin-chinh-sach/chinh-sach/[trang]/card"));
 
 export default async function ChinhSach({params}: { params: Promise<{ trang: string }> }) {
     const {trang} = await params;

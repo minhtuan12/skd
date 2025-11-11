@@ -1,6 +1,4 @@
 import React from "react";
-import {ILab} from "@/models/lab";
-import {formatDate} from "@/lib/utils";
 import Content from "@/app/(user)/ban-do/cac-trung-tam-quan-trac-dat/content";
 
 const tilerApiKey = process.env.MAP_TILER_API_KEY!

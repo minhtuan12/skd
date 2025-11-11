@@ -1,8 +1,8 @@
-import {INewsAndEvents} from "@/models/config";
+import { INewsAndEvents } from "@/models/config";
 import Image from "next/image";
-import {buildDetailPath, cn} from "@/lib/utils";
-import {Button} from "@/components/ui/button";
-import {ChevronRight} from "lucide-react";
+import { buildDetailPath, cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function CardNews(
@@ -14,14 +14,14 @@ export default function CardNews(
         hideDetailBtn = false,
         imageHeight,
     }:
-    {
-        news: INewsAndEvents,
-        className?: string,
-        imageClassname?: string,
-        hideImage?: boolean,
-        hideDetailBtn?: boolean,
-        imageHeight?: number,
-    }
+        {
+            news: INewsAndEvents,
+            className?: string,
+            imageClassname?: string,
+            hideImage?: boolean,
+            hideDetailBtn?: boolean,
+            imageHeight?: number,
+        }
 ) {
     const tag = {
         news: 'TIN TỨC',
@@ -36,22 +36,24 @@ export default function CardNews(
         {
             !hideImage ? <div className={cn(imageClassname, `rounded-md`)}>
                 {imageHeight ?
-                    <Image
+                    <Image priority
+                        fetchPriority="high"
                         src={news.image_url as string || '/logos/principles.png'}
                         alt={news.title}
                         width={0}
                         height={0}
-                        style={{width: '100%', height: imageHeight}}
+                        style={{ width: '100%', height: imageHeight }}
                         sizes="100vw"
                         className={'rounded-md object-cover'}
                     /> :
-                    <Image
+                    <Image priority
+                        fetchPriority="high"
                         src={news.image_url as string || '/logos/principles.png'}
                         alt={news.title}
                         width={0}
                         height={0}
                         sizes="100vw"
-                        style={{width: "100%", height: "auto"}}
+                        style={{ width: "100%", height: "auto" }}
                         className={'rounded-md'}
                     />
                 }
@@ -66,14 +68,14 @@ export default function CardNews(
                 {news.title}
             </Link>
             <div className={'text-gray-500 text-md line-clamp-2 prose'}
-                 dangerouslySetInnerHTML={{__html: (news.description || '').replace(/<img[^>]*>/gi, "")}}/>
+                dangerouslySetInnerHTML={{ __html: (news.description || '').replace(/<img[^>]*>/gi, "") }} />
         </div>
         {!hideDetailBtn ?
             <div className={'flex justify-end max-sm:w-full'}>
                 <Link href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`}>
                     <Button
                         className={'max-sm:w-full flex bg-white border-black border text-black justify-center h-8 hover:bg-white hover:text-green-700 hover:border-green-700'}>
-                        Xem chi tiết<ChevronRight className={'max-sm:hidden flex'}/>
+                        Xem chi tiết<ChevronRight className={'max-sm:hidden flex'} />
                     </Button>
                 </Link>
             </div> : ''

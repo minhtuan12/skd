@@ -1,14 +1,14 @@
 'use client'
 
-import {ChevronLeft, ChevronRight, Loader2} from "lucide-react";
-import {INewsAndEvents} from "@/models/config";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { INewsAndEvents } from "@/models/config";
 import Image from "next/image";
-import {buildDetailPath, formatDateVN} from "@/lib/utils";
-import {Button} from "@/components/ui/button";
-import React, {useMemo, useState} from "react";
+import { buildDetailPath, formatDateVN } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 
-function EventList({data}: { data: any }) {
+function EventList({ data }: { data: any }) {
     const [start, setStart] = useState(0);
 
     const scrollNext = () => {
@@ -30,29 +30,30 @@ function EventList({data}: { data: any }) {
         return data.data.slice(start);
     }, [start, data.data]);
 
-    return !data ? <Loader2 className={'animate-spin w-7 h-7'}/> :
+    return !data ? <Loader2 className={'animate-spin w-7 h-7'} /> :
         <>
             {
                 data.data.length === 0 ? <div className={'italic text-gray-700 font-medium'}>
-                        Chưa có sự kiện mới
-                    </div> :
+                    Chưa có sự kiện mới
+                </div> :
                     <>
                         <div
                             className={'w-full flex flex-col gap-6 md:flex-row md:gap-x-6 xl:gap-x-10 h-140 justify-center'}>
                             {
                                 events.map((item: INewsAndEvents) => {
-                                    const {day, year, month} = formatDateVN(item.date);
+                                    const { day, year, month } = formatDateVN(item.date);
                                     const detailPath = buildDetailPath(item.title, item._id as string);
 
                                     return <Link href={`/tin-tuc-va-su-kien/chi-tiet/${detailPath}`} key={item._id}
-                                                 className={'w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}>
-                                        <Image
+                                        className={'w-full md:w-1/3 relative h-full overflow-hidden cursor-pointer hover:shadow-2xl'}>
+                                        <Image priority
+                                            fetchPriority="high"
                                             src={item.image_url as string || '/logos/principles.png'}
                                             alt={item.title}
                                             objectFit="cover"
                                             layout="fill"
                                         />
-                                        <div className={`absolute inset-0 bg-[#00000080]`}/>
+                                        <div className={`absolute inset-0 bg-[#00000080]`} />
                                         <div
                                             className="absolute inset-0 p-7 text-white box-border flex flex-row gap-8 md:gap-5 md:flex-col max-md:items-center">
                                             <div className={'bg-white box-border py-3 px-5 w-fit rounded-lg'}>
@@ -72,12 +73,12 @@ function EventList({data}: { data: any }) {
                             <Button
                                 onClick={scrollPrev}
                                 className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                <ChevronLeft/>
+                                <ChevronLeft />
                             </Button>
                             <Button
                                 onClick={scrollNext}
                                 className={'rounded-[50%] bg-white border-gray-400 hover:bg-gray-100 border w-10 h-10 flex items-center justify-center text-black'}>
-                                <ChevronRight/>
+                                <ChevronRight />
                             </Button>
                         </div>
                     </>

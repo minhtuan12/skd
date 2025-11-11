@@ -1,11 +1,11 @@
 import Image from "next/image";
-import {Menu, menu} from "@/constants/menu";
+import { Menu, menu } from "@/constants/menu";
 import Link from "next/link";
-import {House, Search} from "lucide-react";
-import {Input} from "@/components/ui/input";
+import { House, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import MobileMenuWrapper from "@/components/layout/user/mobile-menu-wrapper";
 import MobileMenu from "@/components/layout/user/mobile-menu";
-import {buildDetailPath} from "@/lib/utils";
+import { buildDetailPath } from "@/lib/utils";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -14,13 +14,13 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
-import {ISection, SectionType} from "@/models/section";
+import { ISection, SectionType } from "@/models/section";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
 async function fetchMenu() {
     const res = await fetch(`${baseUrl}/api/config/global`,
-        {cache: 'no-store', credentials: 'include'}
+        { cache: 'no-store', credentials: 'include' }
     );
 
     if (!res.ok) {
@@ -67,11 +67,11 @@ export default async function Header() {
             children: sections.menu
                 .filter((i: ISection) => !i.parent_id && i.header_key === item.key)
                 .map((i: ISection) => ({
-                        ...i,
-                        title: i.name,
-                        href: `/${buildDetailPath(i.name, i._id as string)}`,
-                        hasPages: i.type === SectionType.list
-                    })
+                    ...i,
+                    title: i.name,
+                    href: `/${buildDetailPath(i.name, i._id as string)}`,
+                    hasPages: i.type === SectionType.list
+                })
                 )
         }
     })
@@ -85,7 +85,8 @@ export default async function Header() {
                     href={'/'}
                     className={'flex flex-col items-start w-32 h-full max-[1024px]:w-12 max-[1115px]:relative max-[1115px]:-top-5 max-[1024px]:top-0 min-[1024px]:max-[1115px]:-top-4'}>
                     <div className={'w-18 h-18 max-[1024px]:w-12 max-[1024px]:h-12 relative ml-5'}>
-                        <Image src={'/logos/principles.png'} alt={''} fill/>
+                        <Image priority
+                            fetchPriority="high" src={'/logos/principles.png'} alt={''} fill />
                     </div>
                     <h3 className={'absolute max-[1115px]:top-[97%] max-[1024px]:hidden top-20 text-black max-sm:text-[13px] text-[15px] font-bold'}>SỨC
                         KHỎE ĐẤT</h3>
@@ -97,25 +98,29 @@ export default async function Header() {
                         className={'flex items-center min-[1115px]:gap-20 max-[1115px]:justify-between max-lg:justify-center'}>
                         <div className={'flex gap-4 max-sm:hidden max-[1115px]:justify-center'}>
                             <div className={'w-8 h-8 relative'}>
-                                <Image src={'/logos/vietnam_emblem.png'} alt={''} fill/>
+                                <Image priority
+                                    fetchPriority="high" src={'/logos/vietnam_emblem.png'} alt={''} fill />
                             </div>
                             <div className={'w-[114px] h-8 relative'}>
-                                <Image src={'/logos/fao_logo.png'} alt={''} fill/>
+                                <Image priority
+                                    fetchPriority="high" src={'/logos/fao_logo.png'} alt={'FAO'} fill />
                             </div>
                             <Link target={'_blank'} href={'https://sfri.org.vn/'} className={'w-[137px] h-8 relative'}>
-                                <Image src={'/logos/institute_logo.png'} alt={''} fill/>
+                                <Image priority
+                                    fetchPriority="high" src={'/logos/institute_logo.png'} alt={''} fill />
                             </Link>
                             <div className={'w-[73px] h-8 relative'}>
-                                <Image src={'/logos/aei_logo.png'} alt={''} fill/>
+                                <Image priority
+                                    fetchPriority="high" src={'/logos/aei_logo.png'} alt={'AEI'} fill />
                             </div>
                         </div>
                         {/* Search input */}
                         <div className={'hidden items-center gap-8 max-sm:mt-0 max-[1352px]:flex max-lg:hidden'}>
                             <div className={'w-50 relative h-7 max-[335px]:w-36'}>
                                 <Input placeholder={'Tìm kiếm...'}
-                                       className={'w-full h-full rounded-[30px] !text-md text-black !pr-7 box-border'}/>
+                                    className={'w-full h-full rounded-[30px] !text-md text-black !pr-7 box-border'} />
                                 <Search color="#8f8f8f" width={16}
-                                        className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'}/>
+                                    className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'} />
                             </div>
                         </div>
                     </div>
@@ -131,8 +136,8 @@ export default async function Header() {
                                         menuItems.map((item: Menu) => (
                                             !item?.children ?
                                                 <Link key={item.key} href={item.href}
-                                                      className={'flex w-fit -mt-0.5'}>
-                                                    <House/>
+                                                    className={'flex w-fit -mt-0.5'}>
+                                                    <House />
                                                 </Link> :
                                                 <NavigationMenuItem key={item.key}>
                                                     <NavigationMenuTrigger>
@@ -167,16 +172,16 @@ export default async function Header() {
             <div className={'flex items-center gap-8 max-sm:mt-0 max-[1352px]:hidden max-lg:flex'}>
                 <div className={'w-50 relative h-8 max-[335px]:w-36'}>
                     <Input placeholder={'Tìm kiếm...'}
-                           className={'w-full h-full rounded-[30px] !text-base text-black !pr-7 box-border'}/>
+                        className={'w-full h-full rounded-[30px] !text-base text-black !pr-7 box-border'} />
                     <Search color="#8f8f8f" width={16}
-                            className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'}/>
+                        className={'absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer'} />
                 </div>
             </div>
 
             {/* Mobile menu */}
             <div className={'max-[1024px]:flex hidden'}>
                 <MobileMenuWrapper>
-                    <MobileMenu menuItems={menuItems}/>
+                    <MobileMenu menuItems={menuItems} />
                 </MobileMenuWrapper>
             </div>
         </div>

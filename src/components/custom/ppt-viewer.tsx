@@ -1,10 +1,11 @@
 'use client'
 
 import "@cyntler/react-doc-viewer/dist/index.css";
-import {ChevronLeft, ChevronRight} from "lucide-react";
-import {useRef, useState} from "react";
-import {Button} from "@/components/ui/button";
-import {toast} from "sonner";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { getSecureLink } from "@/lib/utils";
 
 interface PowerpointViewerProps {
     slides: string[];
@@ -41,7 +42,7 @@ export default function PowerpointViewer(
             <div className="w-full max-w-5xl">
                 <div
                     className="h-auto bg-white rounded-xl shadow overflow-hidden border border-solid border-gray-200">
-                    <img
+                    <img 
                         src={slides[current]}
                         alt={`Slide ${current + 1}`}
                         className="w-full h-full object-contain"
@@ -53,7 +54,7 @@ export default function PowerpointViewer(
                         onClick={() => scrollThumbnails("left")}
                         className="absolute -left-5 z-10 bg-white !p-2 rounded-full shadow hover:bg-gray-100"
                     >
-                        <ChevronLeft className="!w-6 !h-6 text-[black]"/>
+                        <ChevronLeft className="!w-6 !h-6 text-[black]" />
                     </Button>
 
                     <div
@@ -61,15 +62,14 @@ export default function PowerpointViewer(
                         className={`flex gap-2 overflow-x-auto scroll-smooth px-0 w-full ${slides.length >= 8 ? 'justify-start' : 'justify-center'}`}
                     >
                         {slides.map((thumb, index) => (
-                            <img
+                            <img 
                                 key={index}
                                 src={thumb}
                                 alt={`Slide ${index + 1}`}
-                                className={`w-32 h-20 object-cover rounded-md cursor-pointer border-2 transition ${
-                                    current === index
+                                className={`w-32 h-20 object-cover rounded-md cursor-pointer border-2 transition ${current === index
                                         ? "border-blue-500 shadow-md"
                                         : "border-transparent"
-                                }`}
+                                    }`}
                                 onClick={() => setCurrent(index)}
                             />
                         ))}
@@ -79,19 +79,19 @@ export default function PowerpointViewer(
                         onClick={() => scrollThumbnails("right")}
                         className="absolute -right-5 z-10 bg-white !p-2 rounded-full shadow hover:bg-gray-100"
                     >
-                        <ChevronRight className="!w-6 !h-6 text-[black]"/>
+                        <ChevronRight className="!w-6 !h-6 text-[black]" />
                     </Button>
                 </div>
             </div>
             <div className="w-full max-w-5xl flex flex-col gap-1 justify-start">
                 {downloadable ?
                     <a className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
-                       href={pptUrl} onClick={(e) => {
-                        e.preventDefault();
-                        if (downloadNotification) {
-                            toast.info(downloadNotification)
-                        }
-                    }}>
+                        href={getSecureLink(pptUrl)} onClick={(e) => {
+                            e.preventDefault();
+                            if (downloadNotification) {
+                                toast.info(downloadNotification)
+                            }
+                        }}>
                         Tải xuống bản trình chiếu
                     </a> : ''
                 }
@@ -100,7 +100,7 @@ export default function PowerpointViewer(
                         <a
                             key={index}
                             className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'}
-                            href={item.file_url}
+                            href={getSecureLink(item.file_url)}
                         >
                             Tải xuống {item.name}
                         </a>

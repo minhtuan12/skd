@@ -5,6 +5,7 @@ import {defaultLayoutPlugin} from '@react-pdf-viewer/default-layout';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { getSecureLink } from '@/lib/utils';
 
 
 export default function PdfViewer({url, downloadable}: any) {
@@ -21,7 +22,7 @@ export default function PdfViewer({url, downloadable}: any) {
                 />
                 {!downloadable ?
                     <div className="w-full max-w-5xl flex justify-start">
-                        <a className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'} href={url}>
+                        <a className={'underline flex justify-start mt-2 text-lg text-blue-600 w-fit cursor-pointer'} href={getSecureLink(url)}>
                             Tải xuống PDF
                         </a>
                     </div> : ''

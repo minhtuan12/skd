@@ -52,3 +52,7 @@ export function buildDetailPath(title: string, id: string) {
     const slug = slugify(title, {lower: true, strict: true});
     return `${slug}-${id}`;
 }
+
+export function getSecureLink(url: string) {
+    return !url?.includes('https') ? url.replace('http', 'https') : url;
+}
